@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // routes
 const userRoute = require("./routers/userRouter.js");
-app.use("/user", userRoute);
+app.use("/api/v1/user", userRoute);
 
 // error handling
 app.use(ErrorHandler);
