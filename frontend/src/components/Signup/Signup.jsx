@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import { server } from "../../../server.js";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -25,12 +26,18 @@ function Signup() {
     newForm.append("name", name);
     newForm.append("email", email);
     newForm.append("password", password);
-    console.log(newForm)
 
     axios
       .post(`${server}/user/create-user`, newForm, config)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        if (res.data.success) toast.success(res.data.message);
+        else toast.error(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar(null);
+      })
+      .catch((err) => toast.error(err.response?.data?.message || "Server Offline"));
   };
 
   const handleFileInput = (e) => {
