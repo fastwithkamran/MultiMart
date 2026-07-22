@@ -1,13 +1,12 @@
 const User = require("../models/user.js");
-const path = require("path");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const fs = require("fs");
 const sendMail = require("../utils/sendMail.js");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const sendToken = require("../utils/jwtToken.js");
 
 const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
-  
   const { name, email, password } = req.body;
   const userEmail = await User.findOne({ email });
 
@@ -29,8 +28,9 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   const filename = req.file.filename;
-  const fileUrl = path.join(filename);
-  const user = await User.create({
+  const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+
+  const user = {
     name,
     email,
     password,
@@ -38,9 +38,9 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
       public_id: filename,
       url: fileUrl,
     },
-  });
+  };
 
-  const activationToken = createActivationToken(user.toObject());
+  const activationToken = createActivationToken(user);
 
   const activationUrl = `http://localhost:5173/activation/${activationToken}`;
 
@@ -64,5 +64,32 @@ const createActivationToken = (user) => {
 };
 
 // activate user through mail
+const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
+  const { activation_token } = req.body;
+  const newUser = jwt.verify(activation_token, process.env.Activation_Secret);
 
-module.exports = handleCreateUser;
+  if (!newUser) {
+    return next(new ErrorHandler("Invalid Token", 400));
+  }
+
+  const { name, email, password, avatar } = newUser;
+
+  const userEmail = await User.findOne({ email });
+
+  if (userEmail) {
+    return next(new ErrorHandler("User already exits", 400));
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    avatar,
+  });
+
+  sendToken(user, 201, res);
+});
+
+// login user
+
+module.exports = { handleCreateUser, handleActivateUser };
