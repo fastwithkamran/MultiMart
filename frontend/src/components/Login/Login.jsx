@@ -1,12 +1,38 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { server } from "../../../server";
+import { toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios
+      .post(
+        `${server}/user/login`,
+        { email, password },
+        { withCredentials: true },
+      )
+      .then((res) => {
+        if (res.data.success) {
+          navigate("/");
+          toast.success("Login success");
+        } else toast.error(res.data.message);
+        setEmail("");
+        setPassword("");
+      })
+      .catch((err) =>
+        toast.error(err.response?.data?.message || "Server Offline"),
+      );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
@@ -17,7 +43,7 @@ function Login() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-18">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -105,7 +131,7 @@ function Login() {
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Not have any account?</h4>
               <Link to={"/sign-up"} className="text-blue-600 pl-2">
-              Sign up
+                Sign up
               </Link>
             </div>
           </form>
