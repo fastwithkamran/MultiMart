@@ -91,5 +91,21 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 // login user
+const handleUserLogin = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password)
+    return next(new ErrorHandler("Provide all fields"), 400);
 
-module.exports = { handleCreateUser, handleActivateUser };
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) return next(new ErrorHandler("Incorrect Password or Email"), 400);
+
+  const isPasswordValid = await user.comparePassword(password);
+
+  if (!isPasswordValid)
+    return next(new ErrorHandler("Incorrect Password or Email"), 400);
+
+  sendToken(user, 201, res);
+});
+
+module.exports = { handleCreateUser, handleActivateUser, handleUserLogin };
