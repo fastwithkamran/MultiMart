@@ -1,10 +1,11 @@
-import { Header, Hero } from "../components";
+import { Header, Hero, Categories } from "../components";
 
 function HomePage() {
   return (
     <div>
       <Header activePage={1} />
       <Hero />
+      <Categories />
     </div>
   );
 }
