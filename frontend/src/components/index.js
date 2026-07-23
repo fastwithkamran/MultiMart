@@ -3,5 +3,6 @@ import Signup from "./Signup/Signup.jsx";
 import Header from "./Layout/Header.jsx";
 import Hero from "./Landing/Hero.jsx";
 import Categories from "./Landing/Categories.jsx";
+import BestDeals from "./Landing/BestDeals.jsx";
 
-export { Login, Signup, Header, Hero, Categories };
+export { Login, Signup, Header, Hero, Categories, BestDeals };
