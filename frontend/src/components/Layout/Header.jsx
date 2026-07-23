@@ -31,7 +31,7 @@ const Header = ({ activePage }) => {
   };
 
   window.addEventListener("scroll", () => {
-    if (window.screenY > 70) {
+    if (window.scrollY > 70) {
       setActive(true);
     } else setActive(false);
   });
@@ -98,67 +98,64 @@ const Header = ({ activePage }) => {
 
         {/* Navbar */}
         <div
-          className={`${styles.section} relative ${styles.normalFlex} justify-between`}
+          className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} transition hidden md:flex items-center justify-between w-full bg-blue-700 h-16`}
         >
-          <div
-            className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} transition hidden md:flex items-center justify-between w-full bg-blue-700 h-16`}
-          >
-            {/* All Categories */}
-            <div className="relative h-14 mt-2.5 w-64 ml-5">
-              <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
-              <button
-                className={`h-full w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-medium select-none rounded-t-md`}
-              >
-                All Categories
-              </button>
-              <IoIosArrowDown
-                size={20}
-                className="absolute right-2 top-5 cursor-pointer"
-                onClick={() => setDropDown(!dropDown)}
+          {/* All Categories */}
+          <div className="relative h-14 mt-2.5 w-64 ml-5 cursor-pointer">
+            <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
+            <button
+              className={`h-full w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-medium select-none rounded-t-md`}
+              onClick={() => setDropDown(!dropDown)}
+            >
+              All Categories
+            </button>
+            <IoIosArrowDown
+              size={20}
+              className="absolute right-2 top-5"
+              onClick={() => setDropDown(!dropDown)}
+            />
+
+            {dropDown && (
+              <DropDown
+                categoriesData={categoriesData}
+                setDropDown={setDropDown}
               />
+            )}
+          </div>
 
-              {dropDown && (
-                <DropDown
-                  categoriesData={categoriesData}
-                  setDropDown={setDropDown}
-                />
-              )}
-            </div>
+          {/* navItems */}
+          <div className={`${styles.normalFlex}`}>
+            <Navbar active={activePage} />
+          </div>
 
-            {/* navItems */}
+          {/* icons */}
+          <div className="flex">
+            {/* heart icon for favourites */}
             <div className={`${styles.normalFlex}`}>
-              <Navbar active={activePage} />
+              <div className="relative cursor-pointer mr-3.5">
+                <AiOutlineHeart size={30} className="text-amber-50" />
+                <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
+                  0
+                </span>
+              </div>
             </div>
 
-            {/* icons */}
-            <div className="flex">
-              {/* heart icon for favourites */}
-              <div className={`${styles.normalFlex}`}>
-                <div className="relative cursor-pointer mr-3.5">
-                  <AiOutlineHeart size={30} className="text-amber-50" />
-                  <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
-                    0
-                  </span>
-                </div>
+            {/* shopping cart icon */}
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-3.5">
+                <AiOutlineShoppingCart size={30} className="text-amber-50" />
+                <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
+                  1
+                </span>
               </div>
+            </div>
 
-              {/* shopping cart icon */}
-              <div className={`${styles.normalFlex}`}>
-                <div className="relative cursor-pointer mr-3.5">
-                  <AiOutlineShoppingCart size={30} className="text-amber-50" />
-                  <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
-                    1
-                  </span>
-                </div>
-              </div>
-
-              {/* profile icon */}
-              <div className={`${styles.normalFlex}`}>
-                <div className="relative cursor-pointer mr-3.5">
-                  <Link to={"/login"}>
-                    <CgProfile size={30} className="text-amber-50" />
-                  </Link>
-                </div>
+            {/* profile icon */}
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-3.5">
+                <Link to={"/login"}>
+                  <CgProfile size={30} className="text-amber-50" />
+                </Link>
               </div>
             </div>
           </div>
