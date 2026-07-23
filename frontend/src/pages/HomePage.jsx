@@ -3,7 +3,7 @@ import { Header } from "../components";
 function HomePage() {
   return (
     <div>
-      <Header />
+      <Header activePage={1} />
     </div>
   );
 }

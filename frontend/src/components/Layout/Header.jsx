@@ -1,12 +1,23 @@
 import { useState } from "react";
 import styles from "../../styles/styles.js";
 import { Link } from "react-router";
-import { productData } from "../../static/data.jsx";
-import { AiOutlineSearch } from "react-icons/ai";
+import { categoriesData, productData } from "../../static/data.jsx";
+import {
+  AiOutlineHeart,
+  AiOutlineSearch,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { BiMenuAltLeft } from "react-icons/bi";
+import { CgProfile } from "react-icons/cg";
+import DropDown from "./DropDown.jsx";
+import Navbar from "./Navbar.jsx";
 
-function Header() {
+const Header = ({ activePage }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState("");
+  const [active, setActive] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -18,9 +29,17 @@ function Header() {
 
     setSearchData(filteredProducts);
   };
+
+  window.addEventListener("scroll", () => {
+    if (window.screenY > 70) {
+      setActive(true);
+    } else setActive(false);
+  });
+
   return (
     <>
-      <div className={`${styles.section}`}>
+      <div className={`${styles.section} hidden sm:block`}>
+        {/* Header */}
         <div className="h-fit flex items-center justify-between bg-slate-100 px-3">
           <div>
             <Link to="/">
@@ -67,10 +86,86 @@ function Header() {
               </div>
             ) : null}
           </div>
+
+          <div className={`${styles.button}`}>
+            <Link to={"/seller"}>
+              <h1 className="text-amber-50 flex items-center p-3">
+                Become Seller <IoIosArrowForward className="ml-1" />
+              </h1>
+            </Link>
+          </div>
+        </div>
+
+        {/* Navbar */}
+        <div
+          className={`${styles.section} relative ${styles.normalFlex} justify-between`}
+        >
+          <div
+            className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} transition hidden md:flex items-center justify-between w-full bg-blue-700 h-16`}
+          >
+            {/* All Categories */}
+            <div className="relative h-14 mt-2.5 w-64 ml-5">
+              <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
+              <button
+                className={`h-full w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-medium select-none rounded-t-md`}
+              >
+                All Categories
+              </button>
+              <IoIosArrowDown
+                size={20}
+                className="absolute right-2 top-5 cursor-pointer"
+                onClick={() => setDropDown(!dropDown)}
+              />
+
+              {dropDown && (
+                <DropDown
+                  categoriesData={categoriesData}
+                  setDropDown={setDropDown}
+                />
+              )}
+            </div>
+
+            {/* navItems */}
+            <div className={`${styles.normalFlex}`}>
+              <Navbar active={activePage} />
+            </div>
+
+            {/* icons */}
+            <div className="flex">
+              {/* heart icon for favourites */}
+              <div className={`${styles.normalFlex}`}>
+                <div className="relative cursor-pointer mr-3.5">
+                  <AiOutlineHeart size={30} className="text-amber-50" />
+                  <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
+                    0
+                  </span>
+                </div>
+              </div>
+
+              {/* shopping cart icon */}
+              <div className={`${styles.normalFlex}`}>
+                <div className="relative cursor-pointer mr-3.5">
+                  <AiOutlineShoppingCart size={30} className="text-amber-50" />
+                  <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
+                    1
+                  </span>
+                </div>
+              </div>
+
+              {/* profile icon */}
+              <div className={`${styles.normalFlex}`}>
+                <div className="relative cursor-pointer mr-3.5">
+                  <Link to={"/login"}>
+                    <CgProfile size={30} className="text-amber-50" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Header;
