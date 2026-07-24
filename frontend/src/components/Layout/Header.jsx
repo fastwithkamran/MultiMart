@@ -18,6 +18,7 @@ const Header = ({ activePage }) => {
   const [searchData, setSearchData] = useState("");
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -38,7 +39,7 @@ const Header = ({ activePage }) => {
 
   return (
     <>
-      <div className={`${styles.section} hidden sm:block`}>
+      <div className="w-full hidden sm:block">
         {/* Header */}
         <div className="h-fit flex items-center justify-between bg-slate-100 px-3">
           <div>
@@ -51,7 +52,7 @@ const Header = ({ activePage }) => {
             </Link>
           </div>
           {/* Search Box */}
-          <div className="w-[50%] relative">
+          <div className="w-[50%] relative" onClick={() => setOpen(!open)}>
             <input
               type="text"
               placeholder="Search Product"
@@ -63,7 +64,7 @@ const Header = ({ activePage }) => {
               size={30}
               className="absolute right-2 top-1.5 cursor-pointer"
             />
-            {searchData.length !== 0 ? (
+            {open && searchData.length !== 0 ? (
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-9 p-4">
                 {searchData &&
                   searchData.map((product) => {

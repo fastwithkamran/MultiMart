@@ -6,11 +6,9 @@ function Hero() {
   return (
     <div
       className={`relative min-h-[70vh] md:min-h-[80vh] w-full bg-no-repeat bg-cover bg-left md:bg-center ${styles.normalFlex}`}
-      style={{backgroundImage: `url(${heroImg})`}}
+      style={{ backgroundImage: `url(${heroImg})` }}
     >
-      <div
-        className={`${styles.section} w-[90%] sm:w-[55%] text-left items-start p-3`}
-      >
+      <div className="w-[90%] sm:w-[55%] text-left items-start p-3">
         <h1 className="text-[35px] leading-[1.2] md:text-[60px] text-slate-700 font-medium capitalize">
           Best Collection for home Decoration
         </h1>
