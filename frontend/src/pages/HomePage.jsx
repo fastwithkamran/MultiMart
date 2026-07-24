@@ -6,6 +6,7 @@ import {
   Events,
   FeaturedProducts,
   Sponsored,
+  Footer,
 } from "../components";
 
 function HomePage() {
@@ -18,6 +19,7 @@ function HomePage() {
       <Events />
       <FeaturedProducts />
       <Sponsored />
+      <Footer />
     </div>
   );
 }

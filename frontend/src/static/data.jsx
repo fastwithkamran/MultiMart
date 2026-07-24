@@ -576,7 +576,7 @@ export const footerProductLinks = [
   },
 ];
 
-export const footercompanyLinks = [
+export const footerShopLinks = [
   {
     name: "Game & Video",
   },
