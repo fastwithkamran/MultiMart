@@ -1,4 +1,11 @@
-import { Header, Hero, Categories, BestDeals } from "../components";
+import {
+  Header,
+  Hero,
+  Categories,
+  BestDeals,
+  Events,
+  FeaturedProducts,
+} from "../components";
 
 function HomePage() {
   return (
@@ -7,6 +14,8 @@ function HomePage() {
       <Hero />
       <Categories />
       <BestDeals />
+      <Events />
+      <FeaturedProducts />
     </div>
   );
 }
