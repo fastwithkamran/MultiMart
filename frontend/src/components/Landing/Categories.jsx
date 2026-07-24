@@ -32,16 +32,22 @@ function Categories() {
                 };
                 return (
                   <div
-                    className="w-full h-25 flex items-center cursor-pointer overflow-hidden"
+                    className="w-full min-h-25 flex items-center cursor-pointer overflow-hidden"
                     key={product.id}
                     onClick={() => handleSubmit(product)}
                   >
-                    <h5 className={`leading-[1.3]`}>{product.title}</h5>
-                    <img
-                      src={product.image_Url}
-                      alt="productImage"
-                      className="w-30 object-cover"
-                    />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                      <div className="flex-1 text-center sm:text-start">
+                        <h5 className={`font-medium text-sm md:text-base leading-tight wrap-break-word`}>{product.title}</h5>
+                      </div>
+                      <div className="shrink-0">
+                        <img
+                          src={product.image_Url}
+                          alt="productImage"
+                          className="w-30 object-contain mix-blend-multiply"
+                        />
+                      </div>
+                    </div>
                   </div>
                 );
               })}
