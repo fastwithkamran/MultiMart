@@ -5,6 +5,7 @@ import {
   BestDeals,
   Events,
   FeaturedProducts,
+  Sponsored,
 } from "../components";
 
 function HomePage() {
@@ -16,6 +17,7 @@ function HomePage() {
       <BestDeals />
       <Events />
       <FeaturedProducts />
+      <Sponsored />
     </div>
   );
 }

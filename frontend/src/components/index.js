@@ -6,5 +6,16 @@ import Categories from "./Landing/Categories.jsx";
 import BestDeals from "./Landing/BestDeals.jsx";
 import FeaturedProducts from "./Landing/FeaturedProducts.jsx";
 import Events from "./Landing/Events.jsx";
+import Sponsored from "./Landing/Sponsored.jsx";
 
-export { Login, Signup, Header, Hero, Categories, BestDeals, FeaturedProducts, Events };
+export {
+  Login,
+  Signup,
+  Header,
+  Hero,
+  Categories,
+  BestDeals,
+  FeaturedProducts,
+  Events,
+  Sponsored,
+};
