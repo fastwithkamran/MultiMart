@@ -10,11 +10,17 @@ function ProductPage() {
 
   const products = useMemo(() => {
     if (categoryData === null) {
-      return [...productData].sort(
-        (item1, item2) => item2.total_sell - item1.total_sell,
+      return (
+        productData &&
+        [...productData].sort(
+          (item1, item2) => item2.total_sell - item1.total_sell,
+        )
       );
     } else {
-      return productData.filter((item) => item.category === categoryData);
+      return (
+        productData &&
+        productData.filter((item) => item.category === categoryData)
+      );
     }
   }, [categoryData]);
 
