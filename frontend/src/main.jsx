@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
-import { LoginPage, SignupPage, ActivationPage, HomePage } from "./pages";
+import { LoginPage, SignupPage, ActivationPage, HomePage, ProductPage } from "./pages";
 import Store from "./redux/store.js";
 
 import {
@@ -18,6 +18,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/sign-up" element={<SignupPage />} />
+      <Route path="/products" element={<ProductPage />} />
       <Route
         path="/activation/:activation_token"
         element={<ActivationPage />}
