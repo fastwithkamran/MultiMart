@@ -12,8 +12,10 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
+import { useSelector } from "react-redux";
 
 const Header = ({ activePage }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState("");
   const [active, setActive] = useState(false);
@@ -39,6 +41,7 @@ const Header = ({ activePage }) => {
 
   return (
     <>
+    
       <div className="w-full hidden sm:block">
         {/* Header */}
         <div className="h-fit flex items-center justify-between bg-slate-100 px-3">
@@ -154,9 +157,15 @@ const Header = ({ activePage }) => {
             {/* profile icon */}
             <div className={`${styles.normalFlex}`}>
               <div className="relative cursor-pointer mr-3.5">
-                <Link to={"/login"}>
-                  <CgProfile size={30} className="text-amber-50" />
-                </Link>
+                {isAuthenticated ? (
+                  <Link to={"/profile"}>
+                    <img alt="Image" src={`${user.avatar.url}`} className="w-10 h-10 rounded-full object-cover" />
+                  </Link>
+                ) : (
+                  <Link to={"/login"}>
+                    <CgProfile size={30} className="text-amber-50" />
+                  </Link>
+                )}
               </div>
             </div>
           </div>
