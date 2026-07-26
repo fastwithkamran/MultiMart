@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../server";
 import { toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ActivationPage() {
   const { activation_token } = useParams();
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (activation_token) {
@@ -23,7 +24,7 @@ function ActivationPage() {
           );
 
           if (res.data.success) {
-            Navigate("/");
+            navigate("/");
             window.location.reload();
             toast.success("Account Created Successfully");
           } else {
@@ -36,7 +37,7 @@ function ActivationPage() {
       };
       activationEmail();
     }
-  }, [activation_token]);
+  }, [activation_token, navigate]);
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
