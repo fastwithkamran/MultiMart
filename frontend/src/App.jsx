@@ -3,8 +3,10 @@ import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { loading } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(loadUser());
   }, []);
@@ -23,7 +25,8 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <Outlet />
+
+      {!loading ? <Outlet /> : null}
     </>
   );
 }
