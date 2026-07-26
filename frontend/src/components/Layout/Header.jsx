@@ -14,6 +14,7 @@ import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
 import Cart from "./Cart.jsx";
+import WishList from "./WishList.jsx";
 
 const Header = ({ activePage }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ const Header = ({ activePage }) => {
   const [dropDown, setDropDown] = useState(false);
   const [open, setOpen] = useState(false);
   const [openCart, setOpenCart] = useState(false);
+  const [openWishList, setOpenWishList] = useState(false);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -138,7 +140,7 @@ const Header = ({ activePage }) => {
           <div className="flex">
             {/* heart icon for favourites */}
             <div className={`${styles.normalFlex}`}>
-              <div className="relative cursor-pointer mr-3.5">
+              <div className="relative cursor-pointer mr-3.5"   onClick={() => setOpenWishList(true)}>
                 <AiOutlineHeart size={30} className="text-amber-50" />
                 <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
                   0
@@ -180,6 +182,9 @@ const Header = ({ activePage }) => {
 
             {/* Cart Popup */}
             {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
+            {/* WishList Popup */}
+            {openWishList ? <WishList setOpenWishList={setOpenWishList} /> : null}
           </div>
         </div>
       </div>
