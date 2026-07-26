@@ -13,6 +13,7 @@ import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
+import Cart from "./Cart.jsx";
 
 const Header = ({ activePage }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -21,6 +22,7 @@ const Header = ({ activePage }) => {
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -41,7 +43,6 @@ const Header = ({ activePage }) => {
 
   return (
     <>
-    
       <div className="w-full hidden sm:block">
         {/* Header */}
         <div className="h-fit flex items-center justify-between bg-slate-100 px-3">
@@ -91,6 +92,7 @@ const Header = ({ activePage }) => {
             ) : null}
           </div>
 
+          {/* Seller Button */}
           <div className={`${styles.button}`}>
             <Link to={"/seller"}>
               <h1 className="text-amber-50 flex items-center p-3">
@@ -146,7 +148,10 @@ const Header = ({ activePage }) => {
 
             {/* shopping cart icon */}
             <div className={`${styles.normalFlex}`}>
-              <div className="relative cursor-pointer mr-3.5">
+              <div
+                className="relative cursor-pointer mr-3.5"
+                onClick={() => setOpenCart(true)}
+              >
                 <AiOutlineShoppingCart size={30} className="text-amber-50" />
                 <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
                   1
@@ -159,7 +164,11 @@ const Header = ({ activePage }) => {
               <div className="relative cursor-pointer mr-3.5">
                 {isAuthenticated ? (
                   <Link to={"/profile"}>
-                    <img alt="Image" src={`${user.avatar.url}`} className="w-10 h-10 rounded-full object-cover" />
+                    <img
+                      alt="Image"
+                      src={`${user.avatar.url}`}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
                   </Link>
                 ) : (
                   <Link to={"/login"}>
@@ -168,6 +177,9 @@ const Header = ({ activePage }) => {
                 )}
               </div>
             </div>
+
+            {/* Cart Popup */}
+            {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
           </div>
         </div>
       </div>
