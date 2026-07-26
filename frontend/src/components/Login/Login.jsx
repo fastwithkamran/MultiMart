@@ -24,6 +24,7 @@ function Login() {
       .then((res) => {
         if (res.data.success) {
           navigate("/");
+          window.location.reload();
           toast.success("Login success");
         } else toast.error(res.data.message);
         setEmail("");

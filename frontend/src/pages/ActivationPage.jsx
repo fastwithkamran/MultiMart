@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
 
 function ActivationPage() {
   const { activation_token } = useParams();
@@ -22,6 +23,8 @@ function ActivationPage() {
           );
 
           if (res.data.success) {
+            Navigate("/");
+            window.location.reload();
             toast.success("Account Created Successfully");
           } else {
             toast.error(res.data.message);
