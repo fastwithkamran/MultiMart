@@ -2,6 +2,11 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import styles from "../../styles/styles";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
+
 function ProfileContent({ active }) {
   const { user } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
@@ -16,6 +21,7 @@ function ProfileContent({ active }) {
   };
   return (
     <div className="w-full">
+      {/* {Profile Page} */}
       {active === 1 && (
         <>
           <div className="flex justify-center w-full">
@@ -114,8 +120,98 @@ function ProfileContent({ active }) {
           </div>
         </>
       )}
+
+      {/* Order Page */}
+      {active === 2 && (
+        <div>
+          <AllOrders />
+        </div>
+      )}
     </div>
   );
 }
+
+const AllOrders = () => {
+  const orders = [
+    {
+      _id: "34234234",
+      orderItems: [
+        {
+          name: "Iphone 14 pro max",
+        },
+      ],
+      totalPrice: 120,
+      orderStatus: "Processing",
+    },
+  ];
+
+  const column = [
+    {
+      field: "id",
+      headerName: "Order Id",
+      minWidth: 150,
+      flex: 0.7,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      },
+    },
+    {
+      field: "itemQty",
+      headerName: "Items Qty",
+      minWidth: 130,
+      flex: 0.7,
+    },
+    {
+      field: "total",
+      headerName: "Total Price",
+      minWidth: 150,
+      flex: 0.7,
+      sortable: false,
+    },
+    {
+      field: " ",
+      headerName: "",
+      minWidth: 150,
+      flex: 1,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <Button to={`/order/${params.id}`} component={Link} variant="text">
+            <AiOutlineArrowRight size={20} />
+          </Button>
+        );
+      },
+    },
+  ];
+
+  const row = [];
+
+  orders &&
+    orders.forEach((item) => {
+      row.push({
+        id: item._id,
+        itemQty: item.orderItems.length,
+        total: "US$" + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+  return (
+    <div className="pl-8 pt-1">
+      <DataGrid
+        rows={row}
+        columns={column}
+        pageSize={10}
+        disableRowSelectionOnClick
+        autoHeight
+      />
+    </div>
+  );
+};
 
 export default ProfileContent;
