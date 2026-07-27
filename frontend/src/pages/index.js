@@ -7,6 +7,8 @@ import BestSellingPage from "./BestSellingPage.jsx";
 import EventsPage from "./EventsPage.jsx";
 import FAQPage from "./FAQPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
+import OrderSuccessPage from "./OrderSuccessPage.jsx";
+import ProductDetailsPage from "./ProductDetailsPage.jsx";
 
 export {
   LoginPage,
@@ -18,4 +20,6 @@ export {
   EventsPage,
   FAQPage,
   CheckoutPage,
+  OrderSuccessPage,
+  ProductDetailsPage,
 };

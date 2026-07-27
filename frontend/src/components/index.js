@@ -11,6 +11,7 @@ import Footer from "./Layout/Footer.jsx";
 import Checkout from "./Checkout/Checkout.jsx";
 import CheckoutSteps from "./Checkout/CheckoutSteps.jsx";
 import Payment from "./Payment/Payment.jsx";
+import ProductDetails from "./Products/ProductDetails.jsx";
 
 export {
   Login,
@@ -26,4 +27,5 @@ export {
   Checkout,
   CheckoutSteps,
   Payment,
+  ProductDetails,
 };

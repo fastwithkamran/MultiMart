@@ -12,6 +12,8 @@ import {
   EventsPage,
   FAQPage,
   CheckoutPage,
+  OrderSuccessPage,
+  ProductDetailsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 
@@ -32,8 +34,9 @@ const router = createBrowserRouter(
       <Route path="/best-selling" element={<BestSellingPage />} />
       <Route path="/events" element={<EventsPage />} />
       <Route path="/faq" element={<FAQPage />} />
-      <Route path="checkout" element={<CheckoutPage />} />
-
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/order/success/:id" element={<OrderSuccessPage />} />
+      <Route path="/product/:name" element={<ProductDetailsPage />} />
       <Route
         path="/activation/:activation_token"
         element={<ActivationPage />}
