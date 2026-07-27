@@ -12,7 +12,7 @@ import Checkout from "./Checkout/Checkout.jsx";
 import CheckoutSteps from "./Checkout/CheckoutSteps.jsx";
 import Payment from "./Payment/Payment.jsx";
 import ProductDetails from "./Products/ProductDetails.jsx";
-
+import SuggestedProduct from "./Products/SuggestedProduct.jsx";
 export {
   Login,
   Signup,
@@ -28,4 +28,5 @@ export {
   CheckoutSteps,
   Payment,
   ProductDetails,
+  SuggestedProduct,
 };
