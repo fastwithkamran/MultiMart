@@ -8,6 +8,9 @@ import FeaturedProducts from "./Landing/FeaturedProducts.jsx";
 import Events from "./Landing/Events.jsx";
 import Sponsored from "./Landing/Sponsored.jsx";
 import Footer from "./Layout/Footer.jsx";
+import Checkout from "./Checkout/Checkout.jsx";
+import CheckoutSteps from "./Checkout/CheckoutSteps.jsx";
+import Payment from "./Payment/Payment.jsx";
 
 export {
   Login,
@@ -20,4 +23,7 @@ export {
   Events,
   Sponsored,
   Footer,
+  Checkout,
+  CheckoutSteps,
+  Payment,
 };
