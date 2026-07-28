@@ -22,7 +22,9 @@ if (process.env.NODE_ENV !== "production") {
 
 // routes
 const userRoute = require("./routers/userRouter.js");
+const shopRoute = require("./routers/shopRouter.js")
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/shop", shopRoute);
 
 // error handling
 app.use(ErrorHandler);
