@@ -1,11 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
-import { AiOutlineCreditCard, AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
+import {
+  AiOutlineCreditCard,
+  AiOutlineLogin,
+  AiOutlineMessage,
+} from "react-icons/ai";
 import { MdOutlineTrackChanges } from "react-icons/md";
-import {TbAddressBook} from "react-icons/tb"
+import { TbAddressBook } from "react-icons/tb";
+import axios from "axios";
+import { server } from "../../../server";
+import { toast } from "react-toastify";
+
 function ProfileSidebar({ active, setActive }) {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    try {
+      axios
+        .get(`${server}/user/logout`, { withCredentials: true })
+        .then((res) => {
+          toast.success(res.data.message);
+          navigate("/login");
+          window.location.reload();
+        });
+    } catch (error) {
+      console.error(error.response.data.message);
+      console.error(error);
+      toast.error("Failed to fetch API Request");
+    }
+  };
   return (
     <div className="w-full bg-white shadow-sm rounded-sm p-4 pt-8">
       <div
@@ -67,7 +91,7 @@ function ProfileSidebar({ active, setActive }) {
           Payment Methods
         </span>
       </div>
-      
+
       <div
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(7)}
@@ -77,10 +101,13 @@ function ProfileSidebar({ active, setActive }) {
           Address
         </span>
       </div>
-     
+
       <div
         className="flex items-center cursor-pointer w-full mb-8"
-        onClick={() => setActive(8)}
+        onClick={() => {
+          setActive(8);
+          handleLogout();
+        }}
       >
         <AiOutlineLogin size={20} color={active === 8 ? "red" : ""} />
         <span className={`pl-3 ${active === 8 ? "text-red-500" : ""}`}>

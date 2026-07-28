@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { MdOutlineTrackChanges } from "react-icons/md";
 
 function ProfileContent({ active }) {
-  const { user } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
   const [phoneNumber, setPhoneNumber] = useState(null);
@@ -25,18 +25,20 @@ function ProfileContent({ active }) {
       {/* Profile */}
       {active === 1 && (
         <>
-          <div className="flex justify-center w-full">
-            <div className="relative">
-              <img
-                alt="Image"
-                src={`${user.avatar.url}`}
-                className="w-30 h-30 rounded-full object-cover border-[3px] border-green-400"
-              />
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center cursor-pointer absolute bottom-1.5 right-1.5">
-                <AiOutlineCamera />
+          {isAuthenticated && (
+            <div className="flex justify-center w-full">
+              <div className="relative">
+                <img
+                  alt="Image"
+                  src={`${user.avatar.url}`}
+                  className="w-30 h-30 rounded-full object-cover border-[3px] border-green-400"
+                />
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center cursor-pointer absolute bottom-1.5 right-1.5">
+                  <AiOutlineCamera />
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <div>
             <form
               className="w-full px-5 mt-8"
