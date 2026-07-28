@@ -1,4 +1,4 @@
-import { AiOutlineCamera } from "react-icons/ai";
+import { AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import styles from "../../styles/styles";
 import { useState } from "react";
@@ -22,7 +22,7 @@ function ProfileContent({ active }) {
   };
   return (
     <div className="w-full">
-      {/* {Profile Page} */}
+      {/* Profile */}
       {active === 1 && (
         <>
           <div className="flex justify-center w-full">
@@ -129,17 +129,31 @@ function ProfileContent({ active }) {
         </div>
       )}
 
-      {/* Refund Page */}
+      {/* Refund */}
       {active === 3 && (
         <div>
           <AllRefundOrders />
         </div>
       )}
 
-      {/* Track Order Page */}
+      {/* Track Order */}
       {active === 5 && (
         <div>
           <TrackOrder />
+        </div>
+      )}
+
+      {/* Payment Method */}
+      {active === 6 && (
+        <div>
+          <PaymentMethod />
+        </div>
+      )}
+
+      {/* Address */}
+      {active === 7 && (
+        <div>
+          <Address />
         </div>
       )}
     </div>
@@ -394,6 +408,69 @@ const TrackOrder = () => {
         autoHeight
         disableRowSelectionOnClick
       ></DataGrid>
+    </div>
+  );
+};
+
+const PaymentMethod = () => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex flex-col md:flex-row w-full items-center justify-between">
+        <h1 className="text-[18px] sm:text-[25px] font-medium text-black/63 ">
+          Payment Methods
+        </h1>
+        <div className={`${styles.button} rounded-md! p-3`}>
+          <span className="text-white">Add New</span>
+        </div>
+      </div>
+      <br />
+      <div className="w-full bg-white flex flex-col md:flex-row items-center px-3 shadow justify-between pr-10">
+        <div className="flex items-center">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV07yhKXZ1S8pQJ984d281j6woJ0cE8UBN0077uuZaXQ&s=10"
+            alt="PaymentCards"
+            className="object-cover w-8 h-4"
+          />
+          <h5 className="pl-5 font-semibold">Kamran Ayaz</h5>
+        </div>
+        <div className="pl-8 flex items-center mt-6 md:mt-0">
+          <h6>*****34234324**</h6>
+          <h5 className="pl-6">08/2026</h5>
+        </div>
+        <div className="min-w-[10%] flex items-center justify-between pl-8 mt-6 md:mt-0">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Address = () => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex flex-col md:flex-row w-full items-center justify-between">
+        <h1 className="text-[18px] sm:text-[25px] font-medium text-black/63 ">
+          My Addresses
+        </h1>
+        <div className={`${styles.button} rounded-md! p-3`}>
+          <span className="text-white">Add New</span>
+        </div>
+      </div>
+      <br />
+      <div className="w-full bg-white h-16 flex flex-col md:flex-row items-center px-3 shadow justify-between pr-10">
+        <div className="flex items-center">
+          <h5 className="pl-5 font-semibold">Default</h5>
+        </div>
+        <div className="pl-8 flex items-center mt-6 md:mt-0">
+          <h6>Marston Road, Saddar, Karachi</h6>
+        </div>
+        <div className="pl-8 flex items-center mt-6 md:mt-0">
+          <h6>+92 3213456132</h6>
+        </div>
+        <div className="min-w-[10%] flex items-center justify-between pl-8 mt-6 md:mt-0">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
+      </div>
     </div>
   );
 };
