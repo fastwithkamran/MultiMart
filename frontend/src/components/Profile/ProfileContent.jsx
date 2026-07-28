@@ -21,7 +21,7 @@ function ProfileContent({ active }) {
     e.preventDefault();
   };
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 max-w-full">
       {/* Profile */}
       {active === 1 && (
         <>
@@ -45,8 +45,8 @@ function ProfileContent({ active }) {
               onSubmit={handleSubmit}
               aria-required={true}
             >
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full flex md:flex-row flex-col pb-3">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Full Name</label>
                   <input
                     type="text"
@@ -56,7 +56,7 @@ function ProfileContent({ active }) {
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Email Address</label>
                   <input
                     type="email"
@@ -68,8 +68,8 @@ function ProfileContent({ active }) {
                 </div>
               </div>
 
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full flex pb-3 md:flex-row flex-col">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Phone Number</label>
                   <input
                     type="number"
@@ -79,7 +79,7 @@ function ProfileContent({ active }) {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Zip Code</label>
                   <input
                     type="number"
@@ -91,8 +91,8 @@ function ProfileContent({ active }) {
                 </div>
               </div>
 
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full flex pb-3 md:flex-row flex-col">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Address 1</label>
                   <input
                     type="text"
@@ -102,7 +102,7 @@ function ProfileContent({ active }) {
                     onChange={(e) => setAddress1(e.target.value)}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Address 2</label>
                   <input
                     type="text"
@@ -233,14 +233,16 @@ const AllOrders = () => {
       });
     });
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={column}
-        pageSize={10}
-        disableRowSelectionOnClick
-        autoHeight
-      />
+    <div className="pl-8 pt-1 overflow-hidden w-full max-w-full">
+      <div className="w-full overflow-x-auto">
+        <DataGrid
+          rows={row}
+          columns={column}
+          pageSize={10}
+          disableRowSelectionOnClick
+          autoHeight
+        />
+      </div>
     </div>
   );
 };
@@ -316,14 +318,16 @@ const AllRefundOrders = () => {
       });
     });
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={column}
-        pageSize={10}
-        autoHeight
-        disableRowSelectionOnClick
-      ></DataGrid>
+    <div className="pl-8 pt-1 overflow-hidden w-full max-w-full">
+      <div className="w-full overflow-x-auto">
+        <DataGrid
+          rows={row}
+          columns={column}
+          pageSize={10}
+          disableRowSelectionOnClick
+          autoHeight
+        />
+      </div>
     </div>
   );
 };
@@ -402,14 +406,16 @@ const TrackOrder = () => {
     });
 
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={column}
-        pageSize={10}
-        autoHeight
-        disableRowSelectionOnClick
-      ></DataGrid>
+    <div className="pl-8 pt-1 overflow-hidden w-full max-w-full">
+      <div className="w-full overflow-x-auto">
+        <DataGrid
+          rows={row}
+          columns={column}
+          pageSize={10}
+          disableRowSelectionOnClick
+          autoHeight
+        />
+      </div>
     </div>
   );
 };
@@ -459,7 +465,7 @@ const Address = () => {
         </div>
       </div>
       <br />
-      <div className="w-full bg-white h-16 flex flex-col md:flex-row items-center px-3 shadow justify-between pr-10">
+      <div className="w-full bg-white flex flex-col md:flex-row items-center px-3 shadow justify-between pr-10">
         <div className="flex items-center">
           <h5 className="pl-5 font-semibold">Default</h5>
         </div>
