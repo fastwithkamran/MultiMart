@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import { MdOutlineTrackChanges } from "react-icons/md";
 
 function ProfileContent({ active }) {
   const { user } = useSelector((state) => state.user);
@@ -127,6 +128,20 @@ function ProfileContent({ active }) {
           <AllOrders />
         </div>
       )}
+
+      {/* Refund Page */}
+      {active === 3 && (
+        <div>
+          <AllRefundOrders />
+        </div>
+      )}
+
+      {/* Track Order Page */}
+      {active === 5 && (
+        <div>
+          <TrackOrder />
+        </div>
+      )}
     </div>
   );
 }
@@ -210,6 +225,175 @@ const AllOrders = () => {
         disableRowSelectionOnClick
         autoHeight
       />
+    </div>
+  );
+};
+
+const AllRefundOrders = () => {
+  const orders = [
+    {
+      _id: "34234234",
+      orderItems: [
+        {
+          name: "Iphone 14 pro max",
+        },
+      ],
+      totalPrice: 120,
+      orderStatus: "Processing",
+    },
+  ];
+
+  const column = [
+    {
+      field: "id",
+      headerName: "Order Id",
+      minWidth: 150,
+      flex: 0.7,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      },
+    },
+    {
+      field: "itemQty",
+      headerName: "Items Qty",
+      minWidth: 130,
+      flex: 0.7,
+    },
+    {
+      field: "total",
+      headerName: "Total Price",
+      minWidth: 150,
+      flex: 0.7,
+      sortable: false,
+    },
+    {
+      field: " ",
+      headerName: "",
+      minWidth: 150,
+      flex: 1,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <Button to={`/order/${params.id}`} component={Link} variant="text">
+            <AiOutlineArrowRight size={20} />
+          </Button>
+        );
+      },
+    },
+  ];
+
+  const row = [];
+
+  orders &&
+    orders.forEach((item) => {
+      row.push({
+        id: item._id,
+        itemQty: item.orderItems.length,
+        total: "US$" + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+  return (
+    <div className="pl-8 pt-1">
+      <DataGrid
+        rows={row}
+        columns={column}
+        pageSize={10}
+        autoHeight
+        disableRowSelectionOnClick
+      ></DataGrid>
+    </div>
+  );
+};
+
+const TrackOrder = () => {
+  const orders = [
+    {
+      _id: "34234234",
+      orderItems: [
+        {
+          name: "Iphone 14 pro max",
+        },
+      ],
+      totalPrice: 120,
+      orderStatus: "Processing",
+    },
+  ];
+
+  const column = [
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+
+    {
+      field: "id",
+      headerName: "Order Id",
+      minWidth: 150,
+      flex: 0.7,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+      },
+    },
+    {
+      field: "itemQty",
+      headerName: "Items Qty",
+      minWidth: 130,
+      flex: 0.7,
+    },
+    {
+      field: "total",
+      headerName: "Total Price",
+      minWidth: 150,
+      flex: 0.7,
+      sortable: false,
+    },
+    {
+      field: " ",
+      headerName: "",
+      minWidth: 150,
+      flex: 1,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <Button to={`/order/${params.id}`} component={Link} variant="text">
+            <MdOutlineTrackChanges size={20} />
+          </Button>
+        );
+      },
+    },
+  ];
+
+  const row = [];
+
+  orders &&
+    orders.forEach((item) => {
+      row.push({
+        id: item._id,
+        itemQty: item.orderItems.length,
+        total: "US$" + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+
+  return (
+    <div className="pl-8 pt-1">
+      <DataGrid
+        rows={row}
+        columns={column}
+        pageSize={10}
+        autoHeight
+        disableRowSelectionOnClick
+      ></DataGrid>
     </div>
   );
 };
