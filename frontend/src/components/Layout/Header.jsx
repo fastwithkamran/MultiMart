@@ -102,7 +102,7 @@ const Header = ({ activePage }) => {
 
           {/* Seller Button */}
           <div className={`${styles.button}`}>
-            <Link to={"/seller"}>
+            <Link to={"/shop-create"}>
               <h1 className="text-amber-50 flex items-center p-3">
                 Become Seller <IoIosArrowForward className="ml-1" />
               </h1>
@@ -300,7 +300,7 @@ const Header = ({ activePage }) => {
 
                 {/* Become Seller Button */}
                 <div className={`${styles.button} w-[60%] ml-5 rounded-sm!`}>
-                  <Link to={"/seller"}>
+                  <Link to={"/shop-create"}>
                     <h1 className="text-amber-50 flex items-center whitespace-nowrap p-5">
                       Become Seller <IoIosArrowForward className="ml-1" />
                     </h1>

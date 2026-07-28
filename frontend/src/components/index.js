@@ -15,6 +15,7 @@ import ProductDetails from "./Products/ProductDetails.jsx";
 import SuggestedProduct from "./Products/SuggestedProduct.jsx";
 import ProfileSidebar from "./Profile/ProfileSidebar.jsx";
 import ProfileContent from "./Profile/ProfileContent.jsx";
+import ShopCreate from "./Shop/ShopCreate.jsx";
 export {
   Login,
   Signup,
@@ -33,4 +34,5 @@ export {
   SuggestedProduct,
   ProfileSidebar,
   ProfileContent,
+  ShopCreate,
 };

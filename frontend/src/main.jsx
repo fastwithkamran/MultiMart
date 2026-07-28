@@ -16,6 +16,8 @@ import {
   OrderSuccessPage,
   ProductDetailsPage,
   ProfilePage,
+  ShopCreatePage,
+  SellerActivationPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -35,9 +37,25 @@ const router = createBrowserRouter(
       <Route path="/best-selling" element={<BestSellingPage />} />
       <Route path="/events" element={<EventsPage />} />
       <Route path="/faq" element={<FAQPage />} />
-      <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order/success/:id" element={<OrderSuccessPage />} />
       <Route path="/product/:name" element={<ProductDetailsPage />} />
+      <Route path="/shop-create" element={<ShopCreatePage />} />
+      <Route
+        path="/activation/:activation_token"
+        element={<ActivationPage />}
+      />
+      <Route
+        path="/seller/activation/:activation_token"
+        element={<SellerActivationPage />}
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/profile"
         element={
@@ -45,10 +63,6 @@ const router = createBrowserRouter(
             <ProfilePage />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/activation/:activation_token"
-        element={<ActivationPage />}
       />
     </Route>,
   ),
