@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 // functional component for nav items
 const Navbar = ({active}) => {
   return (
-    <div className={`${styles.normalFlex}`}>
+    <div className={`block md:${styles.normalFlex}`}>
       {navItems &&
         navItems.map((product, index) => (
-          <div className="flex" key={index}>
+          <div className="flex mb-5 md:mb-0" key={index}>
             <Link
               to={product.url}
-              className={`${active === index + 1 ? "text-green-300" : "text-amber-50" } "font-medium px-6 cursor-pointer"`}
+              className={`${active === index + 1 ? "text-green-300" : "md:text-amber-50 text-black" } "font-semibold px-6 cursor-pointer"`}
             >
               {product.title}
             </Link>
