@@ -16,6 +16,7 @@ import SuggestedProduct from "./Products/SuggestedProduct.jsx";
 import ProfileSidebar from "./Profile/ProfileSidebar.jsx";
 import ProfileContent from "./Profile/ProfileContent.jsx";
 import ShopCreate from "./Shop/ShopCreate.jsx";
+import ShopLogin from "./Shop/ShopLogin.jsx";
 export {
   Login,
   Signup,
@@ -35,4 +36,5 @@ export {
   ProfileSidebar,
   ProfileContent,
   ShopCreate,
+  ShopLogin,
 };
