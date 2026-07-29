@@ -6,7 +6,7 @@ const {
   handleActivateUser,
   handleUserLogin,
 } = require("../controllers/user");
-const { isAuthenticated } = require("../utils/auth.js");
+const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 
 // Authentication
@@ -17,7 +17,7 @@ router.post("/login", handleUserLogin);
 // Fetch the user Information
 router.get(
   "/getuser",
-  isAuthenticated,
+  isAuthenticatedUser,
   catchAsyncErrors((req, res) => {
     const user = req.user;
     return res.status(200).json({
@@ -30,7 +30,7 @@ router.get(
 // Logout
 router.get(
   "/logout",
-  isAuthenticated,
+  isAuthenticatedUser,
   catchAsyncErrors(async (req, res) => {
     res.cookie("Usertoken", null, {
       expires: new Date(Date.now()),

@@ -103,4 +103,28 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-module.exports = { handleCreateShop, handleActivateShop };
+
+// login shop
+ const handleShopLogin = catchAsyncErrors(async (req, res, next) => {
+   const { email, password } = req.body;
+   if (!email || !password)
+     return next(new ErrorHandler("Provide all fields", 400));
+ 
+   const seller = await Shop.findOne({ email }).select("+password");
+ 
+   if (!seller) return next(new ErrorHandler("Incorrect Password or Email", 400));
+ 
+   const isPasswordValid = await seller.comparePassword(password);
+ 
+   if (!isPasswordValid)
+     return next(new ErrorHandler("Incorrect Password or Email", 400));
+ 
+   const result = sendToken(seller);
+ 
+   res.status(201).cookie("Sellertoken", result.token, result.options).json({
+     success: true,
+     token: result.token,
+   });
+ });
+
+module.exports = { handleCreateShop, handleActivateShop, handleShopLogin };
