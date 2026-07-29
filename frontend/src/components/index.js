@@ -19,6 +19,8 @@ import ProfileSidebar from "./Profile/ProfileSidebar.jsx";
 import ProfileContent from "./Profile/ProfileContent.jsx";
 import ShopCreate from "./Shop/ShopCreate.jsx";
 import ShopLogin from "./Shop/ShopLogin.jsx";
+import DashboardHeader from "./Shop/Layout/Dashboard/DashboardHeader.jsx";
+import DashboardSideBar from "./Shop/Layout/Dashboard/DashboardSideBar.jsx";
 export {
   Login,
   Signup,
@@ -41,4 +43,6 @@ export {
   ProfileContent,
   ShopCreate,
   ShopLogin,
+  DashboardHeader,
+  DashboardSideBar,
 };
