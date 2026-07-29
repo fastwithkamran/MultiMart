@@ -2,8 +2,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import SellerProtectedRoute from "./SellerProtectedRoute.jsx";
+import { ProtectedRoute, SellerProtectedRoute } from "./routes";
 import {
   LoginPage,
   SignupPage,

@@ -2,8 +2,8 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const SellerProtectedRoute = ({ children }) => {
-  const { isSeller } = useSelector((state) => state.seller);
-  if (!isSeller) {
+  const { isLoading, isSeller } = useSelector((state) => state.seller);
+  if (!isLoading && !isSeller) {
     return <Navigate to={`/`} replace />;
   }
   return children;
