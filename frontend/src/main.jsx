@@ -21,6 +21,7 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   ShopHomePage,
+  PaymentPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -45,6 +46,8 @@ const router = createBrowserRouter(
       <Route path="/faq" element={<FAQPage />} />
       {/* Product Routes */}
       <Route path="/product/:name" element={<ProductDetailsPage />} />
+      {/* Payment */}
+      <Route path="/payment" element={<PaymentPage />} />
       <Route path="/order/success/:id" element={<OrderSuccessPage />} />
       {/* Shop Routes */}
       <Route path="/shop-create" element={<ShopCreatePage />} />

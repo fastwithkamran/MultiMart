@@ -7,6 +7,7 @@ import BestSellingPage from "./LandingPages/BestSellingPage.jsx";
 import EventsPage from "./LandingPages/EventsPage.jsx";
 import FAQPage from "./LandingPages/FAQPage.jsx";
 import CheckoutPage from "./CheckoutPage/CheckoutPage.jsx";
+import PaymentPage from "./PaymentPage.jsx";
 import OrderSuccessPage from "./OrderSuccessPage.jsx";
 import ProductDetailsPage from "./LandingPages/ProductPages/ProductDetailsPage.jsx";
 import ProfilePage from "./ProfilePage/ProfilePage.jsx";
@@ -31,4 +32,5 @@ export {
   SellerActivationPage,
   ShopLoginPage,
   ShopHomePage,
+  PaymentPage,
 };
