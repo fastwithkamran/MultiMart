@@ -23,7 +23,7 @@ function ShopLogin() {
       )
       .then((res) => {
         if (res.data.success) {
-          navigate("/");
+          navigate("/dashboard");
           window.location.reload();
           toast.success("Login success");
         } else toast.error(res.data.message);

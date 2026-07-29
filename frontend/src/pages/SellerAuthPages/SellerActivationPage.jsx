@@ -23,7 +23,7 @@ function SellerActivationPage() {
 
           if (res.data.success) {
             toast.success("Shop Created Successfully");
-            navigate("/");
+            navigate("/dashboard");
           } else {
             toast.error(res.data.message);
           }

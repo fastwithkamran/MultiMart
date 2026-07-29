@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const SellerProtectedRoute = ({ children }) => {
   const { isLoading, isSeller } = useSelector((state) => state.seller);
   if (!isLoading && !isSeller) {
-    return <Navigate to={`/`} replace />;
+    return <Navigate to={`/dashboard`} replace />;
   }
   return children;
 };
