@@ -1,15 +1,15 @@
 import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
-import Store from "./redux/store";
 import { loadUser } from "./redux/actions/user";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
   useEffect(() => {
-    Store.dispatch(loadUser());
-  }, []);
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
     <>

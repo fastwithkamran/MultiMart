@@ -13,9 +13,9 @@ function ShopCreate() {
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [zipCode, setZipCode] = useState(null);
-  const [shopAvatar, setShopAvatar] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [zipCode, setZipCode] = useState();
+  const [shopAvatar, setShopAvatar] = useState();
 
   const handleFileInput = (e) => {
     const file = e.target.files[0];
@@ -46,10 +46,10 @@ function ShopCreate() {
         setName("");
         setEmail("");
         setPassword("");
-        setShopAvatar(null);
+        setShopAvatar("");
         setAddress("");
-        setZipCode(null);
-        setPhoneNumber(null);
+        setZipCode("");
+        setPhoneNumber("");
       })
       .catch((err) =>
         toast.error(err.response?.data?.message || "Server Offline"),
