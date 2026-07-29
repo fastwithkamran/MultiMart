@@ -21,7 +21,9 @@ import ShopCreate from "./Shop/ShopCreate.jsx";
 import ShopLogin from "./Shop/ShopLogin.jsx";
 import DashboardHeader from "./Shop/Layout/Dashboard/DashboardHeader.jsx";
 import DashboardSideBar from "./Shop/Layout/Dashboard/DashboardSideBar.jsx";
+import Loader from "./Layout/Loader/Loader.jsx";
 export {
+  Loader,
   Login,
   Signup,
   Header,

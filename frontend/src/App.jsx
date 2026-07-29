@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import { loadUser, loadSeller } from "./redux/actions/user";
 import { useSelector, useDispatch } from "react-redux";
+import { Loader } from "./components";
 
 function App() {
   const dispatch = useDispatch();
@@ -12,6 +13,10 @@ function App() {
     dispatch(loadUser());
     dispatch(loadSeller());
   }, [dispatch]);
+
+  if (loading || isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -28,7 +33,7 @@ function App() {
         theme="dark"
       />
 
-      {!loading || !isLoading ? <Outlet /> : null}
+      <Outlet />
     </>
   );
 }
