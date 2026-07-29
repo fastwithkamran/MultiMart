@@ -1,4 +1,4 @@
-import ShopLogin from "../../components/Shop/ShopLogin";
+import { ShopLogin } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";

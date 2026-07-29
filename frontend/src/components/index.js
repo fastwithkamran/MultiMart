@@ -17,11 +17,13 @@ import EventCard from "./Landing/Events/EventCard.jsx";
 import SuggestedProduct from "./Landing/Products/SuggestedProduct.jsx";
 import ProfileSidebar from "./Profile/ProfileSidebar.jsx";
 import ProfileContent from "./Profile/ProfileContent.jsx";
-import ShopCreate from "./Shop/ShopCreate.jsx";
-import ShopLogin from "./Shop/ShopLogin.jsx";
+import ShopCreate from "./Shop/Auth/ShopCreate.jsx";
+import ShopLogin from "./Shop/Auth/ShopLogin.jsx";
 import DashboardHeader from "./Shop/Layout/Dashboard/DashboardHeader.jsx";
 import DashboardSideBar from "./Shop/Layout/Dashboard/DashboardSideBar.jsx";
 import Loader from "./Layout/Loader/Loader.jsx";
+import ShopInfo from "./Shop/Layout/Main/ShopInfo.jsx";
+import ShopProfileData from "./Shop/Layout/Main/ShopProfileData.jsx";
 export {
   Loader,
   Login,
@@ -47,4 +49,6 @@ export {
   ShopLogin,
   DashboardHeader,
   DashboardSideBar,
+  ShopInfo,
+  ShopProfileData,
 };

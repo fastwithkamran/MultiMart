@@ -1,4 +1,4 @@
-import ShopCreate from "../../components/Shop/ShopCreate";
+import { ShopCreate } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
