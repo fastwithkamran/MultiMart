@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import SellerProtectedRoute from "./SellerProtectedRoute.jsx";
 import {
   LoginPage,
   SignupPage,
@@ -18,6 +19,8 @@ import {
   ProfilePage,
   ShopCreatePage,
   SellerActivationPage,
+  ShopLoginPage,
+  ShopHomePage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -30,16 +33,31 @@ import {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      {/* Home Route */}
       <Route path="/" element={<HomePage />} />
+      {/* Auth ROutes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/sign-up" element={<SignupPage />} />
+      {/* Nav Items Routes */}
       <Route path="/products" element={<ProductPage />} />
       <Route path="/best-selling" element={<BestSellingPage />} />
       <Route path="/events" element={<EventsPage />} />
       <Route path="/faq" element={<FAQPage />} />
-      <Route path="/order/success/:id" element={<OrderSuccessPage />} />
+      {/* Product Routes */}
       <Route path="/product/:name" element={<ProductDetailsPage />} />
+      <Route path="/order/success/:id" element={<OrderSuccessPage />} />
+      {/* Shop Routes */}
       <Route path="/shop-create" element={<ShopCreatePage />} />
+      <Route path="/shop-login" element={<ShopLoginPage />} />
+      <Route
+        path="/shop/:id"
+        element={
+          <SellerProtectedRoute>
+            <ShopHomePage />
+          </SellerProtectedRoute>
+        }
+      />
+      {/* Activation Routes */}
       <Route
         path="/activation/:activation_token"
         element={<ActivationPage />}
@@ -48,6 +66,8 @@ const router = createBrowserRouter(
         path="/seller/activation/:activation_token"
         element={<SellerActivationPage />}
       />
+      {/* Protected Routes */}
+      {/* CheckOut Route */}
       <Route
         path="/checkout"
         element={
@@ -56,6 +76,7 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
+      {/* Profile Route */}
       <Route
         path="/profile"
         element={
