@@ -1,4 +1,4 @@
-import { CheckoutSteps, Header, Footer, Payment } from "../components";
+import { CheckoutSteps, Header, Footer, Payment } from "../../components";
 
 
 function PaymentPage() {

@@ -23,7 +23,7 @@ const PaymentInfo = () => {
 
   const paymentHandler = (e) => {
     e.preventDefault();
-    navigate("order/success/34583457");
+    navigate("/order/success/34583457");
   };
   return (
     <div className="w-full md:w-[95%] bg-white rounded-md p-5 pb-8">
