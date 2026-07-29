@@ -1,14 +1,16 @@
 import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
-import { loadUser } from "./redux/actions/user";
+import { loadUser, loadSeller } from "./redux/actions/user";
 import { useSelector, useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
+  const { isLoading } = useSelector((state) => state.seller);
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(loadSeller());
   }, [dispatch]);
 
   return (
@@ -26,7 +28,7 @@ function App() {
         theme="dark"
       />
 
-      {!loading ? <Outlet /> : null}
+      {!loading || !isLoading ? <Outlet /> : null}
     </>
   );
 }
