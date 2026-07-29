@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const path = require("path");
 const { upload } = require("../multer.js");
 const {
   handleCreateUser,
@@ -33,7 +32,7 @@ router.get(
   "/logout",
   isAuthenticated,
   catchAsyncErrors(async (req, res) => {
-    res.cookie("token", null, {
+    res.cookie("Usertoken", null, {
       expires: new Date(Date.now()),
       httpOnly: true,
       sameSite: "none",

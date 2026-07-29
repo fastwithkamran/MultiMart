@@ -1,6 +1,6 @@
 // create token and return as cookies
 
-const sendToken = (user, statusCode, res) => {
+const sendToken = (user) => {
   const token = user.getJwtToken();
 
   const options = {
@@ -10,11 +10,7 @@ const sendToken = (user, statusCode, res) => {
     secure: true,
   };
 
-  res.status(statusCode).cookie("token", token, options).json({
-    success: true,
-    user,
-    token,
-  });
+  return { token, options };
 };
 
 module.exports = sendToken;

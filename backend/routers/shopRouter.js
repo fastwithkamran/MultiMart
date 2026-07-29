@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const path = require("path");
 const { upload } = require("../multer.js");
 const { handleCreateShop, handleActivateShop } = require("../controllers/shop");
 

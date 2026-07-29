@@ -94,7 +94,13 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     avatar,
   });
 
-  sendToken(seller, 201, res);
+  const result = sendToken(seller);
+
+  res.status(201).cookie("Shoptoken", result.token, result.options).json({
+    success: true,
+    seller,
+    token: result.token,
+  });
 });
 
 module.exports = { handleCreateShop, handleActivateShop };
