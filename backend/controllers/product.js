@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Shop = require("../models/shop.js");
 
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
@@ -11,8 +12,9 @@ const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Shop ID is invalid!", 400));
     } else {
       const files = req.files;
-      const imageUrl = files.map((file) => `${file.fileName}`);
-
+      const imageUrls = files.map(
+        (file) => `${req.protocol}://${req.get("host")}/${file.filename}`,
+      );
       const productData = req.body;
       productData.images = imageUrls;
       productData.shop = shop;
@@ -25,7 +27,7 @@ const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
       });
     }
   } catch (error) {
-    return next(new ErrorHandler("Error!", 500));
+    return next(new ErrorHandler(error, 500));
   }
 });
 
