@@ -12,7 +12,7 @@ function ShopInfo({ isOwner }) {
           <img
             alt="Image"
             src={`${seller.avatar.url}`}
-            className="w-32 h-32 rounded-full object-cover border-2 border-green-400"
+            className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-2 border-green-400"
           />
         </div>
         <h3 className="text-center py-2 text-[20px]">{seller.name}</h3>
@@ -49,10 +49,10 @@ function ShopInfo({ isOwner }) {
       {isOwner && (
         <div className="py-3 px-4">
           <div className={`${styles.button} w-full! h-10! rounded-sm!`}>
-            <span className="text-white">Edit Shop</span>
+            <span className="text-white text-center text-sm md:text">Edit Shop</span>
           </div>
           <div className={`${styles.button} w-full! h-10! rounded-sm!`} onClick={handleLogOut}>
-            <span className="text-white">Log Out</span>
+            <span className="text-white text-center text-sm md:text">Log Out</span>
           </div>
         </div>
       )}
