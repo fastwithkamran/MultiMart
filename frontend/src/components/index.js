@@ -24,6 +24,7 @@ import DashboardSideBar from "./Shop/Layout/Dashboard/DashboardSideBar.jsx";
 import Loader from "./Layout/Loader/Loader.jsx";
 import ShopInfo from "./Shop/Layout/Main/ShopInfo.jsx";
 import ShopProfileData from "./Shop/Layout/Main/ShopProfileData.jsx";
+import ShopCreateProduct from "./Shop/Layout/Main/ShopCreateProduct.jsx";
 export {
   Loader,
   Login,
@@ -51,4 +52,5 @@ export {
   DashboardSideBar,
   ShopInfo,
   ShopProfileData,
+  ShopCreateProduct,
 };
