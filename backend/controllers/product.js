@@ -31,4 +31,17 @@ const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = handleCreateProduct;
+// get all products of a shop
+const handleGetShopProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const products = await Product.find({ shopId: req.params.id });
+    res.status(201).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = { handleCreateProduct, handleGetShopProducts };
