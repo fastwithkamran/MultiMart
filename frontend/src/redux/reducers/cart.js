@@ -6,7 +6,7 @@ const initialState = {
     : [],
 };
 
-export const cartReducer = createReducer(initialState, (builder) => {
+const cartReducer = createReducer(initialState, (builder) => {
   builder
     .addCase("addToCart", (state, action) => {
       const item = action.payload;
@@ -23,3 +23,5 @@ export const cartReducer = createReducer(initialState, (builder) => {
       state.cart = state.cart.filter((i) => i._id !== action.payload);
     });
 });
+
+export default cartReducer;
