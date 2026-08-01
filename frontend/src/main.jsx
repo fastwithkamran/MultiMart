@@ -24,6 +24,7 @@ import {
   ShopDashboardPage,
   ShopCreateProductPage,
   ShopAllProductsPage,
+  ShopCreateEventPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -86,6 +87,14 @@ const router = createBrowserRouter(
           </SellerProtectedRoute>
         }
       />
+      <Route
+        path="/dashboard-create-event"
+        element={
+          <SellerProtectedRoute>
+            <ShopCreateEventPage />
+          </SellerProtectedRoute>
+        }
+      />
       {/* Activation Routes */}
       <Route
         path="/activation/:activation_token"
@@ -95,7 +104,6 @@ const router = createBrowserRouter(
         path="/seller/activation/:activation_token"
         element={<SellerActivationPage />}
       />
-      {/* Protected Routes */}
       {/* CheckOut Route */}
       <Route
         path="/checkout"
