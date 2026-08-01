@@ -1,10 +1,26 @@
 import { useSelector } from "react-redux";
 import styles from "../../../../styles/styles";
+import axios from "axios";
+import { server } from "../../../../../server";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ShopInfo({ isOwner }) {
   const { seller } = useSelector((state) => state.seller);
 
-  const handleLogOut = () => {}
+  const navigate = useNavigate();
+  const handleLogOut = async () => {
+    axios
+      .get(`${server}/shop/logout`, { withCredentials: true })
+      .then(() => {
+        toast.success("Logout Successfull");
+        navigate("/shop-login");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
   return (
     <div>
       <div className="w-full py-5">
@@ -49,10 +65,17 @@ function ShopInfo({ isOwner }) {
       {isOwner && (
         <div className="py-3 px-4">
           <div className={`${styles.button} w-full! h-10! rounded-sm!`}>
-            <span className="text-white text-center text-sm md:text">Edit Shop</span>
+            <span className="text-white text-center text-sm md:text">
+              Edit Shop
+            </span>
           </div>
-          <div className={`${styles.button} w-full! h-10! rounded-sm!`} onClick={handleLogOut}>
-            <span className="text-white text-center text-sm md:text">Log Out</span>
+          <div
+            className={`${styles.button} w-full! h-10! rounded-sm!`}
+            onClick={handleLogOut}
+          >
+            <span className="text-white text-center text-sm md:text">
+              Log Out
+            </span>
           </div>
         </div>
       )}

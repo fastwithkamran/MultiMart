@@ -28,4 +28,23 @@ router.get(
   }),
 );
 
+// Logout Seller
+router.get(
+  "/logout",
+  isAuthenticatedSeller,
+  catchAsyncErrors(async (req, res) => {
+    res.cookie("Shoptoken", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Log Out Successful",
+    });
+  }),
+);
+
 module.exports = router;

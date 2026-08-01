@@ -39,7 +39,7 @@ router.get(
       secure: true,
     });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Log Out Successful",
     });
