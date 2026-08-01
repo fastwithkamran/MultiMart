@@ -3,6 +3,7 @@ const Event = require("../models/event.js");
 
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
+const fs = require("fs");
 
 const handleCreateEvent = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -48,11 +49,25 @@ const handleGetShopEvents = catchAsyncErrors(async (req, res, next) => {
 const handleDeleteEvent = catchAsyncErrors(async (req, res, next) => {
   try {
     const eventId = req.params.id;
-    const event = await Event.findByIdAndDelete(eventId);
+    const eventData = await Event.findById(eventId);
 
-    if (!event) {
+    if (!eventData) {
       return next(new ErrorHandler("Event not found with this id", 400));
     }
+
+    eventData.images.forEach((imageUrl) => {
+      const filename = new URL(imageUrl).pathname.split("/").pop();
+      const filePath = `uploads/${filename}`;
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Error deleting images", err);
+          return next(new ErrorHandler("Product Images cannot deleted", 500));
+        }
+      });
+    });
+
+    const event = await Event.findByIdAndDelete(eventId);
 
     res.status(200).json({
       success: true,
