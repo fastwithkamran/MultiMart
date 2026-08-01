@@ -44,4 +44,27 @@ const handleGetShopProducts = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleCreateProduct, handleGetShopProducts };
+// delete product
+const handleDeleteProduct = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findByIdAndDelete(productId);
+
+    if (!product) {
+      return next(new ErrorHandler("Product not found with this id", 400));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product Deleted Successfully",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = {
+  handleCreateProduct,
+  handleGetShopProducts,
+  handleDeleteProduct,
+};
