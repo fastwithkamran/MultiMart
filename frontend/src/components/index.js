@@ -25,6 +25,7 @@ import Loader from "./Layout/Loader/Loader.jsx";
 import ShopInfo from "./Shop/Layout/Main/ShopInfo.jsx";
 import ShopProfileData from "./Shop/Layout/Main/ShopProfileData.jsx";
 import ShopCreateProduct from "./Shop/Layout/Main/ShopCreateProduct.jsx";
+import ShopAllProducts from "./Shop/Layout/Main/ShopAllProducts.jsx";
 export {
   Loader,
   Login,
@@ -53,4 +54,5 @@ export {
   ShopInfo,
   ShopProfileData,
   ShopCreateProduct,
+  ShopAllProducts,
 };

@@ -23,6 +23,7 @@ import {
   PaymentPage,
   ShopDashboardPage,
   ShopCreateProductPage,
+  ShopAllProductsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -74,6 +75,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopCreateProductPage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard-products"
+        element={
+          <SellerProtectedRoute>
+            <ShopAllProductsPage />
           </SellerProtectedRoute>
         }
       />
