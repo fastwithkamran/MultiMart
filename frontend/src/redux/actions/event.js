@@ -26,3 +26,50 @@ export const createEvent = (newForm) => async (dispatch) => {
     });
   }
 };
+
+// get All events
+export const getAllEventsShop = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllEventsShopRequest",
+    });
+
+    const { data } = await axios.get(
+      `${server}/event/get-all-events/${id}`,
+    );
+
+    dispatch({
+      type: "getAllEventsShopSuccess",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsShopFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// delete product
+export const deleteEvent = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "deleteEventRequest",
+    });
+
+    const { data } = await axios.delete(
+      `${server}/event/delete-shop-event/${id}`,
+      { withCredentials: true },
+    );
+
+    dispatch({
+      type: "deleteEventSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "deleteEventFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

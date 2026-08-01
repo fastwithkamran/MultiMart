@@ -25,6 +25,7 @@ import {
   ShopCreateProductPage,
   ShopAllProductsPage,
   ShopCreateEventPage,
+  ShopAllEventsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -92,6 +93,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopCreateEventPage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard-events"
+        element={
+          <SellerProtectedRoute>
+            <ShopAllEventsPage />
           </SellerProtectedRoute>
         }
       />
