@@ -2,19 +2,17 @@ import { useSelector } from "react-redux";
 import styles from "../../../../styles/styles";
 import axios from "axios";
 import { server } from "../../../../../server";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function ShopInfo({ isOwner }) {
   const { seller } = useSelector((state) => state.seller);
 
-  const navigate = useNavigate();
-  const handleLogOut = async () => {
+  const handleLogOut = async (e) => {
+    e.preventDefault();
     axios
       .get(`${server}/shop/logout`, { withCredentials: true })
       .then(() => {
-        toast.success("Logout Successfull");
-        navigate("/shop-login");
+        window.location.reload();
       })
       .catch((error) => {
         toast.error(error);
@@ -71,7 +69,7 @@ function ShopInfo({ isOwner }) {
           </div>
           <div
             className={`${styles.button} w-full! h-10! rounded-sm!`}
-            onClick={handleLogOut}
+            onClick={(e) => handleLogOut(e)}
           >
             <span className="text-white text-center text-sm md:text">
               Log Out

@@ -25,7 +25,6 @@ function ShopLogin() {
         if (res.data.success) {
           navigate("/dashboard");
           window.location.reload();
-          toast.success("Login success");
         } else toast.error(res.data.message);
         setEmail("");
         setPassword("");

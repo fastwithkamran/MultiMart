@@ -121,7 +121,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
  
    const result = sendToken(seller);
  
-   res.status(201).cookie("Sellertoken", result.token, result.options).json({
+   res.status(201).cookie("Shoptoken", result.token, result.options).json({
      success: true,
      token: result.token,
    });
