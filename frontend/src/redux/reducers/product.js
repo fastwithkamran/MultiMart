@@ -37,6 +37,21 @@ const productReducer = createReducer(initialState, (builder) => {
     .addCase("getAllProductsShopFailure", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    })
+
+    // delete product of a shop
+    .addCase("deleteProductRequest", (state) => {
+      state.isLoading = true;
+    })
+    .addCase("deleteProductSuccess", (state, action) => {
+      state.isLoading = false;
+      state.success = true;
+      state.message = action.payload;
+    })
+    .addCase("deleteProductFailure", (state, action) => {
+      state.isLoading = false;
+      state.success = false;
+      state.error = action.payload;
     });
 });
 

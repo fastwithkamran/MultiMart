@@ -1,16 +1,41 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsShop } from "../../../../redux/actions/product";
+import {
+  deleteProduct,
+  getAllProductsShop,
+} from "../../../../redux/actions/product";
+import { resetSuccess, clearErrors } from "../../../../redux/reducers/product";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import Loader from "../../../Layout/Loader/Loader";
+import { toast } from "react-toastify";
 
 function ShopAllProducts() {
   const { seller } = useSelector((state) => state.seller);
-  const { products, isLoading } = useSelector((state) => state.product);
+  const { products, isLoading, message, error, success } = useSelector(
+    (state) => state.product,
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (success) {
+      console.log(message);
+      toast.success(message);
+      dispatch(resetSuccess());
+      dispatch(getAllProductsShop(seller._id));
+    }
+  }, [error, success, dispatch, message, seller._id]);
+
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    dispatch(deleteProduct(id));
+  };
 
   useEffect(() => {
     if (!seller?._id) return;
@@ -78,7 +103,7 @@ function ShopAllProducts() {
         return (
           <>
             <Link to={`/product/${product_name}`}>
-              <Button>
+              <Button onClick={(e) => handleDelete(e, params.id)}>
                 <AiOutlineDelete size={20} />
               </Button>
             </Link>
@@ -102,18 +127,19 @@ function ShopAllProducts() {
     });
   return (
     <>
-      {" "}
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
-          <DataGrid
-            rows={row}
-            columns={columns}
-            pageSize={10}
-            disableRowSelectionOnClick
-            autoHeight
-          />
+        <div className="w-full pt-1 mt-2 sm:mt-6 lg:mt-10 bg-white overflow-hidden max-w-full rounded-md shadow-sm">
+          <div className="w-full overflow-x-auto p-1">
+            <DataGrid
+              rows={row}
+              columns={columns}
+              pageSize={10}
+              disableRowSelectionOnClick
+              autoHeight
+            />
+          </div>
         </div>
       )}
     </>
