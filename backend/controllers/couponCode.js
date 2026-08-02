@@ -23,4 +23,29 @@ const handleCreateCouponsCode = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = handleCreateCouponsCode;
+// get all coupons of a shop
+const handleGetAllCoupons = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const couponCodes = await CouponCode.find({ "shop._id": req.params.id });
+    res.status(200).json({
+      success: true,
+      couponCodes,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+// delete coupon
+const handleDeleteCoupon = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const couponCodes = await CouponCode.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = { handleCreateCouponsCode, handleGetAllCoupons, handleDeleteCoupon };
