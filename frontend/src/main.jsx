@@ -26,6 +26,7 @@ import {
   ShopAllProductsPage,
   ShopCreateEventPage,
   ShopAllEventsPage,
+  ShopAllCouponsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -101,6 +102,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopAllEventsPage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard-coupons"
+        element={
+          <SellerProtectedRoute>
+            <ShopAllCouponsPage />
           </SellerProtectedRoute>
         }
       />

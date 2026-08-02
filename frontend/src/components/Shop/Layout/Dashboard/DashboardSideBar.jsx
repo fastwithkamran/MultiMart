@@ -131,7 +131,7 @@ function DashboardSideBar({ active }) {
       </div>
 
       <div className="w-full items-center flex p-4">
-        <Link to={"/dashboard/coupons"} className="w-full flex items-center">
+        <Link to={"/dashboard-coupons"} className="w-full flex items-center">
           <AiOutlineGif
             size={30}
             color={`${active === 9 ? "crimson" : "#555"}`}

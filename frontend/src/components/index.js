@@ -28,6 +28,7 @@ import ShopCreateProduct from "./Shop/Layout/Main/ShopCreateProduct.jsx";
 import ShopAllProducts from "./Shop/Layout/Main/ShopAllProducts.jsx";
 import ShopCreateEvent from "./Shop/Layout/Main/ShopCreateEvent.jsx";
 import ShopAllEvents from "./Shop/Layout/Main/ShopAllEvents.jsx";
+import ShopAllCoupons from "./Shop/Layout/Main/ShopAllCoupons.jsx";
 export {
   Loader,
   Login,
@@ -59,4 +60,5 @@ export {
   ShopAllProducts,
   ShopCreateEvent,
   ShopAllEvents,
+  ShopAllCoupons,
 };
