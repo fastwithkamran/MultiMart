@@ -27,10 +27,12 @@ const userRoute = require("./routers/userRouter.js");
 const shopRoute = require("./routers/shopRouter.js");
 const productRoute = require("./routers/productRouter.js");
 const eventRoute = require("./routers/eventRouter.js");
+const couponCodeRoute = require("./routers/couponCodeRouter.js")
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/shop", shopRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/event", eventRoute);
+app.use("/api/v1/couponCode", couponCodeRoute);
 
 // error handling
 app.use(ErrorHandler);
