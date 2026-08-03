@@ -5,6 +5,7 @@ const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const fs = require("fs");
 
+// create event
 const handleCreateEvent = catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.body.shopId;
@@ -45,7 +46,7 @@ const handleGetShopEvents = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-// delete event
+// delete event of a shop
 const handleDeleteEvent = catchAsyncErrors(async (req, res, next) => {
   try {
     const eventId = req.params.id;
@@ -78,4 +79,21 @@ const handleDeleteEvent = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleCreateEvent, handleDeleteEvent, handleGetShopEvents };
+// get all events
+const handleGetAllEvents = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const events = await Event.find();
+    res.status(201).json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+module.exports = {
+  handleCreateEvent,
+  handleDeleteEvent,
+  handleGetShopEvents,
+  handleGetAllEvents,
+};
