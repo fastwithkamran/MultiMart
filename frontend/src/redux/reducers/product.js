@@ -6,6 +6,7 @@ const initialState = {
 
 const productReducer = createReducer(initialState, (builder) => {
   builder
+    // creation of a product
     .addCase("productCreateRequest", (state) => {
       state.isLoading = true;
     })
@@ -26,7 +27,7 @@ const productReducer = createReducer(initialState, (builder) => {
       state.success = false;
     })
 
-    // get all products
+    // get all products of a shop
     .addCase("getAllProductsShopRequest", (state) => {
       state.isLoading = true;
     })
@@ -52,7 +53,22 @@ const productReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.success = false;
       state.error = action.payload;
-    });
+    })
+    
+    // get all products
+    .addCase("getAllProductsRequest", (state) => {
+      state.isLoading = true;
+    })
+    .addCase("getAllProductsSuccess", (state, action) => {
+      state.isLoading = false;
+      state.success = true;
+      state.allProducts = action.payload;
+    })
+    .addCase("getAllProductsFailed", (state, action) => {
+      state.isLoading = false;
+      state.success = false;
+      state.error = action.payload;
+    })
 });
 
 export const clearErrors = () => ({ type: "clearErrors" });
