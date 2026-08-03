@@ -1,12 +1,14 @@
-import { productData } from "../../../static/data";
+import { useSelector } from "react-redux";
 import styles from "../../../styles/styles";
 import ProductCard from "../Products/ProductCard";
 
 const BestDeals = () => {
+  const { allProducts } = useSelector((state) => state.product);
+
   const bestDeals =
-    productData &&
-    [...productData]
-      .sort((item1, item2) => item2.total_sell - item1.total_sell)
+    allProducts &&
+    [...allProducts]
+      .sort((item1, item2) => item2.sold_out - item1.sold_out)
       .slice(0, 5);
 
   return (

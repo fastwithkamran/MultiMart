@@ -1,10 +1,12 @@
-import { productData } from "../../../static/data";
+import { useSelector } from "react-redux";
 import styles from "../../../styles/styles";
 import ProductCard from "./ProductCard";
 
 const SuggestedProduct = ({ data }) => {
-  const products =
-    productData && productData.filter((i) => i.category === data.category);
+  const { allProducts } = useSelector((state) => state.product);
+
+  const productData =
+    allProducts && allProducts.filter((i) => i.category === data.category);
   return (
     <div>
       {data && (
@@ -15,8 +17,10 @@ const SuggestedProduct = ({ data }) => {
             Related Product
           </h2>
           <div className="grid grid-cols-1 gap-1.5 md:grid-cols-2 md:gap-3 lg:grid-cols-4 lg:gap-10 xl:grid-cols-5 xl:gap-16">
-            {products &&
-              products.map((i, index) => <ProductCard data={i} key={index} />)}
+            {productData &&
+              productData.map((i, index) => (
+                <ProductCard data={i} key={index} />
+              ))}
           </div>
         </div>
       )}

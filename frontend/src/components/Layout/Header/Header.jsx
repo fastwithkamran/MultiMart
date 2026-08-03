@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../../../styles/styles.js";
 import { Link } from "react-router";
-import { categoriesData, productData } from "../../../static/data.jsx";
+import { categoriesData } from "../../../static/data.jsx";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -19,6 +19,8 @@ import { RxCross1 } from "react-icons/rx";
 
 const Header = ({ activePage }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { allProducts } = useSelector((state) => state.product)
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState("");
   const [active, setActive] = useState(false);
@@ -32,8 +34,8 @@ const Header = ({ activePage }) => {
     const term = e.target.value;
     setSearchTerm(term);
 
-    const filteredProducts = productData.filter((product) =>
-      product.name.toLowerCase().includes(term.toLowerCase()),
+    const filteredProducts = allProducts.filter((product) =>
+      product?.name?.toLowerCase().includes(term.toLowerCase()),
     );
 
     setSearchData(filteredProducts);
@@ -87,7 +89,7 @@ const Header = ({ activePage }) => {
                       <Link to={`/product/${ProductName}`}>
                         <div className="w-full flex items-start py-3">
                           <img
-                            src={product.image_Url[0].url}
+                            src={product.images[0]}
                             alt="Product image"
                             className="w-10 h-10 mr-2.5"
                           />
@@ -329,7 +331,7 @@ const Header = ({ activePage }) => {
                           <img
                             alt="Image"
                             src={`${user.avatar.url}`}
-                            className="w-14 h-14 rounded-full object-cover border-2 border-green-400"
+                            className="w-14 h-14 rounded-full object-contain border-2 border-green-400"
                           />
                         </Link>
                       </div>

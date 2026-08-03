@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-function calculateTimeLeft() {
-  const difference = +new Date("2026-07-26") - +new Date();
+function calculateTimeLeft({ data }) {
+  const difference = +new Date(data?.finish_Date) - +new Date();
   let timeLeft = {};
 
   if (difference > 0) {
@@ -15,13 +15,13 @@ function calculateTimeLeft() {
   return timeLeft;
 }
 
-function CountDown() {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+function CountDown({ data }) {
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft({ data }));
 
   //   countdown timer hook
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      setTimeLeft(calculateTimeLeft({ data }));
     }, 1000);
     return () => clearTimeout(timer);
   });
