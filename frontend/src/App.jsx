@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { loadUser, loadSeller } from "./redux/actions/user";
 import { useSelector, useDispatch } from "react-redux";
 import { Loader } from "./components";
+import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
 
 function App() {
   const dispatch = useDispatch();
@@ -12,6 +14,8 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
     dispatch(loadSeller());
+    dispatch(getAllProducts());
+    dispatch(getAllEvents());
   }, [dispatch]);
 
   if (loading || isLoading) {

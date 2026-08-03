@@ -27,6 +27,7 @@ import {
   ShopCreateEventPage,
   ShopAllEventsPage,
   ShopAllCouponsPage,
+  ShopPreviewPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -113,6 +114,7 @@ const router = createBrowserRouter(
           </SellerProtectedRoute>
         }
       />
+      <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
       {/* Activation Routes */}
       <Route
         path="/activation/:activation_token"
