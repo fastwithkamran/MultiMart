@@ -7,6 +7,7 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const ProductDetailsCard = ({ data, setOpen }) => {
   const [count, setCount] = useState(1);
@@ -26,19 +27,21 @@ const ProductDetailsCard = ({ data, setOpen }) => {
 
             <div className="block w-full md:flex">
               <div className="w-full md:w-[50%]">
-                <img src={data.image_Url[0].url} alt="productImage" />
+                <img src={data.images[0]} alt="productImage" className="w-50 h-50 mx-auto mb-5 object-contain"/>
                 <div className="flex">
-                  <img
-                    src={data.shop.shop_avatar.url}
-                    alt="shopAvator"
-                    className="w-12 h-12 rounded-full mr-2"
-                  />
-                  <div>
-                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                    <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Ratings
-                    </h5>
-                  </div>
+                  <Link to={`/shop/preview/${data.shop._id}`}>
+                    <img
+                      src={data.shop.avatar.url}
+                      alt="shopAvator"
+                      className="w-12 h-12 rounded-full mr-2 object-contain"
+                    />
+                    <div>
+                      <h3 className={`${styles.shop_name}`}>
+                        {data.shop.name}
+                      </h3>
+                      <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                    </div>
+                  </Link>
                 </div>
                 <div
                   className={`${styles.button} bg-black mt-4 rounded-sm h-11 w-fit p-4`}
@@ -50,7 +53,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                   </span>
                 </div>
                 <h5 className="text-red-500 text-sm mt-5">
-                  ({data.total_sell}) Sold
+                  ({data.sold_out}) Sold
                 </h5>
               </div>
 
@@ -61,10 +64,10 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discount_price}
+                    {data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + "$" : null}
+                    {data.originalPrice ? data.originalPrice + "$" : null}
                   </h3>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">

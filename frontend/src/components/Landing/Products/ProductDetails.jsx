@@ -7,11 +7,21 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllProductsShop } from "../../../redux/actions/product";
+import { useEffect } from "react";
 
 function ProductDetails({ data }) {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
-  const [select, setSelect] = useState(1);
+  const [select, setSelect] = useState(0);
+
+  const { products } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(data.shop._id));
+  }, [dispatch, data?.shop._id]);
 
   const handleMessageSubmit = () => {};
   return (
@@ -24,28 +34,23 @@ function ProductDetails({ data }) {
 
               <div className="block w-full md:flex">
                 <div className="w-full md:w-[50%]">
-                  <img src={data.image_Url[select].url} alt="productImage" />
+                  <img
+                    src={data?.images[select]}
+                    alt="productImage"
+                    className="w-[80%] object-contain mx-auto"
+                  />
                   <div className="w-full flex">
-                    <div
-                      className={`${select === 0 ? "border" : null} cursor-pointer`}
-                    >
-                      <img
-                        src={data?.image_Url[0].url}
-                        alt="productImage"
-                        className="h-50"
-                        onClick={() => setSelect(0)}
-                      />
-                    </div>
-                    <div
-                      className={`${select === 1 ? "border" : null} cursor-pointer`}
-                    >
-                      <img
-                        src={data?.image_Url[1].url}
-                        alt="productImage"
-                        className="h-50"
-                        onClick={() => setSelect(1)}
-                      />
-                    </div>
+                    {data &&
+                      data.images.map((url, index) => (
+                        <div className={"border cursor-pointer"}>
+                          <img
+                            src={url}
+                            alt="productImage"
+                            className="h-50 object-contain overflow-hidden mr-3"
+                            onClick={() => setSelect(index)}
+                          />
+                        </div>
+                      ))}
                   </div>
                 </div>
 
@@ -55,10 +60,10 @@ function ProductDetails({ data }) {
                   <p>{data.description}</p>
                   <div className="flex mt-3">
                     <h4 className={`${styles.productDiscountPrice}`}>
-                      {data.discount_price}$
+                      {data.discountPrice}$
                     </h4>
                     <h3 className={`${styles.price}`}>
-                      {data.price ? data.price + "$" : null}
+                      {data.originalPrice ? data.originalPrice + "$" : null}
                     </h3>
                   </div>
 
@@ -113,19 +118,20 @@ function ProductDetails({ data }) {
 
                   <div>
                     <div className="flex items-center pt-8">
-                      <img
-                        src={data.shop.shop_avatar.url}
-                        alt="shopImage"
-                        className="w-12 h-12 rounded-full mr-2"
-                      />
-                      <div className="pr-8">
-                        <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                          {data.shop.name}
-                        </h3>
-                        <h5 className="pb-3 text-[15px]">
-                          ({data.shop.ratings}) Ratings
-                        </h5>
-                      </div>
+                      <Link to={`/shop/preview/${data.shop._id}`} className="flex items-center">
+                        <img
+                          src={data?.shop?.avatar.url}
+                          alt="shopImage"
+                          className="w-12 h-12 rounded-full mr-2"
+                        />
+
+                        <div className="pr-8">
+                          <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                            {data.shop.name}
+                          </h3>
+                          <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                        </div>
+                      </Link>
 
                       <div
                         className={`${styles.button} bg-purple-700 text-white mt-4 rounded! h-11! p-3`}
@@ -140,7 +146,7 @@ function ProductDetails({ data }) {
                 </div>
               </div>
             </div>
-            <ProductDetailsInfo data={data} />
+            <ProductDetailsInfo data={data} products={products} />
             <br />
             <br />
           </div>
@@ -150,7 +156,7 @@ function ProductDetails({ data }) {
   );
 }
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
 
   return (
@@ -196,18 +202,7 @@ const ProductDetailsInfo = ({ data }) => {
       <div>
         {active === 1 ? (
           <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus
-            necessitatibus suscipit saepe. Ratione delectus alias quas fuga
-            soluta expedita repellat dolore, fugit aperiam amet! Iure harum
-            error dolorem dicta nulla! Lorem, ipsum dolor sit amet consectetur
-            adipisicing elit. <br /> <br /> Aperiam ea facere maiores quae
-            distinctio, accusamus minima laborum ullam? Officiis eveniet tempora
-            cumque labore et qui quasi expedita obcaecati odio neque. Hic
-            voluptatem, aut explicabo, vitae, magni impedit accusantium quos
-            repellat aliquam corrupti veritatis cum doloribus ad ipsum
-            consequuntur esse repudiandae dolorum quas. Pariatur unde ipsum
-            repudiandae doloribus perspiciatis, inventore repellat est aliquid
-            magni temporibus.
+            {data.description}
           </p>
         ) : null}
       </div>
@@ -226,35 +221,27 @@ const ProductDetailsInfo = ({ data }) => {
             <div className="w-full md:w-[50%]">
               <div className="flex items-center">
                 <img
-                  src={data.shop.shop_avatar.url}
+                  src={data?.shop?.avatar.url}
                   alt="ShopImage"
                   className="w-8 h-8 rounded-full"
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">
-                    ({data.shop.ratings}) Ratings
-                  </h5>
+                  <h5 className="pb-2 text-[15px]">(4/5) Ratings</h5>
                 </div>
               </div>
               <div>
-                <p className="mt-2">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Reprehenderit quia sapiente libero provident, deleniti velit
-                  laborum dignissimos fugiat asperiores, dolore accusantium eos
-                  est, voluptatibus consequuntur neque. Eligendi placeat quam
-                  deleniti.
-                </p>
+                <p className="mt-2">{data.shop?.description}</p>
               </div>
             </div>
 
             <div className="w-full md:w-[50%] mt-5 md:mt-0 md:flex flex-col items-end">
               <div className="text-left">
                 <h5 className="font-medium mb-3">
-                  Joined on: <span>27 July, 2026</span>
+                  Joined on: <span>{data?.createdAt?.slice(0, 10)}</span>
                 </h5>
                 <h5 className="font-medium mb-3">
-                  Total Products: <span>1,223</span>
+                  Total Products: <span>{products?.length}</span>
                 </h5>
                 <h5 className="font-medium mb-3">
                   Total Reviews: <span>223</span>

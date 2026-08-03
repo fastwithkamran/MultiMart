@@ -1,13 +1,19 @@
-import { Header, Footer, ProductDetails, SuggestedProduct } from "../../../components";
+import {
+  Header,
+  Footer,
+  ProductDetails,
+  SuggestedProduct,
+} from "../../../components";
 import { useParams } from "react-router-dom";
-import { productData } from "../../../static/data";
+import { useSelector } from "react-redux";
 
 const ProductDetailsPage = () => {
+  const { allProducts } = useSelector((state) => state.product);
   const { name } = useParams();
   // replaces spaces with - for SEO friendly
   const productName = name.replace(/-/g, " ");
 
-  const data = [...productData].find((i) => i.name === productName);
+  const data = allProducts?.find((i) => i.name === productName);
 
   return (
     <>
