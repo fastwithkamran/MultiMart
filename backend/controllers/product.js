@@ -5,6 +5,7 @@ const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const fs = require("fs");
 
+// create product
 const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.body.shopId;
@@ -45,7 +46,7 @@ const handleGetShopProducts = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-// delete product
+// delete product of a shop
 const handleDeleteProduct = catchAsyncErrors(async (req, res, next) => {
   try {
     const productId = req.params.id;
@@ -78,8 +79,22 @@ const handleDeleteProduct = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// get all events
+const handleGetAllProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const products = await Product.find();
+    res.status(201).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateProduct,
   handleGetShopProducts,
   handleDeleteProduct,
+  handleGetAllProducts,
 };
