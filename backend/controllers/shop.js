@@ -103,28 +103,42 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-
 // login shop
- const handleShopLogin = catchAsyncErrors(async (req, res, next) => {
-   const { email, password } = req.body;
-   if (!email || !password)
-     return next(new ErrorHandler("Provide all fields", 400));
- 
-   const seller = await Shop.findOne({ email }).select("+password");
- 
-   if (!seller) return next(new ErrorHandler("Incorrect Password or Email", 400));
- 
-   const isPasswordValid = await seller.comparePassword(password);
- 
-   if (!isPasswordValid)
-     return next(new ErrorHandler("Incorrect Password or Email", 400));
- 
-   const result = sendToken(seller);
- 
-   res.status(201).cookie("Shoptoken", result.token, result.options).json({
-     success: true,
-     token: result.token,
-   });
- });
+const handleShopLogin = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password)
+    return next(new ErrorHandler("Provide all fields", 400));
 
-module.exports = { handleCreateShop, handleActivateShop, handleShopLogin };
+  const seller = await Shop.findOne({ email }).select("+password");
+
+  if (!seller)
+    return next(new ErrorHandler("Incorrect Password or Email", 400));
+
+  const isPasswordValid = await seller.comparePassword(password);
+
+  if (!isPasswordValid)
+    return next(new ErrorHandler("Incorrect Password or Email", 400));
+
+  const result = sendToken(seller);
+
+  res.status(201).cookie("Shoptoken", result.token, result.options).json({
+    success: true,
+    token: result.token,
+  });
+});
+
+// get shop Info
+const handleGetShopInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const shop = await Shop.findById(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = { handleCreateShop, handleActivateShop, handleShopLogin, handleGetShopInfo};

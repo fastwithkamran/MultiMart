@@ -1,11 +1,21 @@
-import { useSelector } from "react-redux";
 import styles from "../../../../styles/styles";
 import axios from "axios";
 import { server } from "../../../../../server";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 
 function ShopInfo({ isOwner }) {
-  const { seller } = useSelector((state) => state.seller);
+  const { id } = useParams();
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`${server}/shop/get-shop-info/${id}`)
+      .then((res) => setData(res.data.shop))
+      .catch((error) => toast.error(error.response.data.message));
+  }, [id]);
 
   const handleLogOut = async (e) => {
     e.preventDefault();
@@ -25,24 +35,24 @@ function ShopInfo({ isOwner }) {
         <div className="w-full flex items-center justify-center">
           <img
             alt="Image"
-            src={`${seller.avatar.url}`}
+            src={`${data?.avatar?.url}`}
             className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-2 border-green-400"
           />
         </div>
-        <h3 className="text-center py-2 text-[20px]">{seller.name}</h3>
+        <h3 className="text-center py-2 text-[20px]">{data?.name}</h3>
         <p className="text-[16px] text-black/60 p-2.5 flex items-center">
-          {seller.description}
+          {data?.description}
         </p>
       </div>
 
       <div className="p-3">
         <h5 className="font-semibold">Address</h5>
-        <h4 className="text-black/60">{seller.address}</h4>
+        <h4 className="text-black/60">{data?.address}</h4>
       </div>
 
       <div className="p-3">
         <h5 className="font-semibold">Phone Number</h5>
-        <h4 className="text-black/60">{seller.phoneNumber}</h4>
+        <h4 className="text-black/60">{data?.phoneNumber}</h4>
       </div>
 
       <div className="p-3">
@@ -57,7 +67,7 @@ function ShopInfo({ isOwner }) {
 
       <div className="p-3">
         <h5 className="font-semibold">Joined On</h5>
-        <h4 className="text-black/60">{seller.createdAt.slice(0, 10)}</h4>
+        <h4 className="text-black/60">{data?.createdAt?.slice(0, 10)}</h4>
       </div>
 
       {isOwner && (

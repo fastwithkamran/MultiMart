@@ -7,6 +7,7 @@ const {
   handleCreateShop,
   handleActivateShop,
   handleShopLogin,
+  handleGetShopInfo,
 } = require("../controllers/shop");
 
 // Authentication
@@ -14,7 +15,7 @@ router.post("/create-shop", upload.single("file"), handleCreateShop);
 router.post("/activation", handleActivateShop);
 router.post("/login", handleShopLogin);
 
-// Fetch the user Information
+// Fetch the seller Information
 router.get(
   "/getseller",
   isAuthenticatedSeller,
@@ -46,5 +47,8 @@ router.get(
     });
   }),
 );
+
+// Fetch the shop information on preview request
+router.get("/get-shop-info/:id", handleGetShopInfo);
 
 module.exports = router;
