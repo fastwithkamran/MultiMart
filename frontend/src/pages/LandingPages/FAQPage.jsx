@@ -1,7 +1,11 @@
 import { Header, Footer } from "../../components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function FAQPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header activePage={5} />

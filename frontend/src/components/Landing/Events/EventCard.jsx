@@ -6,13 +6,17 @@ function EventCard({ active, data }) {
     <>
       {data ? (
         <div
-          className={`w-full block bg-white rounded-lg lg:flex p-2 ${active ? "unset" : "mb-12"} `}
+          className={`w-full grid grid-cols-1 gap-5 md:grid-cols-2 bg-white rounded-lg p-2 ${active ? "unset" : "mb-12"} `}
         >
-          <div className="w-full lg:w-[50%] m-auto">
-            <img src={data?.images[0]} alt="productImage" />
+          <div className="flex justify-center items-center">
+            <img
+              src={data?.images[0]}
+              alt="productImage"
+              className="w-100 h-100 object-contain"
+            />
           </div>
 
-          <div className="w-full lg:w-[50%] flex flex-col justify-center">
+          <div className="w-full flex flex-col justify-center">
             <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
             <p>{data?.description}</p>
             <div className="flex py-2 justify-between">

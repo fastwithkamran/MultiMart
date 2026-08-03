@@ -9,7 +9,7 @@ const DashboardHeader = () => {
   return (
     <div className="w-full h-14 bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
-        <Link to={"/dashboard"}>
+        <Link to={"/"}>
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5oWZDONBetL_aTOElWb_x6ECh9FPrnJr4vEAkyedUGQ&s=10"
             alt="Logo"

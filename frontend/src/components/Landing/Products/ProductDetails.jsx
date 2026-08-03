@@ -118,7 +118,10 @@ function ProductDetails({ data }) {
 
                   <div>
                     <div className="flex items-center pt-8">
-                      <Link to={`/shop/preview/${data.shop._id}`} className="flex items-center">
+                      <Link
+                        to={`/shop/preview/${data.shop._id}`}
+                        className="flex items-center"
+                      >
                         <img
                           src={data?.shop?.avatar.url}
                           alt="shopImage"
@@ -220,15 +223,17 @@ const ProductDetailsInfo = ({ data, products }) => {
           <div className="w-full block md:flex p-5">
             <div className="w-full md:w-[50%]">
               <div className="flex items-center">
-                <img
-                  src={data?.shop?.avatar.url}
-                  alt="ShopImage"
-                  className="w-8 h-8 rounded-full"
-                />
-                <div className="pl-3">
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">(4/5) Ratings</h5>
-                </div>
+                <Link to={`/shop/preview/${data.shop._id}`}>
+                  <img
+                    src={data?.shop?.avatar.url}
+                    alt="ShopImage"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <div className="pl-3">
+                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                    <h5 className="pb-2 text-[15px]">(4/5) Ratings</h5>
+                  </div>
+                </Link>
               </div>
               <div>
                 <p className="mt-2">{data.shop?.description}</p>

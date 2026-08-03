@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Header, ProductCard, Loader, Footer } from "../../../components";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -21,6 +21,10 @@ function ProductPage() {
       );
     }
   }, [categoryData, allProducts]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

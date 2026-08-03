@@ -9,7 +9,7 @@ function Events() {
     <>
       {isLoading ? (
         <Loader />
-      ) : allEvents.length !== 0 ? (
+      ) : allEvents && allEvents.length > 0 ? (
         <div className="w-full">
           <div className={`${styles.heading} ml-5`}>
             <h1>Popular Events</h1>

@@ -6,6 +6,7 @@ import {
 } from "../../../components";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.product);
@@ -15,6 +16,9 @@ const ProductDetailsPage = () => {
 
   const data = allProducts?.find((i) => i.name === productName);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Header />

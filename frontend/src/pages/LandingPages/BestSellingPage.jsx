@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { Header, ProductCard } from "../../components";
+import { useMemo, useEffect } from "react";
+import { Header, ProductCard, Footer } from "../../components";
 import { Loader } from "../../components";
 import { useSelector } from "react-redux";
 
@@ -11,6 +11,10 @@ function BestSellingPage() {
       [...allProducts].sort((item1, item2) => item2.sold_out - item1.sold_out)
     );
   }, [allProducts]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -32,6 +36,7 @@ function BestSellingPage() {
               </h1>
             )}
           </div>
+          <Footer />
         </div>
       )}
     </>
