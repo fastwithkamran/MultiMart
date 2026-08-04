@@ -1,25 +1,57 @@
 import { AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "../../styles/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { MdOutlineTrackChanges } from "react-icons/md";
+import { updateUserInformation } from "../../redux/actions/user";
+import { toast } from "react-toastify";
+import { server } from "../../../server";
+import axios from "axios";
 
 function ProfileContent({ active }) {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isAuthenticated, user, error } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
-  const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [ZipCode, setZipCode] = useState(null);
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [email] = useState(user && user.email);
+  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  const handleImageChange = async (e) => {
+    const formData = new FormData();
+
+    formData.append("image", e.target.files[0]);
+
+    await axios
+      .put(`${server}/user/update-avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserInformation(name, email, phoneNumber, password));
   };
+
   return (
     <div className="w-full min-w-0 max-w-full">
       {/* Profile */}
@@ -30,11 +62,19 @@ function ProfileContent({ active }) {
               <div className="relative">
                 <img
                   alt="Image"
-                  src={`${user.avatar.url}`}
+                  src={user && user.avatar.url}
                   className="w-30 h-30 rounded-full object-cover border-[3px] border-green-400"
                 />
                 <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center cursor-pointer absolute bottom-1.5 right-1.5">
-                  <AiOutlineCamera />
+                  <input
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    onChange={(e) => handleImageChange(e)}
+                  />
+                  <label htmlFor="image">
+                    <AiOutlineCamera />
+                  </label>
                 </div>
               </div>
             </div>
@@ -58,13 +98,9 @@ function ProfileContent({ active }) {
                 </div>
                 <div className="w-full md:w-[50%]">
                   <label className="block pb-2">Email Address</label>
-                  <input
-                    type="email"
-                    className={`${styles.input} w-[95%]!`}
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <div className={`bg-gray-400 ${styles.input} w-[95%]!`}>
+                    {email}
+                  </div>
                 </div>
               </div>
 
@@ -79,37 +115,17 @@ function ProfileContent({ active }) {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>
-                <div className="w-full md:w-[50%]">
-                  <label className="block pb-2">Zip Code</label>
-                  <input
-                    type="number"
-                    className={`${styles.input} w-[95%]!`}
-                    required
-                    value={ZipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                  />
-                </div>
-              </div>
 
-              <div className="w-full flex pb-3 md:flex-row flex-col">
                 <div className="w-full md:w-[50%]">
-                  <label className="block pb-2">Address 1</label>
+                  <label className="block pb-2">
+                    Enter your Original Password
+                  </label>
                   <input
-                    type="text"
+                    type="password"
                     className={`${styles.input} w-[95%]!`}
                     required
-                    value={address1}
-                    onChange={(e) => setAddress1(e.target.value)}
-                  />
-                </div>
-                <div className="w-full md:w-[50%]">
-                  <label className="block pb-2">Address 2</label>
-                  <input
-                    type="text"
-                    className={`${styles.input} w-[95%]!`}
-                    required
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>

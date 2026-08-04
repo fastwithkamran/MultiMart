@@ -6,6 +6,7 @@ const initialState = {
 
 const userReducer = createReducer(initialState, (builder) => {
   builder
+    // set user information
     .addCase("LoadUserRequest", (state) => {
       state.loading = true;
     })
@@ -21,6 +22,19 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase("clearErrors", (state) => {
       state.error = null;
+    })
+
+    // update user information
+    .addCase("updateUserInfoRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("updateUserInfoSuccess", (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    })
+    .addCase("updateUserInfoFailure", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
 });
 

@@ -40,3 +40,34 @@ export const loadSeller = () => async (dispatch) => {
     });
   }
 };
+
+// update user information
+export const updateUserInformation =
+  (name, email, phoneNumber, password) => async (dispatch) => {
+    try {
+      dispatch({ type: "updateUserInfoRequest" });
+
+      const { data } = await axios.post(
+        `${server}/user/update-user-info`,
+        {
+          name,
+          email,
+          phoneNumber,
+          password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      dispatch({
+        type: "updateUserInfoSuccess",
+        payload: data.user,
+      });
+    } catch (error) {
+      dispatch({
+        type: "updateUserInfoFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
