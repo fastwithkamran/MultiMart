@@ -10,17 +10,26 @@ const cartReducer = createReducer(initialState, (builder) => {
   builder
     .addCase("addToCart", (state, action) => {
       const item = action.payload;
-      const index = state.cart.findIndex((i) => i._id === item._id);
+      const isItemExist = state.cart.find((i) => i._id === item._id);
 
-      if (index !== -1) {
-        state.cart[index] = item;
+      if (isItemExist) {
+        return {
+          ...state,
+          cart: state.cart.map((i) => (i._id === isItemExist._id ? item : i)),
+        };
       } else {
-        state.cart.push(item);
+        return {
+          ...state,
+          cart: [...state.cart, item],
+        };
       }
     })
 
     .addCase("removeFromCart", (state, action) => {
-      state.cart = state.cart.filter((i) => i._id !== action.payload);
+      return {
+        ...state,
+        cart: state.cart.filter((i) => i._id !== action.payload),
+      };
     });
 });
 

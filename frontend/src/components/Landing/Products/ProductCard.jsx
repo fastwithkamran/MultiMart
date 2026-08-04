@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "./ProductDetailsCard";
-
 import {
   AiFillHeart,
   AiFillStar,
@@ -50,7 +49,10 @@ const ProductCard = ({ data }) => {
         <div className="py-2 flex items-center justify-between">
           <div className="flex">
             <h5 className={`${styles.productDiscountPrice}`}>
-              {data.discountPrice === 0 ? data.originalPrice : data.discountPrice}$
+              {data.discountPrice === 0
+                ? data.originalPrice
+                : data.discountPrice}
+              $
             </h5>
             <h4 className={`${styles.price}`}>
               {data.originalPrice ? data.originalPrice + "$" : null}

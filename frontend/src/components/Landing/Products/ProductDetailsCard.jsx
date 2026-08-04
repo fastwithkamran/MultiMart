@@ -8,12 +8,31 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart } from "../../../redux/actions/cart";
 const ProductDetailsCard = ({ data, setOpen }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
 
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const addToCardHandler = (id) => {
+    const isItemExist = cart && cart.find((i) => i._id === id);
+    if (isItemExist) toast.error("Item already in cart!");
+    else {
+      if (data.stock < count) toast.error("Product stock limited!");
+      else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
+
   const handleMessageSubmit = () => {};
+
   return (
     <div className="bg-white">
       {data && (
@@ -27,7 +46,11 @@ const ProductDetailsCard = ({ data, setOpen }) => {
 
             <div className="block w-full md:flex">
               <div className="w-full md:w-[50%]">
-                <img src={data.images[0]} alt="productImage" className="w-50 h-50 mx-auto mb-5 object-contain"/>
+                <img
+                  src={data.images[0]}
+                  alt="productImage"
+                  className="w-50 h-50 mx-auto mb-5 object-contain"
+                />
                 <div className="flex">
                   <Link to={`/shop/preview/${data.shop._id}`}>
                     <img
@@ -108,6 +131,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                 </div>
                 <div
                   className={`${styles.button} mt-6 rounded-sm h-11 flex items-center`}
+                  onClick={() => addToCardHandler(data._id)}
                 >
                   <span className="text-white flex h-11 items-center">
                     Add to Cart
