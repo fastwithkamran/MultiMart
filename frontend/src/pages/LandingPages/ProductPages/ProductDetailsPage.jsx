@@ -10,11 +10,9 @@ import { useEffect } from "react";
 
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.product);
-  const { name } = useParams();
-  // replaces spaces with - for SEO friendly
-  const productName = name.replace(/-/g, " ");
-
-  const data = allProducts?.find((i) => i.name === productName);
+  const { id } = useParams();
+ 
+  const data = allProducts?.find((i) => i._id === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);

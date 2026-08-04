@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "./ProductDetailsCard";
@@ -19,10 +19,7 @@ import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cart";
 
 const ProductCard = ({ data }) => {
-  const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const product_name = data.name.replace(/\s+/g, "-");
 
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
@@ -38,18 +35,13 @@ const ProductCard = ({ data }) => {
     }
   };
 
-  useEffect(() => {
-    if (wishlist && wishlist.find((i) => i._id === data._id)) setClick(true);
-    else setClick(false);
-  }, [data._id, wishlist]);
+  const click = Boolean(wishlist && wishlist.find((i) => i._id === data._id));
 
   const removeFromWishlistHandler = (data) => {
-    setClick(!click);
     dispatch(removeFromWishlist(data));
   };
 
   const addToWishlistHandler = (data) => {
-    setClick(!click);
     dispatch(addToWishlist(data));
     toast.success("Added to wishlist");
   };
@@ -57,7 +49,7 @@ const ProductCard = ({ data }) => {
   return (
     <div className="w-full h-96 rounded-lg bg-white shadow-sm p-3 relative cursor-pointer">
       <div className="flex justify-end"></div>
-      <Link to={`/product/${product_name}`}>
+      <Link to={`/product/${data._id}`}>
         <img
           src={data?.images[0]}
           alt="productImage"
@@ -65,10 +57,10 @@ const ProductCard = ({ data }) => {
         />
       </Link>
       {/* shop name and title */}
-      <Link to={"/"}>
+      <Link to={`/shop/preview/${data?.shop?._id}`}>
         <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
       </Link>
-      <Link to={`/product/${product_name}`}>
+      <Link to={`/product/${data._id}`}>
         <h4 className="pb-3 font-medium">
           {data.name.length > 40 ? data.name.slice(0, 40) : data.name}
         </h4>

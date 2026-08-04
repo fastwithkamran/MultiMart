@@ -85,11 +85,8 @@ const Header = ({ activePage }) => {
               <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-9 p-4">
                 {searchData &&
                   searchData.map((product) => {
-                    const name = product.name;
-
-                    const ProductName = name.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${ProductName}`}>
+                      <Link to={`/product/${product._id}`}>
                         <div className="w-full flex items-start py-3">
                           <img
                             src={product.images[0]}
@@ -277,11 +274,9 @@ const Header = ({ activePage }) => {
                       <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-9 p-4">
                         {searchData &&
                           searchData.map((product) => {
-                            const name = product.name;
-                            const ProductName = name.replace(/\s+/g, "-");
                             return (
                               <Link
-                                to={`/product/${ProductName}`}
+                                to={`/product/${product._id}`}
                                 onClick={() => setOpen(false)}
                               >
                                 <div className="w-full flex items-start py-3">
@@ -325,7 +320,7 @@ const Header = ({ activePage }) => {
                         className="text-[18px] text-black/60"
                       >
                         Sign up
-                      </Link>{" "}
+                      </Link>
                     </>
                   ) : (
                     <>
