@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../../styles/styles";
 import {
@@ -18,11 +18,12 @@ import {
 
 const ProductDetailsCard = ({ data, setOpen }) => {
   const [count, setCount] = useState(1);
-  const [click, setClick] = useState(false);
 
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
+
+  const click = Boolean(wishlist && wishlist.find((i) => i._id === data._id));
 
   const addToCardHandler = (id) => {
     const isItemExist = cart && cart.find((i) => i._id === id);
@@ -37,18 +38,11 @@ const ProductDetailsCard = ({ data, setOpen }) => {
     }
   };
 
-  useEffect(() => {
-    if (wishlist && wishlist.find((i) => i._id === data._id)) setClick(true);
-    else setClick(false);
-  }, [data._id, wishlist]);
-
   const removeFromWishlistHandler = (data) => {
-    setClick(!click);
     dispatch(removeFromWishlist(data));
   };
 
   const addToWishlistHandler = (data) => {
-    setClick(!click);
     dispatch(addToWishlist(data));
     toast.success("Added to wishlist");
   };
