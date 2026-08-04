@@ -5,6 +5,8 @@ const {
   handleCreateUser,
   handleActivateUser,
   handleUserLogin,
+  handleUpdateUserInfo,
+  handleUpdateAvatar,
 } = require("../controllers/user");
 const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
@@ -25,6 +27,17 @@ router.get(
       user,
     });
   }),
+);
+
+// Update user information
+router.post("/update-user-info", isAuthenticatedUser, handleUpdateUserInfo);
+
+// update the user avatar
+router.put(
+  "/update-avatar",
+  isAuthenticatedUser,
+  upload.single("image"),
+  handleUpdateAvatar,
 );
 
 // Logout

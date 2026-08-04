@@ -12,6 +12,31 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter your email"],
     unique: true,
   },
+  phoneNumber: {
+    type: Number,
+  },
+  addresses: [
+    {
+      country: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      address1: {
+        type: String,
+      },
+      address2: {
+        type: String,
+      },
+      zipCode: {
+        type: Number,
+      },
+      addressType: {
+        type: String,
+      },
+    },
+  ],
   password: {
     type: String,
     required: [true, "Please enter your password"],
@@ -41,8 +66,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash pass
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 10);
 });

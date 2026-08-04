@@ -118,4 +118,64 @@ const handleUserLogin = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-module.exports = { handleCreateUser, handleActivateUser, handleUserLogin };
+// update user information
+const handleUpdateUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, email, phoneNumber, password } = req.body;
+
+    let user = await User.findOne({ email }).select("+password");
+
+    if (!user) return next(new ErrorHandler("User not found", 400));
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid)
+      return next(new ErrorHandler("Incorrect Password or Email", 400));
+
+    user.name = name;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    await user.save();
+    user.password = undefined;
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+// update user avatar
+const handleUpdateAvatar = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const existsUser = await User.findById(req.user.id);
+
+    const existAvatarPath = `uploads/${existsUser.avatar.public_id}`;
+
+    fs.unlinkSync(existAvatarPath);
+
+    const filename = req.file.filename;
+    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+
+    const user = await User.findByIdAndUpdate(req.user.id, {
+      avatar: { public_id: filename, url: fileUrl },
+    });
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = {
+  handleCreateUser,
+  handleActivateUser,
+  handleUserLogin,
+  handleUpdateUserInfo,
+  handleUpdateAvatar,
+};
