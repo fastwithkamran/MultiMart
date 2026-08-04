@@ -31,6 +31,8 @@ const Header = ({ activePage }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishList, setOpenWishList] = useState(false);
 
+  const { wishlist } = useSelector((state) => state.wishlist);
+
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -155,7 +157,7 @@ const Header = ({ activePage }) => {
               >
                 <AiOutlineHeart size={30} className="text-amber-50" />
                 <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
-                  0
+                  {wishlist && wishlist.length}
                 </span>
               </div>
             </div>
@@ -244,7 +246,7 @@ const Header = ({ activePage }) => {
                   <div className="relative mr-4">
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
                     <span className="absolute right-0 top-0 mt-5 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
-                      0
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                   <RxCross1
