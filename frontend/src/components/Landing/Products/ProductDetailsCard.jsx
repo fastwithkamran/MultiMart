@@ -83,7 +83,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                   </Link>
                 </div>
                 <div
-                  className={`${styles.button} bg-black mt-4 rounded-sm h-11 w-fit p-4`}
+                  className={`${styles.button} bg-black mt-2 rounded-sm! h-11 w-fit p-4`}
                   onClick={handleMessageSubmit}
                 >
                   <span className="text-white flex items-center">
@@ -91,7 +91,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                     <AiOutlineMessage className="ml-1" />
                   </span>
                 </div>
-                <h5 className="text-red-500 text-sm mt-5">
+                <h5 className="text-red-500 text-sm mt-2">
                   ({data.sold_out}) Sold
                 </h5>
               </div>
@@ -113,7 +113,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                   <div>
                     <button
                       className="bg-linear-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
-                      onClick={() => setCount(count - 1)}
+                      onClick={() => (count === 1 ? 1 : setCount(count - 1))}
                     >
                       -
                     </button>
@@ -146,7 +146,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                   )}
                 </div>
                 <div
-                  className={`${styles.button} mt-6 rounded-sm h-11 flex items-center`}
+                  className={`${styles.button} mt-6 rounded-sm! h-11 flex items-center`}
                   onClick={() => addToCardHandler(data._id)}
                 >
                   <span className="text-white flex h-11 items-center">
