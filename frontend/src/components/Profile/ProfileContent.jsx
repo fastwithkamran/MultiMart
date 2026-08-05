@@ -8,6 +8,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import {
+  deleteUserAddress,
   updateUserAddress,
   updateUserInformation,
 } from "../../redux/actions/user";
@@ -21,6 +22,8 @@ import {
   clearUpdateProfileErrors,
   resetUpdateProfileSuccess,
   resetAddAddressSuccess,
+  clearDeleteAddressErrors,
+  resetDeleteAddressSuccess,
 } from "../../redux/reducers/user";
 
 function ProfileContent({ active, setActive }) {
@@ -29,8 +32,10 @@ function ProfileContent({ active, setActive }) {
     user,
     updateProfileError,
     addAddressError,
+    deleteAddressError,
     updateProfileSuccess,
     addAddressSuccess,
+    deleteAddressSuccess,
   } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
   const [email] = useState(user && user.email);
@@ -58,12 +63,24 @@ function ProfileContent({ active, setActive }) {
       toast.success("Addresses Updated");
       dispatch(resetAddAddressSuccess());
     }
+    if (deleteAddressError) {
+      setActive(7);
+      toast.success(deleteAddressError);
+      dispatch(clearDeleteAddressErrors());
+    }
+    if (deleteAddressSuccess) {
+      setActive(7);
+      toast.success("Addresses Updated");
+      dispatch(resetDeleteAddressSuccess());
+    }
   }, [
     addAddressError,
     updateProfileError,
-    dispatch,
+    deleteAddressError,
     updateProfileSuccess,
     addAddressSuccess,
+    deleteAddressSuccess,
+    dispatch,
     setActive,
   ]);
 
@@ -559,6 +576,10 @@ const Address = () => {
     }
   };
 
+  const handleDeleteAddress = async (item) => {
+    dispatch(deleteUserAddress(item._id));
+  };
+
   return (
     <div className="w-full px-5">
       {open && (
@@ -754,10 +775,20 @@ const Address = () => {
               <h6>{user && user.phoneNumber}</h6>
             </div>
             <div className="min-w-[10%] flex items-center justify-between pl-8 mt-6 md:mt-0">
-              <AiOutlineDelete size={25} className="cursor-pointer" />
+              <AiOutlineDelete
+                size={25}
+                className="cursor-pointer"
+                onClick={() => handleDeleteAddress(item)}
+              />
             </div>
           </div>
         ))}
+
+      {user && user.addresses.length === 0 && (
+        <h5 className="text-center pt-5 text-[18px]">
+          You not have any saved address!
+        </h5>
+      )}
     </div>
   );
 };

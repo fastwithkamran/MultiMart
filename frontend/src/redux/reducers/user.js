@@ -65,19 +65,49 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase("resetAddAddressSuccess", (state) => {
       state.addAddressSuccess = false;
+    })
+
+    // delete user address
+    .addCase("deleteUserAddressRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("deleteUserAddressSuccess", (state, action) => {
+      state.loading = false;
+      state.deleteAddressSuccess = true;
+      state.user = action.payload;
+    })
+    .addCase("deleteUserAddressFailure", (state, action) => {
+      state.loading = false;
+      state.deleteAddressSuccess = false;
+      state.deleteAddressError = action.payload;
+    })
+    .addCase("clearDeleteAddressErrors", (state) => {
+      state.deleteAddressError = null;
+    })
+    .addCase("resetDeleteAddressSuccess", (state) => {
+      state.deleteAddressSuccess = false;
     });
 });
 
 export const clearErrors = () => ({ type: "clearErrors" });
-export const resetUpdateProfileSuccess = () => ({
-  type: "resetUpdateProfileSuccess",
-});
-export const resetAddAddressSuccess = () => ({
-  type: "resetAddAddressSuccess",
-});
+
 export const clearUpdateProfileErrors = () => ({
   type: "clearUpdateProfileErrors",
 });
+export const resetUpdateProfileSuccess = () => ({
+  type: "resetUpdateProfileSuccess",
+});
+
 export const clearAddAddressErrors = () => ({ type: "clearAddAddressErrors" });
+export const resetAddAddressSuccess = () => ({
+  type: "resetAddAddressSuccess",
+});
+
+export const clearDeleteAddressErrors = () => ({
+  type: "clearDeleteAddressErrors",
+});
+export const resetDeleteAddressSuccess = () => ({
+  type: "resetDeleteAddressSuccess",
+});
 
 export default userReducer;

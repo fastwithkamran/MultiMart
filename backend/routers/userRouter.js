@@ -8,6 +8,7 @@ const {
   handleUpdateUserInfo,
   handleUpdateAvatar,
   handleUpdateAddresses,
+  handleDeleteAddress,
 } = require("../controllers/user");
 const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
@@ -46,6 +47,13 @@ router.put(
   "/update-user-addresses",
   isAuthenticatedUser,
   handleUpdateAddresses,
+);
+
+// delete user address
+router.delete(
+  "/delete-user-address/:id",
+  isAuthenticatedUser,
+  handleDeleteAddress,
 );
 
 // Logout

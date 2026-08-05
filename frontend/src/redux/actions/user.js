@@ -105,3 +105,27 @@ export const updateUserAddress =
       });
     }
   };
+
+// delete user address
+export const deleteUserAddress = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: "deleteUserAddressRequest" });
+
+    const { data } = await axios.delete(
+      `${server}/user/delete-user-address/${id}`,
+      {
+        withCredentials: true,
+      },
+    );
+
+    dispatch({
+      type: "deleteUserAddressSuccess",
+      payload: data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: "deleteUserAddressFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

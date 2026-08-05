@@ -175,10 +175,10 @@ const handleUpdateAvatar = catchAsyncErrors(async (req, res, next) => {
 // update user addresses
 const handleUpdateAddresses = catchAsyncErrors(async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
 
     const sameTypeAddress = user.addresses.find(
-      (address) => (address.addressType === req.body.addressType),
+      (address) => address.addressType === req.body.addressType,
     );
 
     if (sameTypeAddress) {
@@ -213,6 +213,30 @@ const handleUpdateAddresses = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// delete user address
+const handleDeleteAddress = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const addressId = req.params.id;
+
+    await User.updateOne(
+      {
+        _id: userId,
+      },
+      { $pull: { addresses: { _id: addressId } } },
+    );
+
+    const user = await User.findById(userId);
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateUser,
   handleActivateUser,
@@ -220,4 +244,5 @@ module.exports = {
   handleUpdateUserInfo,
   handleUpdateAvatar,
   handleUpdateAddresses,
+  handleDeleteAddress,
 };
