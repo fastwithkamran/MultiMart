@@ -569,8 +569,7 @@ const Address = () => {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState();
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [address, setAddress] = useState("");
   const [addressType, setAddressType] = useState("");
 
   const dispatch = useDispatch();
@@ -591,25 +590,24 @@ const Address = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (addressType === "" || country === "" || city === "" || state === "") {
+    if (
+      addressType === "" ||
+      country === "" ||
+      city === "" ||
+      state === "" ||
+      zipCode === "" ||
+      address === ""
+    ) {
       toast.error("Please fill all the fields");
     } else {
       dispatch(
-        updateUserAddress(
-          country,
-          state,
-          city,
-          address1,
-          address2,
-          addressType,
-        ),
+        updateUserAddress(country, state, city, address, zipCode, addressType),
       );
       setOpen(false);
       setCountry("");
       setCity("");
       setState("");
-      setAddress1("");
-      setAddress2("");
+      setAddress("");
       setAddressType("");
       setZipCode("");
     }
@@ -709,27 +707,15 @@ const Address = () => {
                     </select>
                   </div>
 
-                  {/* Address 1 */}
+                  {/* Address */}
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Address 1</label>
+                    <label className="block pb-2">Address</label>
                     <input
                       type="text"
                       required
                       className={`${styles.input}`}
-                      value={address1}
-                      onChange={(e) => setAddress1(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Address 2 */}
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Address 2</label>
-                    <input
-                      type="text"
-                      required
-                      className={`${styles.input}`}
-                      value={address2}
-                      onChange={(e) => setAddress2(e.target.value)}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
 
@@ -806,9 +792,7 @@ const Address = () => {
               <h5 className="pl-5 font-semibold">{item.addressType}</h5>
             </div>
             <div className="pl-8 flex items-center mt-6 md:mt-0">
-              <h6>
-                {item.address1} + {item.address2}
-              </h6>
+              <h6>{item.address}</h6>
             </div>
             <div className="pl-8 flex items-center mt-6 md:mt-0">
               <h6>{user && user.phoneNumber}</h6>

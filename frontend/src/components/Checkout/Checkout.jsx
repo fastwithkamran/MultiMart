@@ -13,8 +13,7 @@ function Checkout() {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [couponCodeData, setCouponCodeData] = useState("");
@@ -27,8 +26,7 @@ function Checkout() {
 
   const paymentSubmit = () => {
     if (
-      address1 === "" ||
-      address2 === "" ||
+      address === "" ||
       zipCode === null ||
       country === "" ||
       city === ""
@@ -36,8 +34,7 @@ function Checkout() {
       toast.error("Please Choose your delivery address");
     } else {
       const shippingAddress = {
-        address1,
-        address2,
+        address,
         zipCode,
         country,
         city,
@@ -108,8 +105,6 @@ function Checkout() {
     ? (subTotalPrice + shipping - discountPercentage).toFixed(2)
     : (subTotalPrice + shipping).toFixed(2);
 
-  console.log(discountPercentage);
-
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="w-[90%] lg:w-[70%] block md:flex">
@@ -122,10 +117,8 @@ function Checkout() {
             setCity={setCity}
             userInfo={userInfo}
             setUserInfo={setUserInfo}
-            address1={address1}
-            address2={address2}
-            setAddress1={setAddress1}
-            setAddress2={setAddress2}
+            address={address}
+            setAddress={setAddress}
             zipCode={zipCode}
             setZipCode={setZipCode}
           />
@@ -163,10 +156,8 @@ const ShippingInfo = ({
   setCity,
   userInfo,
   setUserInfo,
-  address1,
-  address2,
-  setAddress1,
-  setAddress2,
+  address,
+  setAddress,
   zipCode,
   setZipCode,
 }) => {
@@ -255,23 +246,13 @@ const ShippingInfo = ({
           </div>
 
           <div className="w-full flex pb-3">
-            <div className="w-[50%]">
-              <label className="block pb-2">Address1</label>
+            <div className="w-full">
+              <label className="block pb-2">Address</label>
               <input
                 type="address"
                 required
-                value={address1}
-                onChange={(e) => setAddress1(e.target.value)}
-                className={`${styles.input} w-[95%]! h-10`}
-              />
-            </div>
-            <div className="w-[50%]">
-              <label className="block pb-2">Address2</label>
-              <input
-                type="address"
-                required
-                value={address2}
-                onChange={(e) => setAddress2(e.target.value)}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 className={`${styles.input} h-10`}
               />
             </div>
@@ -283,7 +264,7 @@ const ShippingInfo = ({
         className="text-[18px] cursor-pointer inline-block"
         onClick={() => setUserInfo(!userInfo)}
       >
-        Choose from saved Addresses
+        Choose from Saved Addresses
       </h5>
       {userInfo && (
         <div>
@@ -295,8 +276,7 @@ const ShippingInfo = ({
                   className="mr-3"
                   value={item.addressType}
                   onClick={() =>
-                    setAddress1(item.address1) ||
-                    setAddress2(item.address2) ||
+                    setAddress(item.address) ||
                     setZipCode(item.zipCode) ||
                     setCountry(item.setCountry) ||
                     setCity(item.setCity)
