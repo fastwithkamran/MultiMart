@@ -216,10 +216,10 @@ function ProfileContent({ active, setActive }) {
         </div>
       )}
 
-      {/* Payment Method */}
+      {/* Change Password */}
       {active === 6 && (
         <div>
-          <PaymentMethod />
+          <ChangePassword />
         </div>
       )}
 
@@ -491,34 +491,73 @@ const TrackOrder = () => {
   );
 };
 
-const PaymentMethod = () => {
+const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    if (newPassword !== confirmPassword)
+      toast.error("Confirm password does not match!!");
+
+    await axios
+      .put(
+        `${server}/user/update-user-password`,
+        { oldPassword, newPassword, confirmPassword },
+        { withCredentials: true },
+      )
+      .then(() => toast.success("Password Updated"))
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   return (
     <div className="w-full px-5">
-      <div className="flex flex-col md:flex-row w-full items-center justify-between">
-        <h1 className="text-[18px] sm:text-[25px] font-medium text-black/63 ">
-          Payment Methods
-        </h1>
-        <div className={`${styles.button} rounded-md! p-3`}>
-          <span className="text-white">Add New</span>
-        </div>
-      </div>
-      <br />
-      <div className="w-full bg-white flex flex-col md:flex-row items-center px-3 shadow justify-between pr-10">
-        <div className="flex items-center">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV07yhKXZ1S8pQJ984d281j6woJ0cE8UBN0077uuZaXQ&s=10"
-            alt="PaymentCards"
-            className="object-cover w-8 h-4"
-          />
-          <h5 className="pl-5 font-semibold">Kamran Ayaz</h5>
-        </div>
-        <div className="pl-8 flex items-center mt-6 md:mt-0">
-          <h6>*****34234324**</h6>
-          <h5 className="pl-6">08/2026</h5>
-        </div>
-        <div className="min-w-[10%] flex items-center justify-between pl-8 mt-6 md:mt-0">
-          <AiOutlineDelete size={25} className="cursor-pointer" />
-        </div>
+      <h1 className="text-[18px] sm:text-[25px] font-medium text-black/63 ">
+        Change Password
+      </h1>
+      <div className="w-full mt-10">
+        <form
+          aria-required
+          onSubmit={handleChangePassword}
+          className="flex flex-col items-center"
+        >
+          <div className="w-full md:w-[50%]">
+            <label className="block pb-2">Enter your old password</label>
+            <input
+              type="password"
+              className={`${styles.input} w-[95%]!`}
+              required
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+            <label className="block mt-4 pb-2">Enter your new password</label>
+            <input
+              type="password"
+              className={`${styles.input} w-[95%]!`}
+              required
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <label className="block mt-4 pb-2">Confirm your new password</label>
+            <input
+              type="password"
+              className={`${styles.input} w-[95%]!`}
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <input
+              type="submit"
+              required
+              value="Update"
+              className="w-[95%]! h-8 border border-blue-800 text-center text-blue-700 rounded-sm mt-8 cursor-pointer"
+            />
+          </div>
+        </form>
       </div>
     </div>
   );

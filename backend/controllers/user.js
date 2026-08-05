@@ -237,6 +237,34 @@ const handleDeleteAddress = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// update user password
+const handleUpdatePassword = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).select("+password");
+
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+
+    if (!isPasswordMatched)
+      return next(new ErrorHandler("Old Password is Incorrect!", 400));
+
+    if (req.body.newPassword !== req.body.confirmPassword)
+      return next(new ErrorHandler("Password doesnt match!", 400));
+
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(error)
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateUser,
   handleActivateUser,
@@ -245,4 +273,5 @@ module.exports = {
   handleUpdateAvatar,
   handleUpdateAddresses,
   handleDeleteAddress,
+  handleUpdatePassword,
 };
