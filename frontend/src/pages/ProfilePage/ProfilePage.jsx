@@ -10,7 +10,7 @@ function ProfilePage() {
         <div className="w-12 md:w-80 mt-[20%] md:mt-0">
           <ProfileSidebar active={active} setActive={setActive} />
         </div>
-        <ProfileContent active={active} />
+        <ProfileContent active={active} setActive={setActive} />
       </div>
     </div>
   );
