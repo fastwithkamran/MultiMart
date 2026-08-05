@@ -7,6 +7,7 @@ const {
   handleUserLogin,
   handleUpdateUserInfo,
   handleUpdateAvatar,
+  handleUpdateAddresses,
 } = require("../controllers/user");
 const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
@@ -38,6 +39,13 @@ router.put(
   isAuthenticatedUser,
   upload.single("image"),
   handleUpdateAvatar,
+);
+
+// update user addressses
+router.put(
+  "/update-user-addresses",
+  isAuthenticatedUser,
+  handleUpdateAddresses,
 );
 
 // Logout
