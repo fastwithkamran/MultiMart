@@ -48,4 +48,24 @@ const handleDeleteCoupon = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleCreateCouponsCode, handleGetAllCoupons, handleDeleteCoupon };
+// get coupon code value by its name
+const handleGetCoupon = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const couponCode = await CouponCode.findOne({ name: req.params.name });
+    
+    res.status(200).json({
+      success: true,
+      couponCode,
+    });
+  } catch (error) {
+    console.error(error)
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = {
+  handleCreateCouponsCode,
+  handleGetAllCoupons,
+  handleDeleteCoupon,
+  handleGetCoupon,
+};
