@@ -40,9 +40,24 @@ const handleOrder = catchAsyncErrors(async (req, res, next) => {
       orders,
     });
   } catch (error) {
-    console.error(error)
     return next(new ErrorHandler(error, 500));
   }
 });
 
-module.exports = handleOrder;
+// get all orders of user
+const handleGetUserOrders = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.find({ "user._id": req.params.userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(201).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = { handleOrder, handleGetUserOrders };

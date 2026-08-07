@@ -25,6 +25,7 @@ import {
   clearDeleteAddressErrors,
   resetDeleteAddressSuccess,
 } from "../../redux/reducers/user";
+import { getAllUserOrders } from "../../redux/actions/order";
 
 function ProfileContent({ active, setActive }) {
   const {
@@ -234,18 +235,13 @@ function ProfileContent({ active, setActive }) {
 }
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "34234234",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
+  const { user } = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllUserOrders(user._id));
+  }, [dispatch, user._id]);
 
   const column = [
     {
@@ -284,7 +280,11 @@ const AllOrders = () => {
       align: "right",
       renderCell: (params) => {
         return (
-          <Button to={`/order/${params.id}`} component={Link} variant="text">
+          <Button
+            to={`/user/order/${params.id}`}
+            component={Link}
+            variant="text"
+          >
             <AiOutlineArrowRight size={20} />
           </Button>
         );
@@ -298,9 +298,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       row.push({
         id: item._id,
-        itemQty: item.orderItems.length,
+        itemQty: item.cart?.length,
         total: "US$" + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
   return (
