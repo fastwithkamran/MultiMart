@@ -225,7 +225,7 @@ const Header = ({ activePage }) => {
             </Link>
           </div>
           <div>
-            <div className="relative mr-5">
+            <div className="relative mr-5" onClick={() => setOpenCart(true)}>
               <AiOutlineShoppingCart size={30} />
               <span className="absolute right-0 top-0 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
                 {cart && cart.length}
@@ -240,8 +240,12 @@ const Header = ({ activePage }) => {
             <div className="fixed w-full bg-black/60 z-20 h-full top-0 left-0">
               <div className="w-[60%] fixed bg-white h-screen top-0 left-0 z-10 overflow-y-scroll">
                 <div className="w-full justify-between flex pr-3">
-                  <div className="relative mr-4">
+                  <div
+                    className="relative mr-4"
+                    onClick={() => setOpenWishList(true) || setOpen(false)}
+                  >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
+
                     <span className="absolute right-0 top-0 mt-5 rounded-full bg-green-400 w-4 h-4 p-0 m-0 text-white font-mono text-sm text-center leading-tight">
                       {wishlist && wishlist.length}
                     </span>
@@ -329,7 +333,7 @@ const Header = ({ activePage }) => {
                           <img
                             alt="Image"
                             src={`${user.avatar.url}`}
-                            className="w-14 h-14 rounded-full object-contain border-2 border-green-400"
+                            className="w-14 h-14 rounded-full object-cover border-2 border-green-400"
                           />
                         </Link>
                       </div>
@@ -339,6 +343,12 @@ const Header = ({ activePage }) => {
               </div>
             </div>
           )}
+
+          {/* Cart Popup */}
+          {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+
+          {/* WishList Popup */}
+          {openWishList ? <WishList setOpenWishList={setOpenWishList} /> : null}
         </div>
       </div>
     </>
