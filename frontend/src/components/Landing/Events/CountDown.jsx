@@ -31,7 +31,7 @@ function CountDown({ data }) {
     if (!timeLeft[interval]) return null;
 
     return (
-      <span className="text-base sm:text-[25px] text-blue-400 mr-3">
+      <span key={interval} className="text-base sm:text-[25px] text-blue-400 mr-3">
         {timeLeft[interval]} {interval}
       </span>
     );

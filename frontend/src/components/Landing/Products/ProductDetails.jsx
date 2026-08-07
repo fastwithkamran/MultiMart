@@ -74,7 +74,7 @@ function ProductDetails({ data }) {
                   <div className="w-full flex">
                     {data &&
                       data.images.map((url, index) => (
-                        <div className={"border cursor-pointer"}>
+                        <div key={index} className={"border cursor-pointer"}>
                           <img
                             src={url}
                             alt="productImage"
@@ -262,7 +262,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                     alt="ShopImage"
                     className="w-8 h-8 rounded-full"
                   />
-                  <div className="pl-3">
+                  <div>
                     <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
                     <h5 className="pb-2 text-[15px]">(4/5) Ratings</h5>
                   </div>
@@ -284,7 +284,7 @@ const ProductDetailsInfo = ({ data, products }) => {
                 <h5 className="font-medium mb-3">
                   Total Reviews: <span>223</span>
                 </h5>
-                <Link to={"/"}>
+                <Link to={`/shop/preview/${data?.shop?._id}`}>
                   <div className={`${styles.button} rounded-sm h-8 mt-3`}>
                     <h4 className="text-white">Visit Shop</h4>
                   </div>

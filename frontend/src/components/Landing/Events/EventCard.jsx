@@ -1,7 +1,24 @@
 import styles from "../../../styles/styles";
 import CountDown from "./CountDown";
+import { Link } from "react-router-dom";
+import { addToCart } from "../../../redux/actions/cart";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 function EventCard({ active, data }) {
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (id) => {
+    const isItemExist = cart && cart.find((i) => i._id === id);
+    if (isItemExist) toast.error("Item already in cart!");
+    else {
+      const cartData = { ...data, qty: 1 };
+      dispatch(addToCart(cartData));
+      toast.success("Item added to cart successfully!");
+    }
+  };
+
   return (
     <>
       {data ? (
@@ -33,6 +50,19 @@ function EventCard({ active, data }) {
               </span>
             </div>
             <CountDown data={data} />
+            <div className="flex items-center">
+              <Link to={`/product/${data._id}?isEvent=true`}>
+                <div className={`${styles.button} p-3 text-white rounded-sm!`}>
+                  See Details
+                </div>
+              </Link>
+              <div
+                onClick={() => addToCartHandler(data)}
+                className={`${styles.button} ml-5 p-3 rounded-sm! text-white`}
+              >
+                Add To Cart
+              </div>
+            </div>
           </div>
         </div>
       ) : (
