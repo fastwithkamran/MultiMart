@@ -142,7 +142,27 @@ function Payment() {
   };
 
   // cash on delivery
-  const cashOnDeliveryHandler = async () => {};
+  const cashOnDeliveryHandler = async (e) => {
+    e.preventDefault();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    order.paymentInfo = {
+      type: "Cash On Delivery",
+    };
+
+    await axios.post(`${server}/order/create-order`, order, config).then(() => {
+      setOpen(false);
+      navigate("/order/success");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      toast.success("Order successful!");
+    });
+  };
 
   return (
     <div className="w-full flex flex-col items-center py-8">
@@ -359,11 +379,11 @@ const PaymentInfo = ({
 
         {select === 3 && (
           <div className="w-full flex">
-            <form className="w-full" onSubmit={paymentHandler}>
+            <form className="w-full" onSubmit={cashOnDeliveryHandler}>
               <input
                 type="submit"
                 value={"Confirm"}
-                className={`${styles.button} p-3 bg-[#f63b60]! text-white h-8 rounded-sm cursor-pointer text-[18px] font-medium`}
+                className={`${styles.button} p-3 bg-[#f63b60]! text-white h-8 rounded-sm! cursor-pointer text-[18px] font-medium`}
               />
             </form>
           </div>
@@ -398,7 +418,9 @@ const CartData = ({ orderData }) => {
       </div>
       <div className="flex justify-between border-b pb-3 mt-2">
         <h3 className="text-[16px] font-medium text-black">Amount:</h3>
-        <h5 className="text-[18px] font-medium">${orderData?.totalPrice.toFixed(2)}</h5>
+        <h5 className="text-[18px] font-medium">
+          ${orderData?.totalPrice.toFixed(2)}
+        </h5>
       </div>
     </div>
   );
