@@ -99,9 +99,9 @@ function Footer() {
         </ul>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-center pt-2 text-gray-400 text-sm pb-8 justify-items-center items-center">
-        <span>© 2026 Kamran. All rights reserved.</span>
-        <span>Terms | Privacy Policy</span>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center pt-2 text-gray-400 text-sm pb-8 justify-items-center items-center">
+        <span className="flex">© 2026<a target="_blank" href="https://kamranportfolio-six.vercel.app" rel="noopener noreferrer" className="ml-1 text-blue-300 font-semibold cursor-pointer">fastwithkamran</a></span>
+        <span className="text-blue-300 font-semibold cursor-pointer">Terms | Privacy Policy</span>
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsrpBiXAJiQBMZ9PGFfqzr1tpa4ofGwR9qGWqUDOD2WA&s=10"
           alt="CardsImage"
