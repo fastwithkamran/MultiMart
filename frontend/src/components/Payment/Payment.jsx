@@ -8,40 +8,31 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { server } from "../../../server";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { RxCross1 } from "react-icons/rx";
 
 function Payment() {
-  const orderData = useState(JSON.parse(localStorage.getItem("latestOrder")));
+  const orderData = JSON.parse(localStorage.getItem("latestOrder"));
 
-  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
 
   const [open, setOpen] = useState(false);
 
-  // Paypal Payment Handlers
-  const createOrder = (data, actions) => {};
-
-  const onApprove = (data, actions) => {};
-
-  const paypalPaymentHandler = async (paymentInfo) => {};
-
-  // cash on delivery
-  const cashOnDeliveryHandler = async () => {};
-
+  // Credit/Debit Card via stripe
   const paymentData = {
-    amount: Math.round(orderData[0]?.totalPrice * 100),
+    amount: Math.round(orderData?.totalPrice * 100),
   };
 
   const order = {
-    cart: orderData[0]?.cart,
-    shippingAddress: orderData[0]?.shippingAddress,
-    user: user && user,
-    totalPrice: orderData[0]?.totalPrice,
+    cart: orderData?.cart,
+    shippingAddress: orderData?.shippingAddress,
+    user: orderData?.user,
+    totalPrice: orderData?.totalPrice,
   };
 
   const paymentHandler = async (e) => {
@@ -94,12 +85,71 @@ function Payment() {
     }
   };
 
+  // Paypal Payment Handlers
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            description: "Rose",
+            amount: {
+              currency_code: "USD",
+              value: orderData?.totalPrice,
+            },
+          },
+        ],
+        application_context: {
+          shipping_preference: "NO_SHIPPING",
+        },
+      })
+      .then((orderId) => {
+        return orderId;
+      });
+  };
+
+  const paypalPaymentHandler = async (paymentInfo) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    order.paymentInfo = {
+      id: paymentInfo.payer_id,
+      status: "succeeded",
+      type: "Paypal",
+    };
+
+    await axios.post(`${server}/order/create-order`, order, config).then(() => {
+      setOpen(false);
+      navigate("/order/success");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      toast.success("Order successful!");
+    });
+  };
+
+  const onApprove = async (data, actions) => {
+    return actions.order.capture().then(function (details) {
+      const { payer } = details;
+
+      let paymentInfo = payer;
+
+      if (paymentInfo !== undefined) {
+        paypalPaymentHandler(paymentInfo);
+      }
+    });
+  };
+
+  // cash on delivery
+  const cashOnDeliveryHandler = async () => {};
+
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="w-[90%] lg:w-[70%] block md:flex">
         <div className="w-full md:w-[65%]">
           <PaymentInfo
-            user={user}
+            orderData={orderData}
             open={open}
             setOpen={setOpen}
             onApprove={onApprove}
@@ -109,7 +159,7 @@ function Payment() {
           />
         </div>
         <div className="w-full md:w-[35%] md:mt-0 mt-8">
-          <CartData orderData={orderData[0]} />
+          <CartData orderData={orderData} />
         </div>
       </div>
     </div>
@@ -117,7 +167,7 @@ function Payment() {
 }
 
 const PaymentInfo = ({
-  user,
+  orderData,
   open,
   setOpen,
   onApprove,
@@ -126,6 +176,7 @@ const PaymentInfo = ({
   cashOnDeliveryHandler,
 }) => {
   const [select, setSelect] = useState(1);
+  const [name, setName] = useState(orderData.user.name);
 
   return (
     <div className="w-full md:w-[95%] bg-white rounded-md p-5 pb-8">
@@ -154,8 +205,9 @@ const PaymentInfo = ({
                   <label className="block pb-2">Name on Card</label>
                   <input
                     required
-                    placeholder={user && user.name}
-                    value={user && user.name}
+                    placeholder={orderData.user && orderData.user.name}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className={`${styles.input} w-[95%]!`}
                   />
                 </div>
@@ -236,7 +288,7 @@ const PaymentInfo = ({
         ) : null}
       </div>
 
-      {/* pay with EasyPaisa */}
+      {/* pay with paypal */}
       <div>
         <div className="flex w-full pb-5 border-b mb-2 mt-4">
           <div
@@ -248,25 +300,43 @@ const PaymentInfo = ({
             )}
           </div>
           <h4 className="text-[18px] pl-2 font-medium text-black">
-            Pay with EasyPaisa
+            Pay with Paypal
           </h4>
         </div>
 
         {select === 2 && (
           <div className="w-full flex border-b">
-            <form className="w-full" onSubmit={paymentHandler}>
-              <div className="w-full flex pb-3">
-                <div className="w-full">
-                  <label className="block pb-2">EasyPaisa Number</label>
-                  <input type="number" required className={`${styles.input}`} />
+            <div
+              className={`${styles.button} bg-red-500! p-4 text-white h-8! rounded-sm! cursor-pointer text-[18px] font-semibold`}
+              onClick={() => setOpen(true)}
+            >
+              Pay Now
+            </div>
+            {open && (
+              <div className="w-full fixed top-0 left-0 bg-black/50 h-screen flex items-center justify-center z-9999">
+                <div className="w-full md:w-[40%] h-screen md:h-[80vh] bg-white rounded-sm shadow flex flex-col justify-center p-8 relative overflow-y-auto">
+                  <div className="w-full flex justify-end">
+                    <RxCross1
+                      onClick={() => setOpen(false)}
+                      size={30}
+                      className="cursor-pointer absolute top-3 right-3"
+                    />
+                  </div>
+                  <PayPalScriptProvider
+                    options={{
+                      clientId:
+                        "Aczac4Ry9_QA1t4c7TKH9UusH3RTe6onyICPoCToHG10kjlNdI-qwobbW9JAHzaRQwFMn2-k660853jn",
+                    }}
+                  >
+                    <PayPalButtons
+                      style={{ layout: "vertical" }}
+                      onApprove={onApprove}
+                      createOrder={createOrder}
+                    />
+                  </PayPalScriptProvider>
                 </div>
               </div>
-              <input
-                type="submit"
-                value={"Submit"}
-                className={`${styles.button} p-3 bg-[#f63b60]! text-white h-8 rounded-sm cursor-pointer text-[18px] font-medium`}
-              />
-            </form>
+            )}
           </div>
         )}
       </div>
@@ -308,37 +378,28 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-white rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-medium text-black">Subtotal:</h3>
-        <h5 className="text-[18px] font-medium">${orderData?.subTotalPrice}</h5>
+        <h5 className="text-[18px] font-medium">
+          ${orderData?.subTotalPrice?.toFixed(2)}
+        </h5>
       </div>
       <div className="flex justify-between">
         <h3 className="text-[16px] font-medium text-black">Shipping fees:</h3>
         <h5 className="text-[18px] font-medium">
-          ${orderData?.shippingCharge}
+          ${orderData?.shippingCharge?.toFixed(2)}
+        </h5>
+      </div>
+      <div className="flex justify-between border-b pb-3">
+        <h3 className="text-[16px] font-medium text-black">Discount:</h3>
+        <h5 className="text-[18px] font-medium">
+          {orderData?.discountPrice
+            ? "$" + orderData?.discountPrice?.toFixed(2)
+            : "-"}
         </h5>
       </div>
       <div className="flex justify-between border-b pb-3 mt-2">
-        <h3 className="text-[16px] font-medium text-black">Discount:</h3>
-        <h5 className="text-[18px] font-medium">
-          ${orderData?.discountPrice ? orderData?.discountPrice : 0}
-        </h5>
+        <h3 className="text-[16px] font-medium text-black">Amount:</h3>
+        <h5 className="text-[18px] font-medium">${orderData?.totalPrice.toFixed(2)}</h5>
       </div>
-      <h5 className="text-[18px] font-semibold text-end pt-3">
-        ${orderData?.totalPrice}
-      </h5>
-      <form className="mt-2">
-        <input
-          type="text"
-          className={`${styles.input} h-8 pl-2`}
-          placeholder="Coupon code"
-          required
-        />
-        <input
-          type="submit"
-          value={"Apply Code"}
-          required
-          className="w-full h-8 border border-[#f63b60] text-center text-[#f63b60] rounded-sm mt-8 cursor-pointer"
-        />
-      </form>
     </div>
   );
 };
