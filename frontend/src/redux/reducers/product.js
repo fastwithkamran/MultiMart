@@ -61,12 +61,10 @@ const productReducer = createReducer(initialState, (builder) => {
     })
     .addCase("getAllProductsSuccess", (state, action) => {
       state.isLoading = false;
-      state.success = true;
       state.allProducts = action.payload;
     })
     .addCase("getAllProductsFailed", (state, action) => {
       state.isLoading = false;
-      state.success = false;
       state.error = action.payload;
     })
 });
