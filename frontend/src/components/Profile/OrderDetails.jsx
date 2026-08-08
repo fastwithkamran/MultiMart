@@ -61,6 +61,7 @@ const OrderDetails = () => {
       })
       .then(() => {
         toast.success("Refund Request is in Process");
+        dispatch(getAllUserOrders(user._id));
       })
       .catch((error) => toast.error(error.message));
   };
