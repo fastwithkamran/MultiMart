@@ -37,7 +37,7 @@ const OrderDetails = () => {
     await axios
       .put(
         `${server}/product/product-review`,
-        { user, ratings, comment, productId: selectedItem?._id },
+        { user, ratings, comment, productId: selectedItem?._id, orderId: id },
         {
           withCredentials: true,
         },
@@ -47,6 +47,7 @@ const OrderDetails = () => {
         setRating(3);
         setComment("");
         setOpen(false);
+        dispatch(getAllUserOrders(user._id));
       })
       .catch((error) => toast.error(error.message));
   };
@@ -92,7 +93,7 @@ const OrderDetails = () => {
                       US${item?.discountPrice} x {item?.qty}
                     </h5>
 
-                    {data?.status === "Delivered" && (
+                    {!item?.isReviewed && (
                       <div
                         className={`${styles.button} w-50 md:ml-2 rounded-sm! whitespace-nowrap text-white`}
                         onClick={() => setOpen(true) || setSelectedItem(item)}

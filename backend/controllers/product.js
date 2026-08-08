@@ -1,6 +1,6 @@
-const product = require("../models/product");
-const Product = require("../models/product");
+const Product = require("../models/product.js");
 const Shop = require("../models/shop.js");
+const Order = require("../models/order.js");
 
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
@@ -96,7 +96,7 @@ const handleGetAllProducts = catchAsyncErrors(async (req, res, next) => {
 // review for a product
 const handleCreateProductReview = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { user, ratings, comment, productId } = req.body;
+    const { user, ratings, comment, productId, orderId } = req.body;
 
     const review = { user, ratings, comment, productId };
 
@@ -127,6 +127,12 @@ const handleCreateProductReview = catchAsyncErrors(async (req, res, next) => {
     product.ratings = avg / product.reviews.length;
 
     await product.save({ validateBeforeSave: false });
+
+    await Order.findByIdAndUpdate(
+      orderId,
+      { $set: { "cart.$[elem].isReviewed": true } },
+      { arrayFilters: [{ "elem._id": productId }], new: true },
+    );
 
     res.status(200).json({
       success: true,
