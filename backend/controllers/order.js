@@ -120,9 +120,32 @@ const handleUpdateOrderStatus = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// handle refund requests
+const handleRefundRequest = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.findById(req.params.id);
+
+    if (!orders) return next(new ErrorHandler("Order is not found", 400));
+
+    // update the order status
+    orders.status = req.body.status;
+
+    await orders.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleOrder,
   handleGetUserOrders,
   handleGetShopOrders,
   handleUpdateOrderStatus,
+  handleRefundRequest,
 };

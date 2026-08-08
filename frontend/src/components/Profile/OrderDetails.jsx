@@ -52,6 +52,18 @@ const OrderDetails = () => {
       .catch((error) => toast.error(error.message));
   };
 
+  const refundHandler = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .put(`${server}/order/order-refund/${id}`, {
+        status: "Processing refund",
+      })
+      .then(() => {
+        toast.success("Refund Request is in Process");
+      })
+      .catch((error) => toast.error(error.message));
+  };
   return (
     <>
       {isLoading ? (
@@ -120,13 +132,23 @@ const OrderDetails = () => {
                         Shop Phone Number: {item?.shop?.phoneNumber}
                       </h4>
                     </div>
-                    <Link to="/">
-                      <div
-                        className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-50`}
-                      >
-                        Send Message
-                      </div>
-                    </Link>
+                    <div className="flex gap-4">
+                      <Link to="/">
+                        <div
+                          className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-36`}
+                        >
+                          Send Message
+                        </div>
+                      </Link>
+                      {data.status === "Delivered" && (
+                        <div
+                          className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-36`}
+                          onClick={refundHandler}
+                        >
+                          Ask a Refund
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

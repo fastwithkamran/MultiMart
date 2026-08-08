@@ -12,6 +12,7 @@ const {
   handleGetUserOrders,
   handleGetShopOrders,
   handleUpdateOrderStatus,
+  handleRefundRequest,
 } = require("../controllers/order.js");
 // create an order
 router.post("/create-order", handleOrder);
@@ -25,5 +26,7 @@ router.put(
   isAuthenticatedSeller,
   handleUpdateOrderStatus,
 );
+// order refund request
+router.put("/order-refund/:id", handleRefundRequest);
 
 module.exports = router;
