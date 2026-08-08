@@ -88,6 +88,7 @@ function ProductDetails({ data }) {
                   />
                   <div className="w-full flex">
                     {data &&
+                      data.images.length > 1 &&
                       data.images.map((url, index) => (
                         <div key={index} className={"border cursor-pointer"}>
                           <img

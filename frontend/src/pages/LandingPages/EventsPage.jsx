@@ -19,7 +19,10 @@ function EventsPage() {
           <div className="min-h-[80vh]">
             <Header activePage={4} />
             <div className="p-5">
-              <EventCard active={true} data={allEvents && allEvents[0]} />
+              {allEvents &&
+                allEvents.map((event) => (
+                  <EventCard active={true} data={event} />
+                ))}
             </div>
           </div>
           <Footer />
