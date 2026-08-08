@@ -66,7 +66,7 @@ const handleGetShopOrders = catchAsyncErrors(async (req, res, next) => {
     const orders = await Order.find({ "cart.shopId": req.params.shopId }).sort({
       createdAt: -1,
     });
-    
+
     res.status(200).json({
       success: true,
       orders,
@@ -76,4 +76,53 @@ const handleGetShopOrders = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleOrder, handleGetUserOrders, handleGetShopOrders };
+// update order status
+const handleUpdateOrderStatus = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.findById(req.params.id);
+
+    if (!orders) return next(new ErrorHandler("Order is not found", 400));
+
+    // update the order status
+    orders.status = req.body.status;
+
+    // if order is delivered update the delivery date and payment status
+    if (req.body.status === "Delivered") {
+      orders.deliveredAt = Date.now();
+      orders.paymentInfo.status = "Succeeded";
+    }
+
+    // if product is dispatch then update the stock and sold out number
+    if (req.body.status === "Transferred to delivery partner") {
+      orders.cart.forEach(async (order) => {
+        await updateProduct(order._id, order.qty);
+      });
+    }
+
+    async function updateProduct(id, qty) {
+      const product = await Product.findById(id);
+
+      product.stock -= qty;
+      product.sold_out += qty;
+
+      await product.save({ validateBeforeSave: false });
+    }
+
+    await orders.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = {
+  handleOrder,
+  handleGetUserOrders,
+  handleGetShopOrders,
+  handleUpdateOrderStatus,
+};

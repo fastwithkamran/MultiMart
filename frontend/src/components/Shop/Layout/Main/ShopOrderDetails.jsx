@@ -1,16 +1,21 @@
 import { BsFillBagFill } from "react-icons/bs";
 import styles from "../../../../styles/styles";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllShopOrders } from "../../../../redux/actions/order";
 import Loader from "../../../Layout/Loader/Loader";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { server } from "../../../../../server";
 
 const ShopOrderDetails = () => {
   const { orders, isLoading } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [status, setStatus] = useState("");
 
   const { id } = useParams();
@@ -21,8 +26,22 @@ const ShopOrderDetails = () => {
 
   const data = orders && orders.find((item) => item._id === id);
 
-  const orderUpdateHandler = (e) => {
+  const orderUpdateHandler = async (e) => {
     e.preventDefault();
+
+    if (status === "") toast.error("Update the order status");
+
+    await axios
+      .put(
+        `${server}/order/update-order-status/${id}`,
+        { status },
+        { withCredentials: true },
+      )
+      .then(() => {
+        toast.success("Order Status Updated");
+        navigate("/dashboard-orders");
+      })
+      .catch((error) => toast.error(error.message));
   };
 
   return (
@@ -107,7 +126,7 @@ const ShopOrderDetails = () => {
                 Phone Number: {data?.user.phoneNumber}
               </h4>
               <h4 className="pt-3 text-[20px]">
-                Payment Method: {data?.paymentInfo.type}{" "}
+                Payment Method: {data?.paymentInfo.type}
                 <span>
                   {data?.paymentInfo?.status
                     ? "|" + data?.paymentInfo?.status
@@ -117,7 +136,7 @@ const ShopOrderDetails = () => {
             </div>
           </div>
           <h4 className="mt-4 pt-3 mb-2 text-[20px] font-semibold">
-            Order Status:{" "}
+            Order Status:
           </h4>
           <select
             className="w-48 border h-8 rounded-sm!"
