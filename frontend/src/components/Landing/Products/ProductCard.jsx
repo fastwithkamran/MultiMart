@@ -4,8 +4,6 @@ import styles from "../../../styles/styles";
 import ProductDetailsCard from "./ProductDetailsCard";
 import {
   AiFillHeart,
-  AiFillStar,
-  AiOutlineStar,
   AiOutlineHeart,
   AiOutlineEye,
   AiOutlineShoppingCart,
@@ -17,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cart";
+import Ratings from "./Ratings";
 
 const ProductCard = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -57,21 +56,19 @@ const ProductCard = ({ data }) => {
         />
       </Link>
       {/* shop name and title */}
-      <Link to={`/shop/preview/${data?.shop?._id}`}>
+      <Link
+        to={`/shop/preview/${data?.shop?._id} text-ellipsis whitespace-nowrap overflow-hidden`}
+      >
         <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
       </Link>
       <Link to={`/product/${data._id}`}>
-        <h4 className="pb-3 font-medium">
+        <h4 className="pb-3 font-medium text-ellipsis whitespace-nowrap overflow-hidden">
           {data.name.length > 40 ? data.name.slice(0, 40) : data.name}
         </h4>
 
         {/* stars rating */}
-        <div className="flex text-yellow-400">
-          <AiFillStar className="mr-2 cursor-pointer" size={20} />
-          <AiFillStar className="mr-2 cursor-pointer" size={20} />
-          <AiFillStar className="mr-2 cursor-pointer" size={20} />
-          <AiFillStar className="mr-2 cursor-pointer" size={20} />
-          <AiOutlineStar className="mr-2 cursor-pointer" size={20} />
+        <div className="flex">
+          <Ratings rating={data.reviews[0]?.ratings} />
         </div>
 
         {/* price */}
@@ -90,7 +87,7 @@ const ProductCard = ({ data }) => {
 
           {/* total sells */}
           <span className="font-[400px] text-[17px] text-green-400">
-            {data.stock} sold
+            {data.sold_out} sold
           </span>
         </div>
       </Link>
