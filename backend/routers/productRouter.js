@@ -7,9 +7,10 @@ const {
   handleGetShopProducts,
   handleDeleteProduct,
   handleGetAllProducts,
+  handleCreateProductReview,
 } = require("../controllers/product");
 
-const { isAuthenticatedSeller } = require("../utils/auth");
+const { isAuthenticatedSeller, isAuthenticatedUser } = require("../utils/auth");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 
 // create product
@@ -24,5 +25,8 @@ router.delete(
 );
 // get all products
 router.get("/get-all-products", handleGetAllProducts);
+
+// review for a product
+router.put("/product-review", isAuthenticatedUser, handleCreateProductReview);
 
 module.exports = router;

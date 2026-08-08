@@ -32,6 +32,22 @@ const productSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  reviews: [
+    {
+      user: {
+        type: Object,
+      },
+      ratings: {
+        type: Number,
+      },
+      comment: {
+        type: String,
+      },
+      productId: {
+        type: String,
+      },
+    },
+  ],
   shopId: {
     type: String,
     required: true,

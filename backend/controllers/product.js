@@ -1,3 +1,4 @@
+const product = require("../models/product");
 const Product = require("../models/product");
 const Shop = require("../models/shop.js");
 
@@ -92,9 +93,54 @@ const handleGetAllProducts = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// review for a product
+const handleCreateProductReview = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { user, ratings, comment, productId } = req.body;
+
+    const review = { user, ratings, comment, productId };
+
+    const product = await Product.findById(productId);
+
+    product.reviews = product.reviews || [];
+
+    const isReviewed = product.reviews.find((rev) => rev.user._id === user._id);
+
+    if (isReviewed) {
+      product.reviews.forEach((rev) => {
+        if (rev.user._id === req.user._id) {
+          rev.ratings = ratings;
+          rev.comment = comment;
+          rev.user = user;
+        }
+      });
+    } else {
+      product.reviews.push(review);
+    }
+
+    let avg = 0;
+
+    product.reviews.forEach((rev) => {
+      avg += rev.ratings;
+    });
+
+    product.ratings = avg / product.reviews.length;
+
+    await product.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateProduct,
   handleGetShopProducts,
   handleDeleteProduct,
   handleGetAllProducts,
+  handleCreateProductReview,
 };
