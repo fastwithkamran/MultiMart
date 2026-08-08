@@ -30,6 +30,7 @@ import {
   ShopPreviewPage,
   ShopAllOrdersPage,
   ShopOrderDetailsPage,
+  OrdersDetailsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -171,6 +172,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user/order/:id"
+        element={
+          <ProtectedRoute>
+            <OrdersDetailsPage />
           </ProtectedRoute>
         }
       />

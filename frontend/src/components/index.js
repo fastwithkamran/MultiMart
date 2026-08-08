@@ -31,6 +31,7 @@ import ShopAllEvents from "./Shop/Layout/Main/ShopAllEvents.jsx";
 import ShopAllCoupons from "./Shop/Layout/Main/ShopAllCoupons.jsx";
 import ShopAllOrders from "./Shop/Layout/Main/ShopAllOrders.jsx";
 import ShopOrderDetails from "./Shop/Layout/Main/ShopOrderDetails.jsx";
+import OrderDetails from "./Profile/OrderDetails.jsx";
 export {
   Loader,
   Login,
@@ -65,4 +66,5 @@ export {
   ShopAllCoupons,
   ShopAllOrders,
   ShopOrderDetails,
+  OrderDetails,
 };
