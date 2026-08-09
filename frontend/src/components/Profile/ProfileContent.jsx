@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import { MdTrackChanges } from "react-icons/md";
 import {
   deleteUserAddress,
+  loadUser,
   updateUserAddress,
   updateUserInformation,
 } from "../../redux/actions/user";
@@ -97,7 +98,11 @@ function ProfileContent({ active, setActive }) {
         },
         withCredentials: true,
       })
-      .then(() => window.location.reload())
+      .then(() => {
+        dispatch(loadUser()).then(() =>
+          toast.success("Avatar Updated Successfully"),
+        );
+      })
       .catch((error) => {
         toast.error(error.message);
       });
