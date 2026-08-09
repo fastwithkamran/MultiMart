@@ -142,10 +142,48 @@ const handleRefundRequest = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// proceedings of refund order --- for shop
+const handleRefundProceedings = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.findById(req.params.id);
+
+    if (!orders) return next(new ErrorHandler("Order is not found", 400));
+
+    // update the order status
+    orders.status = req.body.status;
+
+    if (req.body.status === "Refund approve") {
+      orders.cart.forEach(async (order) => {
+        await updateProduct(order._id, order.qty);
+      });
+    }
+
+    async function updateProduct(id, qty) {
+      const product = await Product.findById(id);
+
+      product.stock += qty;
+      product.sold_out -= qty;
+
+      await product.save({ validateBeforeSave: false });
+    }
+
+    await orders.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleOrder,
   handleGetUserOrders,
   handleGetShopOrders,
   handleUpdateOrderStatus,
   handleRefundRequest,
+  handleRefundProceedings,
 };
