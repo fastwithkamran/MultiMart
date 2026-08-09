@@ -1,14 +1,14 @@
-import DashboardHeader from "../../components/Shop/Layout/Dashboard/DashboardHeader";
-import DashboardSideBar from "../../components/Shop/Layout/Dashboard/DashboardSideBar";
+import { DashboardHeader, DashboardSideBar, DashboardHero } from "../../components";
 
 function ShopDashboardPage() {
   return (
     <div>
       <DashboardHeader />
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-start justify-between w-full">
         <div className="md:w-80 w-20">
           <DashboardSideBar active={1} />
         </div>
+        <DashboardHero />
       </div>
     </div>
   );
