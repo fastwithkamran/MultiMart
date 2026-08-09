@@ -33,6 +33,7 @@ import {
   OrdersDetailsPage,
   OrdersTrackPage,
   ShopRefundsPage,
+  ShopSettingsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -82,6 +83,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopHomePage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <SellerProtectedRoute>
+            <ShopSettingsPage />
           </SellerProtectedRoute>
         }
       />

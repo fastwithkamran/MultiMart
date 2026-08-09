@@ -35,6 +35,7 @@ import OrderDetails from "./Profile/OrderDetails.jsx";
 import OrderTrack from "./Profile/OrderTrack.jsx";
 import ShopRefunds from "./Shop/Layout/Main/ShopRefunds.jsx";
 import DashboardHero from "./Shop/Layout/Dashboard/DashboardHero.jsx";
+import ShopSettings from "./Shop/Layout/Main/ShopSettings.jsx";
 export {
   Loader,
   Login,
@@ -73,4 +74,5 @@ export {
   OrderTrack,
   ShopRefunds,
   DashboardHero,
+  ShopSettings,
 };

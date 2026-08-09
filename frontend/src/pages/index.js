@@ -27,6 +27,7 @@ import ShopOrderDetailsPage from "./ShopPage/ShopOrderDetailsPage.jsx";
 import OrdersDetailsPage from "./ProfilePage/OrdersDetailsPage.jsx";
 import OrdersTrackPage from "./ProfilePage/OrdersTrackPage.jsx";
 import ShopRefundsPage from "./ShopPage/ShopRefundsPage.jsx";
+import ShopSettingsPage from "./ShopPage/ShopSettingsPage.jsx"
 export {
   LoginPage,
   SignupPage,
@@ -57,4 +58,5 @@ export {
   OrdersDetailsPage,
   OrdersTrackPage,
   ShopRefundsPage,
+  ShopSettingsPage
 };
