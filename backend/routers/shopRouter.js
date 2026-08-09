@@ -8,6 +8,8 @@ const {
   handleActivateShop,
   handleShopLogin,
   handleGetShopInfo,
+  handleUpdateShopAvatar,
+  handleUpdateShopInfo,
 } = require("../controllers/shop");
 
 // Authentication
@@ -50,5 +52,15 @@ router.get(
 
 // Fetch the shop information on preview request
 router.get("/get-shop-info/:id", handleGetShopInfo);
+
+// update the user avatar
+router.put(
+  "/update-shop-avatar",
+  isAuthenticatedSeller,
+  upload.single("image"),
+  handleUpdateShopAvatar,
+);
+
+router.put("/update-shop-info", isAuthenticatedSeller, handleUpdateShopInfo);
 
 module.exports = router;

@@ -84,6 +84,13 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Seller already exits", 400));
   }
 
+  const shopNameExist = await Shop.findOne({ name });
+
+  if (!shopNameExist)
+    return next(
+      new ErrorHandler("Name is already chosen by other vendor", 400),
+    );
+
   const seller = await Shop.create({
     name,
     email,
@@ -141,4 +148,75 @@ const handleGetShopInfo = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-module.exports = { handleCreateShop, handleActivateShop, handleShopLogin, handleGetShopInfo};
+// update shop avatar
+const handleUpdateShopAvatar = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const existsShop = await Shop.findById(req.seller.id);
+
+    const existAvatarPath = `uploads/${existsShop.avatar.public_id}`;
+
+    fs.unlinkSync(existAvatarPath);
+
+    const filename = req.file.filename;
+    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+
+    const shop = await Shop.findByIdAndUpdate(req.seller.id, {
+      avatar: { public_id: filename, url: fileUrl },
+    });
+
+    return res.status(200).json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+// update shop information
+const handleUpdateShopInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, description, address, phoneNumber, zipCode } = req.body;
+
+    const shop = await Shop.findById(req.seller.id);
+
+    if (!shop) {
+      return next(new ErrorHandler("Shop not found", 400));
+    }
+
+    if (shop.name !== name) {
+      const shopNameExist = await Shop.findOne({ name });
+
+      if (shopNameExist)
+        return next(
+          new ErrorHandler("Name is already chosen by other vendor", 400),
+        );
+    }
+
+    shop.name = name;
+    shop.description = description;
+    shop.address = address;
+    shop.zipCode = zipCode;
+    shop.phoneNumber = phoneNumber;
+
+    await shop.save();
+
+    res.status(200).json({
+      success: true,
+      shop,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
+module.exports = {
+  handleCreateShop,
+  handleActivateShop,
+  handleShopLogin,
+  handleGetShopInfo,
+  handleUpdateShopAvatar,
+  handleUpdateShopInfo,
+};
