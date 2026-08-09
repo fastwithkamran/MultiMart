@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function ShopInfo({ isOwner }) {
   const { id } = useParams();
@@ -25,7 +26,7 @@ function ShopInfo({ isOwner }) {
         window.location.reload();
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error.response.data.message);;
       });
   };
 
@@ -73,9 +74,11 @@ function ShopInfo({ isOwner }) {
       {isOwner && (
         <div className="py-3 px-4">
           <div className={`${styles.button} w-full! h-10! rounded-sm!`}>
-            <span className="text-white text-center text-sm md:text">
-              Edit Shop
-            </span>
+            <Link to="/settings">
+              <span className="text-white text-center text-sm md:text">
+                Edit Shop
+              </span>
+            </Link>
           </div>
           <div
             className={`${styles.button} w-full! h-10! rounded-sm!`}

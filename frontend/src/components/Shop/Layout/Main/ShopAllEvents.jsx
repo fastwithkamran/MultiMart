@@ -18,7 +18,7 @@ function ShopAllEvents() {
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      toast.error(error.response.data.message);;
       dispatch(clearErrors());
     }
     if (success) {
