@@ -328,7 +328,13 @@ const AllRefundOrders = () => {
   }, [dispatch, user._id]);
 
   const eligibleOrders =
-    orders && orders.filter((item) => item.status === "Processing refund");
+    orders &&
+    orders.filter(
+      (item) =>
+        item.status === "Processing refund" ||
+        item.status === "Refund approve" ||
+        item.status === "Refund reject",
+    );
 
   const column = [
     {

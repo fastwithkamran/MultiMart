@@ -60,9 +60,15 @@ const OrderTrack = () => {
             </h1>
           )}
     
-          {data && data?.status === "Refund Success" && (
+          {data && data?.status === "Refund approve" && (
             <h1 className="text-center text-20[px]">
-              Order is Refunded!!
+              Order has been Refunded!!
+            </h1>
+          )}
+          
+          {data && data?.status === "Refund reject" && (
+            <h1 className="text-center text-20[px]">
+              Order Refund Request has Rejected!!
             </h1>
           )}
         </div>
