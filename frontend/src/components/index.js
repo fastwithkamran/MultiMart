@@ -33,6 +33,7 @@ import ShopAllOrders from "./Shop/Layout/Main/ShopAllOrders.jsx";
 import ShopOrderDetails from "./Shop/Layout/Main/ShopOrderDetails.jsx";
 import OrderDetails from "./Profile/OrderDetails.jsx";
 import OrderTrack from "./Profile/OrderTrack.jsx";
+import ShopRefunds from "./Shop/Layout/Main/ShopRefunds.jsx";
 export {
   Loader,
   Login,
@@ -69,4 +70,5 @@ export {
   ShopOrderDetails,
   OrderDetails,
   OrderTrack,
+  ShopRefunds,
 };

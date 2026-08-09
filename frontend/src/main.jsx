@@ -32,6 +32,7 @@ import {
   ShopOrderDetailsPage,
   OrdersDetailsPage,
   OrdersTrackPage,
+  ShopRefundsPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -117,10 +118,10 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="/order/:id"
+        path="/dashboard-refunds"
         element={
           <SellerProtectedRoute>
-            <ShopOrderDetailsPage />
+            <ShopRefundsPage />
           </SellerProtectedRoute>
         }
       />
@@ -177,6 +178,14 @@ const router = createBrowserRouter(
         }
       />
       {/* Order Details Routes */}
+      <Route
+        path="/order/:id"
+        element={
+          <SellerProtectedRoute>
+            <ShopOrderDetailsPage />
+          </SellerProtectedRoute>
+        }
+      />
       <Route
         path="/user/order/:id"
         element={
