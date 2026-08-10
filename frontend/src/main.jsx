@@ -34,6 +34,7 @@ import {
   OrdersTrackPage,
   ShopRefundsPage,
   ShopSettingsPage,
+  ShopWithdrawMoneyPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -155,6 +156,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopAllCouponsPage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard-withdraw-money"
+        element={
+          <SellerProtectedRoute>
+            <ShopWithdrawMoneyPage />
           </SellerProtectedRoute>
         }
       />
