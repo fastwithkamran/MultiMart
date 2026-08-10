@@ -6,10 +6,26 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ShopInfo({ isOwner }) {
   const { id } = useParams();
   const [data, setData] = useState({});
+  const { products } = useSelector((state) => state.product);
+
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.ratings, 0),
+      0,
+    );
+
+  const avgRatings = totalRatings / totalReviewsLength || 0;
 
   useEffect(() => {
     axios
@@ -26,7 +42,7 @@ function ShopInfo({ isOwner }) {
         window.location.reload();
       })
       .catch((error) => {
-        toast.error(error.response.data.message);;
+        toast.error(error.response.data.message);
       });
   };
 
@@ -40,8 +56,8 @@ function ShopInfo({ isOwner }) {
             className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-2 border-green-400"
           />
         </div>
-        <h3 className="text-center py-2 text-[20px]">{data?.name}</h3>
-        <p className="text-[16px] text-black/60 p-2.5 flex items-center">
+        <h3 className="text-center py-2 text-[14px] md:text-[20px]">{data?.name}</h3>
+        <p className="text-[16px] text-black/60 p-2.5 items-center hidden md:block">
           {data?.description}
         </p>
       </div>
@@ -53,17 +69,17 @@ function ShopInfo({ isOwner }) {
 
       <div className="p-3">
         <h5 className="font-semibold">Phone Number</h5>
-        <h4 className="text-black/60">{data?.phoneNumber}</h4>
+        <h4 className="text-black/60 text-[12px] sm:text-[16px]">{data?.phoneNumber}</h4>
       </div>
 
       <div className="p-3">
         <h5 className="font-semibold">Total Products</h5>
-        <h4 className="text-black/60">10</h4>
+        <h4 className="text-black/60">{products && products.length}</h4>
       </div>
 
       <div className="p-3">
         <h5 className="font-semibold">Shop Ratings</h5>
-        <h4 className="text-black/60">4/5</h4>
+        <h4 className="text-black/60">{avgRatings}/5</h4>
       </div>
 
       <div className="p-3">
@@ -72,7 +88,7 @@ function ShopInfo({ isOwner }) {
       </div>
 
       {isOwner && (
-        <div className="py-3 px-4">
+        <div className="py-3 px-1 md:px-2">
           <div className={`${styles.button} w-full! h-10! rounded-sm!`}>
             <Link to="/settings">
               <span className="text-white text-center text-sm md:text">
