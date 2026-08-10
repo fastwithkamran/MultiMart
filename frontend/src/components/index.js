@@ -37,6 +37,7 @@ import ShopRefunds from "./Shop/Layout/Main/ShopRefunds.jsx";
 import DashboardHero from "./Shop/Layout/Dashboard/DashboardHero.jsx";
 import ShopSettings from "./Shop/Layout/Main/ShopSettings.jsx";
 import ShopWithdrawMoney from "./Shop/Layout/Main/ShopWithdrawMoney.jsx";
+import ShopInbox from "./Shop/Layout/Main/ShopInbox.jsx";
 export {
   Loader,
   Login,
@@ -77,4 +78,5 @@ export {
   DashboardHero,
   ShopSettings,
   ShopWithdrawMoney,
+  ShopInbox,
 };

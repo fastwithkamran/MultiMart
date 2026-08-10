@@ -35,6 +35,7 @@ import {
   ShopRefundsPage,
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
+  ShopInboxPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -164,6 +165,14 @@ const router = createBrowserRouter(
         element={
           <SellerProtectedRoute>
             <ShopWithdrawMoneyPage />
+          </SellerProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard-inbox"
+        element={
+          <SellerProtectedRoute>
+            <ShopInboxPage />
           </SellerProtectedRoute>
         }
       />
