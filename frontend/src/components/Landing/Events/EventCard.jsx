@@ -46,7 +46,7 @@ function EventCard({ active, data }) {
                 </h5>
               </div>
               <span className="pr-3 font-medium text-[17px] text-green-300">
-                120 sold
+                {data?.sold_out}
               </span>
             </div>
             <CountDown data={data} />

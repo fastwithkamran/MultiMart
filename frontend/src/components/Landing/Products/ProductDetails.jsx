@@ -275,7 +275,7 @@ const ProductDetailsInfo = ({
         {active === 2 ? (
           <p className="w-full flex flex-col my-4 min-h-[40vh]">
             {data &&
-              data.reviews.map((item, index) => (
+              data?.reviews?.map((item, index) => (
                 <div className="w-full flex mt-2" key={index}>
                   <img
                     className="w-12 h-12 rounded-full object-cover"
@@ -290,7 +290,7 @@ const ProductDetailsInfo = ({
                 </div>
               ))}
             <div className="w-full flex justify-center">
-              {data && data.reviews.length === 0 && (
+              {data && (!data?.reviews || data?.reviews?.length === 0) && (
                 <h5>No Reviews for this product yet!</h5>
               )}
             </div>
