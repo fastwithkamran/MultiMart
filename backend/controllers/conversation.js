@@ -34,6 +34,28 @@ const handleCreateConversations = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// get seller conversations
+const handleGetSellerConversations = catchAsyncErrors(
+  async (req, res, next) => {
+    try {
+      const conversations = await Conversation.find({
+        members: {
+          $in: [req.params.sellerId],
+        },
+      }).sort({ updatedAt: -1, createdAt: -1 });
+
+      return res.status(200).json({
+        success: true,
+        conversations,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 500));
+    }
+  },
+);
+
 module.exports = {
   handleCreateConversations,
+  handleGetSellerConversations,
 };

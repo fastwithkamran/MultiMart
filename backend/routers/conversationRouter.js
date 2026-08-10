@@ -5,9 +5,19 @@ const { upload } = require("../multer");
 const { isAuthenticatedSeller } = require("../utils/auth");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 
-const { handleCreateConversations } = require("../controllers/conversation");
+const {
+  handleCreateConversations,
+  handleGetSellerConversations,
+} = require("../controllers/conversation");
 
 // create conversation
 router.post("/create-new-conversation", handleCreateConversations);
+
+// get seller conversations
+router.get(
+  "/get-all-seller-conversations/:sellerId",
+  isAuthenticatedSeller,
+  handleGetSellerConversations,
+);
 
 module.exports = router;
