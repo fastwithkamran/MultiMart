@@ -66,7 +66,7 @@ const ShopSettings = () => {
 
   return (
     <div className="w-full min-h-screen my-5 flex flex-col items-center">
-      <div className="w-[80%] flex flex-col justify-center">
+      <div className="w-[80%] md:w-full flex flex-col justify-center">
         {/* Shop avatar */}
         <div className="w-full flex items-center justify-center mt-5">
           <div className="relative">

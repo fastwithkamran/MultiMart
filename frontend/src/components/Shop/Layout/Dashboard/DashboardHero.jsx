@@ -1,5 +1,4 @@
 import { AiOutlineArrowRight, AiOutlineMoneyCollect } from "react-icons/ai";
-import styles from "../../../../styles/styles";
 import { Link } from "react-router-dom";
 import { MdBorderClear } from "react-icons/md";
 import { FiPackage } from "react-icons/fi";
@@ -94,83 +93,79 @@ const DashboardHero = () => {
     });
 
   return (
-    <div className="w-full p-8">
-      <h3 className="text-[22px] font-Poppins pb-2">Overview</h3>
+    <div className="w-full p-4 sm:p-6 lg:p-8">
+      <h3 className="pb-4 text-[22px] font-Poppins">Overview</h3>
 
-      <div className="w-full block md:flex items-center justify-between">
-        <div className="w-full mb-4 md:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
-          <div className="grid grid-rows-2">
-            <div className="flex items-center">
+      <div className="mb-8 grid gap-4 lg:grid-cols-3">
+        <div className="min-h-[20vh] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex h-full flex-col justify-between">
+            <div className="flex items-start">
               <AiOutlineMoneyCollect
                 size={30}
-                className="mr-2"
+                className="mr-3 shrink-0"
                 fill="#00000085"
               />
-              <h3
-                className={`${styles.productTitle} text-[18px]! leading-5 font-400 text-black/60`}
-              >
-                Account Balance
-                <div className="text-[12px]"> (with 10% service charge)</div>
-              </h3>
+              <div>
+                <h3 className="text-[18px] font-400 leading-5 text-black/70">
+                  Account Balance
+                </h3>
+                <div className="mt-1 text-[12px] text-slate-500">
+                  (with 10% service charge)
+                </div>
+              </div>
             </div>
             <div>
-              <h5 className="pt-2 pl-9 text-[22px] font-medium">
+              <h5 className="pt-4 pl-9 text-[22px] font-medium">
                 ${availableBalance.toFixed(2)}
               </h5>
-              <Link to="/dashboard-withdraw-money">
-                <h5 className="pt-4 pl-2 text-[#077f9c]">Withdraw Money</h5>
+              <Link to="/dashboard-withdraw-money" className="mt-4 inline-block pl-2 text-[#077f9c]">
+                Withdraw Money
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="w-full mb-4 md:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
-          <div className="grid grid-rows-2">
-            <div className="flex items-center">
-              <MdBorderClear size={30} className="mr-2" fill="#00000085" />
-              <h3
-                className={`${styles.productTitle} text-[18px]! leading-5 font-400 text-black/60`}
-              >
+        <div className="min-h-[20vh] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex h-full flex-col justify-between">
+            <div className="flex items-start">
+              <MdBorderClear size={30} className="mr-3 shrink-0" fill="#00000085" />
+              <h3 className="text-[18px] font-400 leading-5 text-black/70">
                 All Orders
               </h3>
             </div>
             <div>
-              <h5 className="pt-2 pl-9 text-[22px] font-medium">
+              <h5 className="pt-4 pl-9 text-[22px] font-medium">
                 {orders && orders.length}
               </h5>
-              <Link to="/dashboard-orders">
-                <h5 className="pt-4 pl-2 text-[#077f9c]">View Orders</h5>
+              <Link to="/dashboard-orders" className="mt-4 inline-block pl-2 text-[#077f9c]">
+                View Orders
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="w-full mb-4 md:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
-          <div className="grid grid-rows-2">
-            <div className="flex items-center">
-              <FiPackage size={30} className="mr-2" fill="#00000085" />
-              <h3
-                className={`${styles.productTitle} text-[18px]! leading-5 font-400 text-black/60`}
-              >
+        <div className="min-h-[20vh] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex h-full flex-col justify-between">
+            <div className="flex items-start">
+              <FiPackage size={30} className="mr-3 shrink-0" fill="#00000085" />
+              <h3 className="text-[18px] font-400 leading-5 text-black/70">
                 All Products
               </h3>
             </div>
             <div>
-              <h5 className="pt-2 pl-9 text-[22px] font-medium">
+              <h5 className="pt-4 pl-9 text-[22px] font-medium">
                 {products && products.length}
               </h5>
-              <Link to="/dashboard-products">
-                <h5 className="pt-4 pl-2 text-[#077f9c]">View Products</h5>
+              <Link to="/dashboard-products" className="mt-4 inline-block pl-2 text-[#077f9c]">
+                View Products
               </Link>
             </div>
           </div>
         </div>
-
-        <br />
       </div>
 
-      <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
-      <div className="w-full min-h-[45vh] bg-white rounded p-1">
+      <h3 className="pb-4 text-[22px] font-Poppins">Latest Orders</h3>
+      <div className="min-h-[40vh] overflow-hidden rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
         <DataGrid
           rows={row}
           columns={column}
