@@ -2,24 +2,29 @@ const nodemailer = require("nodemailer");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 
 const sendMail = catchAsyncErrors(async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    service: process.env.SMTP_SERVICE,
-    auth: {
-      user: process.env.SMTP_MAIL,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      service: process.env.SMTP_SERVICE,
+      auth: {
+        user: process.env.SMTP_MAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
 
-  const mailOptions = {
-    from: process.env.SMTP_MAIL,
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-  };
+    const mailOptions = {
+      from: process.env.SMTP_MAIL,
+      to: options.email,
+      subject: options.subject,
+      text: options.message,
+    };
 
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
 });
 
 module.exports = sendMail;

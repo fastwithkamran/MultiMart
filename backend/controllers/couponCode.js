@@ -19,6 +19,7 @@ const handleCreateCouponsCode = catchAsyncErrors(async (req, res, next) => {
       couponCode,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -32,6 +33,7 @@ const handleGetAllCoupons = catchAsyncErrors(async (req, res, next) => {
       couponCodes,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -44,6 +46,7 @@ const handleDeleteCoupon = catchAsyncErrors(async (req, res, next) => {
       success: true,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -52,13 +55,13 @@ const handleDeleteCoupon = catchAsyncErrors(async (req, res, next) => {
 const handleGetCoupon = catchAsyncErrors(async (req, res, next) => {
   try {
     const couponCode = await CouponCode.findOne({ name: req.params.name });
-    
+
     res.status(200).json({
       success: true,
       couponCode,
     });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });

@@ -6,29 +6,39 @@ const Shop = require("../models/shop.js");
 
 // Verify User
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
-  const { Usertoken } = req.cookies;
+  try {
+    const { Usertoken } = req.cookies;
 
-  if (!Usertoken) {
-    return next(new ErrorHandler("Please Login to continue", 401));
+    if (!Usertoken) {
+      return next(new ErrorHandler("Please Login to continue", 401));
+    }
+
+    const verifyUser = jwt.verify(Usertoken, process.env.JWT_SECRET_KEY);
+
+    req.user = await User.findById(verifyUser.id);
+
+    next();
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
   }
-
-  const verifyUser = jwt.verify(Usertoken, process.env.JWT_SECRET_KEY);
-
-  req.user = await User.findById(verifyUser.id);
-
-  next();
 });
 
 // Verify Seller
 exports.isAuthenticatedSeller = catchAsyncErrors(async (req, res, next) => {
-  const { Shoptoken } = req.cookies;
+  try {
+    const { Shoptoken } = req.cookies;
 
-  if (!Shoptoken) {
-    return next(new ErrorHandler("Please Login to continue", 401));
+    if (!Shoptoken) {
+      return next(new ErrorHandler("Please Login to continue", 401));
+    }
+
+    const verifySeller = jwt.verify(Shoptoken, process.env.JWT_SECRET_KEY);
+
+    req.seller = await Shop.findById(verifySeller.id);
+    next();
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
   }
-
-  const verifySeller = jwt.verify(Shoptoken, process.env.JWT_SECRET_KEY);
-
-  req.seller = await Shop.findById(verifySeller.id);
-  next();
 });

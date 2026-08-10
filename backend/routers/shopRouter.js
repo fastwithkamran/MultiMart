@@ -22,12 +22,17 @@ router.get(
   "/getseller",
   isAuthenticatedSeller,
   catchAsyncErrors((req, res) => {
-    const seller = req.seller;
+    try {
+      const seller = req.seller;
 
-    return res.status(200).json({
-      success: true,
-      seller,
-    });
+      return res.status(200).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 500));
+    }
   }),
 );
 
@@ -36,17 +41,22 @@ router.get(
   "/logout",
   isAuthenticatedSeller,
   catchAsyncErrors(async (req, res) => {
-    res.cookie("Shoptoken", null, {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
+    try {
+      res.cookie("Shoptoken", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
 
-    res.status(200).json({
-      success: true,
-      message: "Log Out Successful",
-    });
+      res.status(200).json({
+        success: true,
+        message: "Log Out Successful",
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 500));
+    }
   }),
 );
 

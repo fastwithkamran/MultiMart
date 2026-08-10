@@ -30,6 +30,7 @@ const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -43,6 +44,7 @@ const handleGetShopProducts = catchAsyncErrors(async (req, res, next) => {
       products,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -76,6 +78,7 @@ const handleDeleteProduct = catchAsyncErrors(async (req, res, next) => {
       message: "Product Deleted Successfully",
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -89,6 +92,7 @@ const handleGetAllProducts = catchAsyncErrors(async (req, res, next) => {
       products,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });

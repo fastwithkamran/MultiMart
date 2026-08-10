@@ -40,6 +40,7 @@ const handleOrder = catchAsyncErrors(async (req, res, next) => {
       orders,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -56,6 +57,7 @@ const handleGetUserOrders = catchAsyncErrors(async (req, res, next) => {
       orders,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
@@ -72,6 +74,7 @@ const handleGetShopOrders = catchAsyncErrors(async (req, res, next) => {
       orders,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });

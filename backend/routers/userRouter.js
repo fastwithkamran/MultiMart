@@ -24,11 +24,16 @@ router.get(
   "/getuser",
   isAuthenticatedUser,
   catchAsyncErrors((req, res) => {
-    const user = req.user;
-    return res.status(200).json({
-      success: true,
-      user,
-    });
+    try {
+      const user = req.user;
+      return res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 500));
+    }
   }),
 );
 
@@ -65,17 +70,22 @@ router.get(
   "/logout",
   isAuthenticatedUser,
   catchAsyncErrors(async (req, res) => {
-    res.cookie("Usertoken", null, {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
+    try {
+      res.cookie("Usertoken", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
 
-    res.status(200).json({
-      success: true,
-      message: "Log Out Successful",
-    });
+      res.status(200).json({
+        success: true,
+        message: "Log Out Successful",
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 500));
+    }
   }),
 );
 

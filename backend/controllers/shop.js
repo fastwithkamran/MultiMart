@@ -7,131 +7,154 @@ const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken.js");
 
 const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password, address, phoneNumber, zipCode } = req.body;
-  const sellerEmail = await Shop.findOne({ email });
+  try {
+    const { name, email, password, address, phoneNumber, zipCode } = req.body;
+    const sellerEmail = await Shop.findOne({ email });
 
-  if (sellerEmail) {
+    if (sellerEmail) {
+      const filename = req.file.filename;
+      const filePath = `uploads/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Error deleting avatar", err);
+          return next(
+            new ErrorHandler(
+              "Avatar cannot deleted at Duplicate User Request",
+              500,
+            ),
+          );
+        }
+      });
+      return next(new ErrorHandler("Seller already exits", 400));
+    }
+
     const filename = req.file.filename;
-    const filePath = `uploads/${filename}`;
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting avatar", err);
-        return next(
-          new ErrorHandler(
-            "Avatar cannot deleted at Duplicate User Request",
-            500,
-          ),
-        );
-      }
+    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+
+    const seller = {
+      name,
+      email,
+      password,
+      address,
+      phoneNumber,
+      avatar: {
+        public_id: filename,
+        url: fileUrl,
+      },
+      zipCode,
+    };
+
+    const activationToken = createActivationToken(seller);
+
+    const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+
+    await sendMail({
+      email: seller.email,
+      subject: "Activate your shop",
+      message: `Hello ${seller.name}, please click on the link to activate your shop ${activationUrl}`,
     });
-    return next(new ErrorHandler("Seller already exits", 400));
+
+    res.status(201).json({
+      success: true,
+      message: `Please check your email: ${seller.email} to activate shop`,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
   }
-
-  const filename = req.file.filename;
-  const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
-
-  const seller = {
-    name,
-    email,
-    password,
-    address,
-    phoneNumber,
-    avatar: {
-      public_id: filename,
-      url: fileUrl,
-    },
-    zipCode,
-  };
-
-  const activationToken = createActivationToken(seller);
-
-  const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
-
-  await sendMail({
-    email: seller.email,
-    subject: "Activate your shop",
-    message: `Hello ${seller.name}, please click on the link to activate your shop ${activationUrl}`,
-  });
-
-  res.status(201).json({
-    success: true,
-    message: `Please check your email: ${seller.email} to activate shop`,
-  });
 });
 
 // create activation token
 const createActivationToken = (seller) => {
-  return jwt.sign(seller, process.env.Activation_Secret, {
-    expiresIn: "5m",
-  });
+  try {
+    return jwt.sign(seller, process.env.Activation_Secret, {
+      expiresIn: "5m",
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
 };
 
 // activate user through mail
 const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
-  const { activation_token } = req.body;
-  const newSeller = jwt.verify(activation_token, process.env.Activation_Secret);
-
-  if (!newSeller) {
-    return next(new ErrorHandler("Invalid Token", 400));
-  }
-
-  const { name, email, password, address, phoneNumber, zipCode, avatar } =
-    newSeller;
-
-  const seller_exist = await Shop.findOne({ email });
-
-  if (seller_exist) {
-    return next(new ErrorHandler("Seller already exits", 400));
-  }
-
-  const shopNameExist = await Shop.findOne({ name });
-
-  if (!shopNameExist)
-    return next(
-      new ErrorHandler("Name is already chosen by other vendor", 400),
+  try {
+    const { activation_token } = req.body;
+    const newSeller = jwt.verify(
+      activation_token,
+      process.env.Activation_Secret,
     );
 
-  const seller = await Shop.create({
-    name,
-    email,
-    password,
-    address,
-    phoneNumber,
-    zipCode,
-    avatar,
-  });
+    if (!newSeller) {
+      return next(new ErrorHandler("Invalid Token", 400));
+    }
 
-  const result = sendToken(seller);
+    const { name, email, password, address, phoneNumber, zipCode, avatar } =
+      newSeller;
 
-  res.status(201).cookie("Shoptoken", result.token, result.options).json({
-    success: true,
-    seller,
-    token: result.token,
-  });
+    const seller_exist = await Shop.findOne({ email });
+
+    if (seller_exist) {
+      return next(new ErrorHandler("Seller already exits", 400));
+    }
+
+    const shopNameExist = await Shop.findOne({ name });
+
+    if (!shopNameExist)
+      return next(
+        new ErrorHandler("Name is already chosen by other vendor", 400),
+      );
+
+    const seller = await Shop.create({
+      name,
+      email,
+      password,
+      address,
+      phoneNumber,
+      zipCode,
+      avatar,
+    });
+
+    const result = sendToken(seller);
+
+    res.status(201).cookie("Shoptoken", result.token, result.options).json({
+      success: true,
+      seller,
+      token: result.token,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
 });
 
 // login shop
 const handleShopLogin = catchAsyncErrors(async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return next(new ErrorHandler("Provide all fields", 400));
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return next(new ErrorHandler("Provide all fields", 400));
 
-  const seller = await Shop.findOne({ email }).select("+password");
+    const seller = await Shop.findOne({ email }).select("+password");
 
-  if (!seller)
-    return next(new ErrorHandler("Incorrect Password or Email", 400));
+    if (!seller)
+      return next(new ErrorHandler("Incorrect Password or Email", 400));
 
-  const isPasswordValid = await seller.comparePassword(password);
+    const isPasswordValid = await seller.comparePassword(password);
 
-  if (!isPasswordValid)
-    return next(new ErrorHandler("Incorrect Password or Email", 400));
+    if (!isPasswordValid)
+      return next(new ErrorHandler("Incorrect Password or Email", 400));
 
-  const result = sendToken(seller);
+    const result = sendToken(seller);
 
-  res.status(201).cookie("Shoptoken", result.token, result.options).json({
-    success: true,
-    token: result.token,
-  });
+    res.status(201).cookie("Shoptoken", result.token, result.options).json({
+      success: true,
+      token: result.token,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
 });
 
 // get shop Info
@@ -144,6 +167,7 @@ const handleGetShopInfo = catchAsyncErrors(async (req, res, next) => {
       shop,
     });
   } catch (error) {
+    console.error(error);
     return next(new ErrorHandler(error, 500));
   }
 });
