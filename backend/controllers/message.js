@@ -21,6 +21,7 @@ const handleCreateMessages = catchAsyncErrors(async (req, res, next) => {
 
     const message = await Message.create({
       conversationId: req.body.conversationId,
+      text: req.body.text,
       sender: req.body.sender,
       images,
     });
@@ -35,6 +36,24 @@ const handleCreateMessages = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// get all messages
+const handleGetMessages = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const messages = await Message.find({
+      conversationId: req.params.id,
+    });
+
+    return res.status(200).json({
+      success: true,
+      messages,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateMessages,
+  handleGetMessages,
 };
