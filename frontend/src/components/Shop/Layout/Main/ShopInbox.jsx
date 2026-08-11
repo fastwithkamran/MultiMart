@@ -23,6 +23,7 @@ const ShopInbox = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const currentChatRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
@@ -193,8 +194,12 @@ const ShopInbox = () => {
     setMessages([]);
   };
 
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="w-[90%] bg-white m-4 h-[85vh] overflow-hidden rounded shadow-sm">
+    <div className="w-[90%] bg-white m-4 h-[80vh] overflow-hidden rounded shadow-sm">
       {!open && (
         <h1 className="text-center text-[30px] py-3 font-Poppins">All Chats</h1>
       )}
@@ -224,6 +229,7 @@ const ShopInbox = () => {
           seller={seller}
           userData={chatUserData}
           activeStatus={activeStatus}
+          scrollRef={scrollRef}
         />
       )}
     </div>
@@ -304,6 +310,7 @@ const ChatBox = ({
   seller,
   userData,
   activeStatus,
+  scrollRef,
 }) => {
   return (
     <div className="w-full h-full flex flex-col">
@@ -333,9 +340,11 @@ const ChatBox = ({
         {messages?.length ? (
           messages.map((item, index) => {
             const isSeller = item.sender === seller._id;
+            const isLast = index === messages.length - 1;
             return (
               <div
                 key={index}
+                ref={isLast ? scrollRef : null}
                 className={`flex gap-3 my-3 ${
                   isSeller ? "justify-end" : "justify-start"
                 }`}

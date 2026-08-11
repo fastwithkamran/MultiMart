@@ -23,6 +23,7 @@ const Inbox = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const currentChatRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
@@ -190,7 +191,7 @@ const Inbox = () => {
   };
 
   return (
-    <div className="w-[90%] mx-auto my-4 h-[85vh] overflow-hidden rounded shadow-sm bg-white">
+    <div className="w-[90%] mx-auto my-4 h-[70vh] overflow-hidden rounded shadow-sm bg-white">
       {!open ? (
         <div className="h-full overflow-y-auto">
           <h1 className="text-center text-[30px] py-4 font-Poppins border-b border-slate-200">
@@ -220,6 +221,7 @@ const Inbox = () => {
         </div>
       ) : (
         <ChatBox
+          messagesContainerRef={messagesContainerRef}
           closeChat={() => {
             setOpen(false);
             setCurrentChat(null);
@@ -307,6 +309,7 @@ const ConversationLists = ({
 };
 
 const ChatBox = ({
+  messagesContainerRef,
   closeChat,
   newMessage,
   setNewMessage,
@@ -316,6 +319,11 @@ const ChatBox = ({
   sellerData,
   activeStatus,
 }) => {
+  useEffect(() => {
+    if (!messagesContainerRef.current) return;
+    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+  }, [messages, messagesContainerRef]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full p-4 flex items-center justify-between bg-blue-100 border-b border-slate-200">
@@ -341,7 +349,7 @@ const ChatBox = ({
         </button>
       </div>
 
-      <div className="flex-1 p-4 bg-slate-100 overflow-y-auto">
+      <div ref={messagesContainerRef} className="flex-1 p-4 bg-slate-100 overflow-y-auto">
         {messages?.length ? (
           messages.map((item, index) => {
             const isUser = item.sender === user._id;

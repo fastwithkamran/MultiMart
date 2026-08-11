@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { Header, Footer, Inbox } from "../../../components";
 
 function InboxPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div>
       <Header />
