@@ -30,6 +30,7 @@ import ShopRefundsPage from "./ShopPage/ShopRefundsPage.jsx";
 import ShopSettingsPage from "./ShopPage/ShopSettingsPage.jsx";
 import ShopWithdrawMoneyPage from "./ShopPage/ShopWithdrawMoneyPage.jsx";
 import ShopInboxPage from "./ShopPage/ShopInboxPage.jsx";
+import InboxPage from "./ProfilePage/Inbox/InboxPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -63,4 +64,5 @@ export {
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
   ShopInboxPage,
+  InboxPage,
 };

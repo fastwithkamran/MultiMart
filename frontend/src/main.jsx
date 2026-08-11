@@ -36,6 +36,7 @@ import {
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
   ShopInboxPage,
+  InboxPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -74,6 +75,15 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <OrderSuccessPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* user inbox page */}
+      <Route
+        path="/inbox"
+        element={
+          <ProtectedRoute>
+            <InboxPage />
           </ProtectedRoute>
         }
       />
