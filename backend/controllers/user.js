@@ -5,6 +5,7 @@ const fs = require("fs");
 const sendMail = require("../utils/sendMail.js");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken.js");
+const { cloudinary } = require("../multer");
 
 const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -12,24 +13,18 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Error deleting avatar", err);
-          return next(
-            new ErrorHandler(
-              "Avatar cannot deleted at Duplicate User Request",
-              500,
-            ),
-          );
+      const publicId = req.file.filename;
+
+      await cloudinary.uploader.destroy(publicId, (error, result) => {
+        if (error) {
+          console.error("Error deleting avatar from cloudinary", error);
         }
       });
       return next(new ErrorHandler("User already exits", 400));
     }
 
     const filename = req.file.filename;
-    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+    const fileUrl = req.file.path;
 
     const user = {
       name,
@@ -174,16 +169,24 @@ const handleUpdateAvatar = catchAsyncErrors(async (req, res, next) => {
   try {
     const existsUser = await User.findById(req.user.id);
 
-    const existAvatarPath = `uploads/${existsUser.avatar.public_id}`;
-
-    fs.unlinkSync(existAvatarPath);
+    const existAvatarPath = existsUser.avatar.public_id;
+    
+    await cloudinary.uploader.destroy(existAvatarPath, (error, result) => {
+      if (error) {
+        console.error("Error deleting avatar from cloudinary", error);
+      }
+    });
 
     const filename = req.file.filename;
-    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+    const fileUrl = req.file.path;
 
-    const user = await User.findByIdAndUpdate(req.user.id, {
-      avatar: { public_id: filename, url: fileUrl },
-    });
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        avatar: { public_id: filename, url: fileUrl },
+      },
+      { returnDocument: "after" },
+    );
 
     return res.status(200).json({
       success: true,

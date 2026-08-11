@@ -4,19 +4,27 @@ const Event = require("../models/event.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const fs = require("fs");
+const { cloudinary } = require("../multer");
 
 // create event
 const handleCreateEvent = catchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.body.shopId;
     const shop = await Shop.findById(shopId);
+
+    let imageUrls = [];
+
     if (!shop) {
       return next(new ErrorHandler("Shop ID is invalid!", 400));
     } else {
       const files = req.files;
-      const imageUrls = files.map(
-        (file) => `${req.protocol}://${req.get("host")}/${file.filename}`,
-      );
+      imageUrls = files.map((file) => {
+        const filename = file.filename;
+        const fileUrl = file.path;
+
+        return { public_id: filename, url: fileUrl };
+      });
+
       const eventData = req.body;
       eventData.images = imageUrls;
       eventData.shop = shop;
@@ -58,17 +66,15 @@ const handleDeleteEvent = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Event not found with this id", 400));
     }
 
-    eventData.images.forEach((imageUrl) => {
-      const filename = new URL(imageUrl).pathname.split("/").pop();
-      const filePath = `uploads/${filename}`;
+    for (const image of productData.images) {
+      const existImagePath = image.public_id;
 
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Error deleting images", err);
-          return next(new ErrorHandler("Product Images cannot deleted", 500));
+      await cloudinary.uploader.destroy(existImagePath, (error, result) => {
+        if (error) {
+          console.error("Error deleting avatar from cloudinary", error);
         }
       });
-    });
+    }
 
     const event = await Event.findByIdAndDelete(eventId);
 

@@ -29,7 +29,14 @@ const eventSchema = new mongoose.Schema({
   },
   images: [
     {
-      type: String,
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
     },
   ],
   start_Date: {

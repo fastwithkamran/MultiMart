@@ -5,6 +5,7 @@ const fs = require("fs");
 const sendMail = require("../utils/sendMail.js");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken.js");
+const { cloudinary } = require("../multer");
 
 const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -12,24 +13,18 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     const sellerEmail = await Shop.findOne({ email });
 
     if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Error deleting avatar", err);
-          return next(
-            new ErrorHandler(
-              "Avatar cannot deleted at Duplicate User Request",
-              500,
-            ),
-          );
+      const publicId = req.file.filename;
+
+      await cloudinary.uploader.destroy(publicId, (error, result) => {
+        if (error) {
+          console.error("Error deleting avatar from cloudinary", error);
         }
       });
       return next(new ErrorHandler("Seller already exits", 400));
     }
 
     const filename = req.file.filename;
-    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+    const fileUrl = req.file.path;
 
     const seller = {
       name,
@@ -177,16 +172,24 @@ const handleUpdateShopAvatar = catchAsyncErrors(async (req, res, next) => {
   try {
     const existsShop = await Shop.findById(req.seller.id);
 
-    const existAvatarPath = `uploads/${existsShop.avatar.public_id}`;
+    const existAvatarPath = existsShop.avatar.public_id;
 
-    fs.unlinkSync(existAvatarPath);
+    await cloudinary.uploader.destroy(existAvatarPath, (error, result) => {
+      if (error) {
+        console.error("Error deleting avatar from cloudinary", error);
+      }
+    });
 
     const filename = req.file.filename;
-    const fileUrl = `${req.protocol}://${req.get("host")}/${filename}`;
+    const fileUrl = req.file.path;
 
-    const shop = await Shop.findByIdAndUpdate(req.seller.id, {
-      avatar: { public_id: filename, url: fileUrl },
-    });
+    const shop = await Shop.findByIdAndUpdate(
+      req.seller.id,
+      {
+        avatar: { public_id: filename, url: fileUrl },
+      },
+      { returnDocument: "after" },
+    );
 
     return res.status(200).json({
       success: true,
