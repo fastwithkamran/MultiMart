@@ -105,10 +105,10 @@ io.on("connection", (socket) => {
   });
 
   // update and get new message
-  socket.on("updateNewMessage", ({ newMessage, newMessageId }) => {
-    io.emit("getNewMessage", {
-      newMessage,
-      newMessageId,
+  socket.on("updateLastMessage", ({ lastMessage, lastMessageId }) => {
+    io.emit("getLastMessage", {
+      lastMessage,
+      lastMessageId,
     });
   });
 

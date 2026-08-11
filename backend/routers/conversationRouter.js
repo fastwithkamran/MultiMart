@@ -8,6 +8,7 @@ const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const {
   handleCreateConversations,
   handleGetSellerConversations,
+  handleUpdateLastMessage,
 } = require("../controllers/conversation");
 
 // create conversation
@@ -19,5 +20,7 @@ router.get(
   isAuthenticatedSeller,
   handleGetSellerConversations,
 );
+
+router.put("/update-last-message/:id", handleUpdateLastMessage);
 
 module.exports = router;

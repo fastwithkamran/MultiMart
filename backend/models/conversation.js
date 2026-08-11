@@ -7,10 +7,10 @@ const conversationSchema = new mongoose.Schema(
     members: {
       type: Array,
     },
-    NewMessage: {
+    lastMessage: {
       type: String,
     },
-    NewMessageId: {
+    lastMessageId: {
       type: String,
     },
   },

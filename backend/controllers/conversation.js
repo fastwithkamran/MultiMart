@@ -55,7 +55,28 @@ const handleGetSellerConversations = catchAsyncErrors(
   },
 );
 
+// update the last message
+const handleUpdateLastMessage = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { lastMessage, lastMessageId } = req.body;
+
+    const conversation = await Conversation.findByIdAndUpdate(req.params.id, {
+      lastMessage,
+      lastMessageId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      conversation,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateConversations,
   handleGetSellerConversations,
+  handleUpdateLastMessage,
 };
