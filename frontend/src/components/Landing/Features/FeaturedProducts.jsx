@@ -4,6 +4,9 @@ import ProductCard from "../Products/ProductCard";
 
 function FeaturedProducts() {
   const { allProducts } = useSelector((state) => state.product);
+
+  const recentProducts = allProducts && [...allProducts].slice(0, 5);
+
   return (
     <div className="w-full">
       <div className={`${styles.heading} ml-5`}>
@@ -12,8 +15,8 @@ function FeaturedProducts() {
       <div className="p-5">
         <div className="w-full bg-white p-6 rounded-lg mb-12" id="categories">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5 mb-12 border-0">
-            {allProducts &&
-              allProducts.map((product, index) => {
+            {recentProducts &&
+              recentProducts.map((product, index) => {
                 return <ProductCard data={product} key={index} />;
               })}
           </div>
