@@ -290,6 +290,21 @@ const handleUpdatePassword = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// get user information via userID
+const handleGetUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error, 500));
+  }
+});
+
 module.exports = {
   handleCreateUser,
   handleActivateUser,
@@ -299,4 +314,5 @@ module.exports = {
   handleUpdateAddresses,
   handleDeleteAddress,
   handleUpdatePassword,
+  handleGetUserInfo,
 };

@@ -10,6 +10,7 @@ const {
   handleUpdateAddresses,
   handleDeleteAddress,
   handleUpdatePassword,
+  handleGetUserInfo,
 } = require("../controllers/user");
 const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
@@ -36,6 +37,9 @@ router.get(
     }
   }),
 );
+
+// Find user information with userID
+router.get("/user-info/:id", handleGetUserInfo);
 
 // Update user information
 router.post("/update-user-info", isAuthenticatedUser, handleUpdateUserInfo);
