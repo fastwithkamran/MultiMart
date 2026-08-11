@@ -103,7 +103,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
             <div className="block w-full md:flex">
               <div className="w-full md:w-[50%]">
                 <img
-                  src={data.images[0]}
+                  src={data.images[0].url}
                   alt="productImage"
                   className="w-50 h-50 mx-auto mb-5 object-contain"
                 />

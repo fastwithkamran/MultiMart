@@ -107,17 +107,17 @@ function ProductDetails({ data }) {
               <div className="block w-full md:flex">
                 <div className="w-full md:w-[50%]">
                   <img
-                    src={data?.images[select]}
+                    src={data?.images[select].url}
                     alt="productImage"
                     className="w-[80%] object-contain mx-auto"
                   />
                   <div className="w-full flex">
                     {data &&
                       data.images.length > 1 &&
-                      data.images.map((url, index) => (
+                      data.images.map((image, index) => (
                         <div key={index} className={"border cursor-pointer"}>
                           <img
-                            src={url}
+                            src={image.url}
                             alt="productImage"
                             className="h-50 object-contain overflow-hidden mr-3"
                             onClick={() => setSelect(index)}

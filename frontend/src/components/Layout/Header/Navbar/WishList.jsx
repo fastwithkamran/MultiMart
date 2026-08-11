@@ -95,7 +95,7 @@ const WishlistSingle = ({
             onClick={() => removeFromWishlistHandler(data)}
           />
           <img
-            src={data?.images[0]}
+            src={data?.images[0].url}
             alt="itemsImage"
             className="w-20 h-20 object-cover ml-4"
           />

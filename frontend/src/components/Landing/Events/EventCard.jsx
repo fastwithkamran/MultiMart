@@ -27,7 +27,7 @@ function EventCard({ active, data }) {
         >
           <div className="flex justify-center items-center">
             <img
-              src={data?.images[0]}
+              src={data?.images[0].url}
               alt="productImage"
               className="w-100 h-100 object-contain"
             />
