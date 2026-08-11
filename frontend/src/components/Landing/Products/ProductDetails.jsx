@@ -87,8 +87,8 @@ function ProductDetails({ data }) {
           userId,
           sellerId,
         })
-        .then((res) => {
-          navigate(`/conversation/${res.data.conversation._id}`);
+        .then(() => {
+          navigate(`/inbox`);
         })
         .catch((error) => toast.error(error.response.data.message));
     } else {

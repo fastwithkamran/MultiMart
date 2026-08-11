@@ -1,11 +1,10 @@
 import { BsFillBagFill } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loader from "../Layout/Loader/Loader";
 import { getAllUserOrders } from "../../redux/actions/order";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
@@ -14,8 +13,9 @@ import { toast } from "react-toastify";
 
 const OrderDetails = () => {
   const { orders, isLoading } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -65,6 +65,31 @@ const OrderDetails = () => {
       })
       .catch((error) => toast.error(error.message));
   };
+
+  const handleMessageSubmit = async (e, item) => {
+    e.preventDefault();
+
+    if (isAuthenticated) {
+      console.log(item)
+      const conversationTitle = user._id + item.shopId;
+      const userId = user._id;
+      const sellerId = item.shopId;
+
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          conversationTitle,
+          userId,
+          sellerId,
+        })
+        .then(() => {
+          navigate(`/inbox`);
+        })
+        .catch((error) => toast.error(error.response.data.message));
+    } else {
+      toast.error("Please login to start a conversation!");
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -134,13 +159,12 @@ const OrderDetails = () => {
                       </h4>
                     </div>
                     <div className="flex gap-4">
-                      <Link to="/">
-                        <div
-                          className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-36`}
-                        >
-                          Send Message
-                        </div>
-                      </Link>
+                      <div
+                        className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-36`}
+                        onClick={(e) => handleMessageSubmit(e, item)}
+                      >
+                        Send Message
+                      </div>
                       {data.status === "Delivered" && (
                         <div
                           className={`${styles.button} whitespace-nowrap text-white rounded-sm! w-36`}

@@ -56,9 +56,7 @@ const ProductCard = ({ data }) => {
         />
       </Link>
       {/* shop name and title */}
-      <Link
-        to={`/shop/preview/${data?.shop?._id} text-ellipsis whitespace-nowrap overflow-hidden`}
-      >
+      <Link to={`/shop/preview/${data?.shop?._id}`}>
         <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
       </Link>
       <Link to={`/product/${data._id}`}>

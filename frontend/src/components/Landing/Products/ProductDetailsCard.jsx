@@ -7,7 +7,7 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../redux/actions/cart";
@@ -15,13 +15,18 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist";
+import axios from "axios";
+import { server } from "../../../../server";
 
 const ProductDetailsCard = ({ data, setOpen }) => {
   const [count, setCount] = useState(1);
 
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { products } = useSelector((state) => state.product);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const click = Boolean(wishlist && wishlist.find((i) => i._id === data._id));
 
@@ -47,7 +52,42 @@ const ProductDetailsCard = ({ data, setOpen }) => {
     toast.success("Added to wishlist");
   };
 
-  const handleMessageSubmit = () => {};
+  const handleMessageSubmit = async (e) => {
+    e.preventDefault();
+
+    if (isAuthenticated) {
+      const conversationTitle = user._id + data.shop._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          conversationTitle,
+          userId,
+          sellerId,
+        })
+        .then(() => {
+          navigate(`/inbox`);
+        })
+        .catch((error) => toast.error(error.response.data.message));
+    } else {
+      toast.error("Please login to start a conversation!");
+    }
+  };
+
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.ratings, 0),
+      0,
+    );
+
+  const avgRatings = totalRatings / totalReviewsLength || 0;
 
   return (
     <div className="bg-white">
@@ -78,7 +118,9 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                       <h3 className={`${styles.shop_name}`}>
                         {data.shop.name}
                       </h3>
-                      <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                      <h5 className="pb-3 text-[15px]">
+                        ({avgRatings}/5) Ratings
+                      </h5>
                     </div>
                   </Link>
                 </div>
