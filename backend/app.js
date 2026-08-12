@@ -6,10 +6,7 @@ const cors = require("cors");
 const connectDatabase = require("./db/Database.js");
 
 // CORS
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://multi-vendor-fastwithkamran.vercel.app",
-];
+const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_API];
 
 app.use(
   cors({

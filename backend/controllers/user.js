@@ -31,8 +31,13 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
     };
 
     const activationToken = createActivationToken(user);
+    let activationUrl;
 
-    const activationUrl = `http://localhost:5173/activation/${activationToken}`;
+    if (process.env.NODE_ENV === "production") {
+      activationUrl = `${process.env.FRONTEND_API}/activation/${activationToken}`;
+    } else {
+      activationUrl = `http://localhost:5173/activation/${activationToken}`;
+    }
 
     await sendMail({
       email: user.email,

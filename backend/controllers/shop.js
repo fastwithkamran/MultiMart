@@ -34,8 +34,13 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     };
 
     const activationToken = createActivationToken(seller);
+    let activationUrl;
 
-    const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+    if (process.env.NODE_ENV === "production") {
+      activationUrl = `${process.env.FRONTEND_API}/seller/activation/${activationToken}`;
+    } else {
+      activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+    }
 
     await sendMail({
       email: seller.email,
