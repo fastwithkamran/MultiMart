@@ -65,19 +65,9 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 
-  // Object to track messages for each user
-  const messages = {};
-
   socket.on("sendMessage", ({ senderId, receiverId, text, images }) => {
     const message = createMessage({ senderId, receiverId, text, images });
     const user = getUser(receiverId);
-
-    // Store the messages in the 'messages' object
-    if (!messages[receiverId]) {
-      messages[receiverId] = [message];
-    } else {
-      messages[receiverId].push(message);
-    }
 
     // send the message to the receiver
     io.to(user?.socketId).emit("getMessage", message);
