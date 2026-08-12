@@ -24,6 +24,8 @@ const connectDatabase = async () => {
       // wait maximum 10 sec for query response
       socketTimeoutMS: 10000,
     });
+
+    console.log("MongoDB Connected");
   } catch (err) {
     console.error("MongoDB Connection failed", err.message);
     throw err;

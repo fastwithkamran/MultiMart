@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const app = require("./app");
-const connectDatabase = require("./db/database");
+const connectDatabase = require("./db/Database.js");
 
 // handling synchronous uncaught Exceptions
 process.on("uncaughtException", (err) => {
