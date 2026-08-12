@@ -27,18 +27,22 @@ process.on("unhandledRejection", (err) => {
 
 // start server for local dev
 if (process.env.NODE_ENV !== "production") {
-  try {
-    await connectDatabase();
+  const startServer = async () => {
+    try {
+      await connectDatabase();
 
-    const PORT = process.env.PORT;
+      const PORT = process.env.PORT;
 
-    app.listen(PORT, () => {
-      console.log("Server connected on PORT", PORT);
-    });
-  } catch (error) {
-    console.error("Server not start", error.message);
-    process.exit(1);
-  }
+      app.listen(PORT, () => {
+        console.log("Server connected on PORT", PORT);
+      });
+    } catch (error) {
+      console.error("Server not start", error.message);
+      process.exit(1);
+    }
+  };
+
+  startServer();
 }
 
 module.exports = app;
