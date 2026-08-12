@@ -10,8 +10,6 @@ import styles from "../../../../styles/styles";
 import { format } from "timeago.js";
 
 import socketIO from "socket.io-client";
-const ENDPOINT = import.meta.env.VITE_Socket_API;
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const ShopInbox = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -24,14 +22,26 @@ const ShopInbox = () => {
   const [newMessage, setNewMessage] = useState("");
   const currentChatRef = useRef(null);
   const scrollRef = useRef(null);
+  const socketRef = useRef(null);
 
-  const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  // connect to socket
+  useEffect(() => {
+    const EndPoint = import.meta.env.VITE_SOCKET_API;
+    if (!EndPoint) return;
+
+    socketRef.current = socketIO(EndPoint, { transports: ["websocket"] });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
+
   // receive new messages in real-time from socket
   useEffect(() => {
-    socketId.on("getMessage", (data) => {
+    socketRef.current.on("getMessage", (data) => {
       const message = {
         sender: data.senderId,
         text: data.text,
@@ -44,6 +54,7 @@ const ShopInbox = () => {
     });
   }, []);
 
+  // set the ref to currentChat
   useEffect(() => {
     currentChatRef.current = currentChat;
   }, [currentChat]);
@@ -99,7 +110,7 @@ const ShopInbox = () => {
       (memberId) => memberId !== seller._id,
     );
 
-    socketId.emit("sendMessage", {
+    socketRef.current.emit("sendMessage", {
       senderId: seller._id,
       receiverId,
       text: newMessage,
@@ -120,7 +131,7 @@ const ShopInbox = () => {
 
   // to update the last message both in database and socket
   const updateLastMessage = async () => {
-    socketId.emit("updateLastMessage", {
+    socketRef.current.emit("updateLastMessage", {
       lastMessage: newMessage,
       lastMessageId: seller._id,
     });
@@ -144,8 +155,8 @@ const ShopInbox = () => {
     if (!seller?._id) return;
 
     const userId = seller._id;
-    socketId.emit("addUser", userId);
-    socketId.on("getUsers", (data) => {
+    socketRef.current.emit("addUser", userId);
+    socketRef.current.on("getUsers", (data) => {
       setOnlineUsers(data);
     });
   }, [seller]);
@@ -173,14 +184,6 @@ const ShopInbox = () => {
 
     fetchConversations();
   }, [seller._id]);
-
-  const activeStatus = currentChat
-    ? onlineUsers.some(
-        (user) =>
-          currentChat.members.find((member) => member !== seller._id) ===
-          user.userId,
-      )
-    : false;
 
   const handleNavigateToChat = (id) => {
     navigate(`?${id}`);
@@ -211,8 +214,6 @@ const ShopInbox = () => {
             data={data}
             index={index}
             seller={seller}
-            active={active}
-            setActive={setActive}
             handleNavigateToChat={handleNavigateToChat}
             setCurrentChat={setCurrentChat}
             online={isOnline(data)}
@@ -228,7 +229,7 @@ const ShopInbox = () => {
           messages={messages}
           seller={seller}
           userData={chatUserData}
-          activeStatus={activeStatus}
+          online={isOnline(currentChat)}
           scrollRef={scrollRef}
         />
       )}
@@ -240,8 +241,6 @@ const ConversationItem = ({
   index,
   data,
   seller,
-  active,
-  setActive,
   handleNavigateToChat,
   setCurrentChat,
   online,
@@ -265,11 +264,9 @@ const ConversationItem = ({
 
   return (
     <div
-      className={`w-full flex items-center p-3 gap-3 cursor-pointer border-b border-slate-200 ${
-        active === index ? "bg-slate-100" : "bg-white"
-      }`}
+      key={index}
+      className="w-full flex items-center p-3 gap-3 cursor-pointer border-b border-slate-200 bg-slate-100"
       onClick={() => {
-        setActive(index);
         handleNavigateToChat(data?._id);
         setCurrentChat(data);
       }}
@@ -309,8 +306,8 @@ const ChatBox = ({
   messages,
   seller,
   userData,
-  activeStatus,
   scrollRef,
+  online,
 }) => {
   return (
     <div className="w-full h-full flex flex-col">
@@ -324,7 +321,7 @@ const ChatBox = ({
           <div>
             <h1 className="text-[18px] font-semibold">{userData?.name}</h1>
             <p className="text-[14px] text-slate-600">
-              {activeStatus ? "Online" : "Offline"}
+              {online ? "Online" : "Offline"}
             </p>
           </div>
         </div>

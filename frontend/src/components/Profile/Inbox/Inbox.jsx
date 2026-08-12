@@ -10,8 +10,6 @@ import axios from "axios";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
 import styles from "../../../styles/styles";
-const ENDPOINT = import.meta.env.VITE_Socket_API;
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const Inbox = () => {
   const { user } = useSelector((state) => state.user);
@@ -22,16 +20,28 @@ const Inbox = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const socketRef = useRef(null);
   const currentChatRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
-  const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  // connect to socket
+  useEffect(() => {
+    const EndPoint = import.meta.env.VITE_SOCKET_API;
+    if (!EndPoint) return;
+
+    socketRef.current = socketIO(EndPoint, { transports: ["websocket"] });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
+
   // receiving new messages in real-time from socket
   useEffect(() => {
-    socketId.on("getMessage", (data) => {
+    socketRef.current.on("getMessage", (data) => {
       const message = {
         sender: data.senderId,
         text: data.text,
@@ -99,7 +109,7 @@ const Inbox = () => {
       (memberId) => memberId !== user._id,
     );
 
-    socketId.emit("sendMessage", {
+    socketRef.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
       text: message.text,
@@ -121,7 +131,7 @@ const Inbox = () => {
 
   // to update the last message both in database and socket
   const updateLastMessage = async () => {
-    socketId.emit("updateLastMessage", {
+    socketRef.current.emit("updateLastMessage", {
       lastMessage: newMessage,
       lastMessageId: user._id,
     });
@@ -144,20 +154,12 @@ const Inbox = () => {
   useEffect(() => {
     if (user) {
       const userId = user._id;
-      socketId.emit("addUser", userId);
-      socketId.on("getUsers", (data) => {
+      socketRef.current.emit("addUser", userId);
+      socketRef.current.on("getUsers", (data) => {
         setOnlineSellers(data);
       });
     }
   }, [user]);
-
-  const activeStatus = currentChat
-    ? onlineSellers.some(
-        (socketUser) =>
-          currentChat.members.find((member) => member !== user._id) ===
-          socketUser.userId,
-      )
-    : false;
 
   const isOnline = (chat) => {
     const chatMembersId = chat.members.find((member) => member !== user._id);
@@ -190,6 +192,13 @@ const Inbox = () => {
     setOpen(true);
   };
 
+  const closeChat = () => {
+    setOpen(false);
+    setCurrentChat(null);
+    setMessages([]);
+    setChatSellerData(null);
+  };
+
   return (
     <div className="w-[90%] mx-auto my-4 h-[70vh] overflow-hidden rounded shadow-sm bg-white">
       {!open ? (
@@ -205,8 +214,6 @@ const Inbox = () => {
                   data={data}
                   index={index}
                   user={user}
-                  active={active}
-                  setActive={setActive}
                   handleNavigateToChat={handleNavigateToChat}
                   setCurrentChat={setCurrentChat}
                   online={isOnline(data)}
@@ -222,19 +229,14 @@ const Inbox = () => {
       ) : (
         <ChatBox
           messagesContainerRef={messagesContainerRef}
-          closeChat={() => {
-            setOpen(false);
-            setCurrentChat(null);
-            setMessages([]);
-            setChatSellerData(null);
-          }}
+          closeChat={closeChat}
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           sendMessageHandler={sendMessageHandler}
           messages={messages}
           user={user}
           sellerData={chatSellerData}
-          activeStatus={activeStatus}
+          online={isOnline(currentChat)}
         />
       )}
     </div>
@@ -245,8 +247,6 @@ const ConversationLists = ({
   index,
   data,
   user,
-  active,
-  setActive,
   handleNavigateToChat,
   setCurrentChat,
   online,
@@ -270,13 +270,9 @@ const ConversationLists = ({
 
   return (
     <div
-      className={`w-full flex items-center gap-4 p-3 rounded-xl border transition-colors cursor-pointer ${
-        active === index
-          ? "bg-slate-100 border-slate-300"
-          : "bg-white border-transparent hover:bg-slate-50"
-      }`}
+      key={index}
+      className={`w-full flex items-center gap-4 p-3 rounded-xl border transition-colors cursor-pointerbg-slate-100 border-slate-300`}
       onClick={() => {
-        setActive(index);
         handleNavigateToChat(data?._id);
         setCurrentChat(data);
       }}
@@ -317,11 +313,12 @@ const ChatBox = ({
   messages,
   user,
   sellerData,
-  activeStatus,
+  online,
 }) => {
   useEffect(() => {
     if (!messagesContainerRef.current) return;
-    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    messagesContainerRef.current.scrollTop =
+      messagesContainerRef.current.scrollHeight;
   }, [messages, messagesContainerRef]);
 
   return (
@@ -336,7 +333,7 @@ const ChatBox = ({
           <div>
             <h1 className="text-[18px] font-semibold">{sellerData?.name}</h1>
             <p className="text-[14px] text-slate-600">
-              {activeStatus ? "Online" : "Offline"}
+              {online ? "Online" : "Offline"}
             </p>
           </div>
         </div>
@@ -349,7 +346,10 @@ const ChatBox = ({
         </button>
       </div>
 
-      <div ref={messagesContainerRef} className="flex-1 p-4 bg-slate-100 overflow-y-auto">
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 p-4 bg-slate-100 overflow-y-auto"
+      >
         {messages?.length ? (
           messages.map((item, index) => {
             const isUser = item.sender === user._id;
