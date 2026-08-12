@@ -1,11 +1,10 @@
 const Shop = require("../models/shop");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
-const fs = require("fs");
 const sendMail = require("../utils/sendMail.js");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken.js");
-const { cloudinary } = require("../multer");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../multer");
 
 const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -13,18 +12,13 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     const sellerEmail = await Shop.findOne({ email });
 
     if (sellerEmail) {
-      const publicId = req.file.filename;
-
-      await cloudinary.uploader.destroy(publicId, (error, result) => {
-        if (error) {
-          console.error("Error deleting avatar from cloudinary", error);
-        }
-      });
       return next(new ErrorHandler("Seller already exits", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = req.file.path;
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname,
+    );
 
     const seller = {
       name,
@@ -33,8 +27,8 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
       address,
       phoneNumber,
       avatar: {
-        public_id: filename,
-        url: fileUrl,
+        public_id: result.public_id,
+        url: result.secure_url,
       },
       zipCode,
     };
@@ -61,14 +55,9 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
 
 // create activation token
 const createActivationToken = (seller) => {
-  try {
-    return jwt.sign(seller, process.env.Activation_Secret, {
-      expiresIn: "5m",
-    });
-  } catch (error) {
-    console.error(error);
-    return next(new ErrorHandler(error, 500));
-  }
+  return jwt.sign(seller, process.env.Activation_Secret, {
+    expiresIn: "5m",
+  });
 };
 
 // activate user through mail
@@ -174,19 +163,17 @@ const handleUpdateShopAvatar = catchAsyncErrors(async (req, res, next) => {
 
     const existAvatarPath = existsShop.avatar.public_id;
 
-    await cloudinary.uploader.destroy(existAvatarPath, (error, result) => {
-      if (error) {
-        console.error("Error deleting avatar from cloudinary", error);
-      }
-    });
+    await deleteFromCloudinary(existAvatarPath);
 
-    const filename = req.file.filename;
-    const fileUrl = req.file.path;
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname,
+    );
 
     const shop = await Shop.findByIdAndUpdate(
       req.seller.id,
       {
-        avatar: { public_id: filename, url: fileUrl },
+        avatar: { public_id: result.public_id, url: result.secure_url },
       },
       { returnDocument: "after" },
     );

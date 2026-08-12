@@ -4,8 +4,7 @@ const Order = require("../models/order.js");
 
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
-const fs = require("fs");
-const { cloudinary } = require("../multer");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../multer");
 
 // create product
 const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
@@ -19,12 +18,17 @@ const handleCreateProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Shop ID is invalid!", 400));
     } else {
       const files = req.files;
-      imageUrls = files.map((file) => {
-        const filename = file.filename;
-        const fileUrl = file.path;
+      imageUrls = await Promise.all(
+        files.map(async (file) => {
+          const result = await uploadToCloudinary(
+            file.buffer,
+            file.originalname,
+          );
 
-        return { public_id: filename, url: fileUrl };
-      });
+          return { public_id: result.public_id, url: result.secure_url };
+        }),
+      );
+
       const productData = req.body;
       productData.images = imageUrls;
       productData.shop = shop;
@@ -69,11 +73,7 @@ const handleDeleteProduct = catchAsyncErrors(async (req, res, next) => {
     for (const image of productData.images) {
       const existImagePath = image.public_id;
 
-      await cloudinary.uploader.destroy(existImagePath, (error, result) => {
-        if (error) {
-          console.error("Error deleting avatar from cloudinary", error);
-        }
-      });
+      await deleteFromCloudinary(existImagePath);
     }
 
     const product = await Product.findByIdAndDelete(productId);

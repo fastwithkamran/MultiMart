@@ -1,11 +1,10 @@
 const User = require("../models/user.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
-const fs = require("fs");
 const sendMail = require("../utils/sendMail.js");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken.js");
-const { cloudinary } = require("../multer");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../multer");
 
 const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -13,26 +12,21 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      const publicId = req.file.filename;
-
-      await cloudinary.uploader.destroy(publicId, (error, result) => {
-        if (error) {
-          console.error("Error deleting avatar from cloudinary", error);
-        }
-      });
       return next(new ErrorHandler("User already exits", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = req.file.path;
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname,
+    );
 
     const user = {
       name,
       email,
       password,
       avatar: {
-        public_id: filename,
-        url: fileUrl,
+        public_id: result.public_id,
+        url: result.secure_url,
       },
     };
 
@@ -58,14 +52,9 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
 
 // create activation token
 const createActivationToken = (user) => {
-  try {
-    return jwt.sign(user, process.env.Activation_Secret, {
-      expiresIn: "5m",
-    });
-  } catch (error) {
-    console.error(error);
-    return next(new ErrorHandler(error, 500));
-  }
+  return jwt.sign(user, process.env.Activation_Secret, {
+    expiresIn: "5m",
+  });
 };
 
 // activate user through mail
@@ -170,20 +159,18 @@ const handleUpdateAvatar = catchAsyncErrors(async (req, res, next) => {
     const existsUser = await User.findById(req.user.id);
 
     const existAvatarPath = existsUser.avatar.public_id;
-    
-    await cloudinary.uploader.destroy(existAvatarPath, (error, result) => {
-      if (error) {
-        console.error("Error deleting avatar from cloudinary", error);
-      }
-    });
 
-    const filename = req.file.filename;
-    const fileUrl = req.file.path;
+    await deleteFromCloudinary(existAvatarPath);
+
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname,
+    );
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
       {
-        avatar: { public_id: filename, url: fileUrl },
+        avatar: { public_id: result.public_id, url: result.secure_url },
       },
       { returnDocument: "after" },
     );
