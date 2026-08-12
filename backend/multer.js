@@ -18,8 +18,8 @@ exports.upload = multer({ storage });
 // upload to cloudinary
 exports.uploadToCloudinary = (fileBuffer, originalname) => {
   return new Promise((resolve, reject) => {
-    const ext = path.extname(file.originalname);
-    const filename = path.basename(file.originalname, ext);
+    const ext = path.extname(originalname);
+    const filename = path.basename(originalname, ext);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const public_id = `multi-vendor/images/${filename}-${uniqueSuffix}`;
 
