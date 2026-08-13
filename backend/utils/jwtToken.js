@@ -6,10 +6,10 @@ const sendToken = (user) => {
 
     const options = {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      path: "/",
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production",
+      path: "/",
     };
 
     return { token, options };
