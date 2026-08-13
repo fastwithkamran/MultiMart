@@ -37,7 +37,7 @@ const handleCreateMessages = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -54,7 +54,7 @@ const handleGetMessages = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 

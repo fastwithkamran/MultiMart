@@ -41,7 +41,7 @@ const handleOrder = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -58,7 +58,7 @@ const handleGetUserOrders = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -75,7 +75,7 @@ const handleGetShopOrders = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -119,7 +119,7 @@ const handleUpdateOrderStatus = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -141,7 +141,7 @@ const handleRefundRequest = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -178,7 +178,7 @@ const handleRefundProceedings = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 

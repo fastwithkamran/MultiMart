@@ -15,21 +15,14 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Seller already exits", 400));
     }
 
-    const result = await uploadToCloudinary(
-      req.file.buffer,
-      req.file.originalname,
-    );
-
     const seller = {
       name,
       email,
       password,
       address,
       phoneNumber,
-      avatar: {
-        public_id: result.public_id,
-        url: result.secure_url,
-      },
+      fileSize: req.file.buffer,
+      fileName: req.file.originalname,
       zipCode,
     };
 
@@ -45,7 +38,8 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     await sendMail({
       email: seller.email,
       subject: "Activate your shop",
-      message: `Hello ${seller.name}, please click on the link to activate your shop ${activationUrl}`,
+      message: `Hello ${seller.name}, please click on the link to activate your shop:
+      ${activationUrl}`,
     });
 
     res.status(201).json({
@@ -54,14 +48,14 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
 // create activation token
 const createActivationToken = (seller) => {
   return jwt.sign(seller, process.env.Activation_Secret, {
-    expiresIn: "5m",
+    expiresIn: "15m",
   });
 };
 
@@ -78,8 +72,16 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Invalid Token", 400));
     }
 
-    const { name, email, password, address, phoneNumber, zipCode, avatar } =
-      newSeller;
+    const {
+      name,
+      email,
+      password,
+      address,
+      phoneNumber,
+      zipCode,
+      fileSize,
+      fileName,
+    } = newSeller;
 
     const seller_exist = await Shop.findOne({ email });
 
@@ -89,10 +91,12 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
 
     const shopNameExist = await Shop.findOne({ name });
 
-    if (!shopNameExist)
+    if (shopNameExist)
       return next(
         new ErrorHandler("Name is already chosen by other vendor", 400),
       );
+
+    const uploadImage = await uploadToCloudinary(fileSize, fileName);
 
     const seller = await Shop.create({
       name,
@@ -101,11 +105,14 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
       address,
       phoneNumber,
       zipCode,
-      avatar,
+      avatar: {
+        public_id: uploadImage.public_id,
+        url: uploadImage.secure_url,
+      },
     });
-
+    console.log(seller);
     const result = sendToken(seller);
-
+    console.log(result);
     res.status(201).cookie("Shoptoken", result.token, result.options).json({
       success: true,
       seller,
@@ -113,7 +120,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -142,7 +149,7 @@ const handleShopLogin = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -157,7 +164,7 @@ const handleGetShopInfo = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -189,7 +196,7 @@ const handleUpdateShopAvatar = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -227,7 +234,7 @@ const handleUpdateShopInfo = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 

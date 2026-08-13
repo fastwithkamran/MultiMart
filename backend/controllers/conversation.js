@@ -30,7 +30,7 @@ const handleCreateConversations = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -50,7 +50,7 @@ const handleGetSellerConversations = catchAsyncErrors(
       });
     } catch (error) {
       console.error(error);
-      return next(new ErrorHandler(error, 500));
+      return next(new ErrorHandler(error.message, error.statusCode || 500));
     }
   },
 );
@@ -71,7 +71,7 @@ const handleUpdateLastMessage = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 

@@ -31,7 +31,7 @@ router.get(
       });
     } catch (error) {
       console.error(error);
-      return next(new ErrorHandler(error, 500));
+      return next(new ErrorHandler(error.message, error.statusCode || 500));
     }
   }),
 );
@@ -55,7 +55,7 @@ router.get(
       });
     } catch (error) {
       console.error(error);
-      return next(new ErrorHandler(error, 500));
+      return next(new ErrorHandler(error.message, error.statusCode || 500));
     }
   }),
 );
