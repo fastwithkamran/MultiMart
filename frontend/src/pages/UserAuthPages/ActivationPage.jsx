@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../../server";
 import { toast } from "react-toastify";
@@ -15,8 +15,12 @@ function ActivationPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const initializedRef = useRef(false);
 
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     if (activation_token) {
       const activationEmail = async () => {
         setLoading(true);
@@ -30,9 +34,10 @@ function ActivationPage() {
           );
 
           if (res.data.success) {
-            toast.success("Account Created Successfully");
-            dispatch(loadUser());
-            navigate("/");
+            dispatch(loadUser()).then(() => {
+              toast.success("Avatar Updated Successfully");
+              navigate("/");
+            });
           } else {
             toast.error(res.data.message);
           }
@@ -40,7 +45,6 @@ function ActivationPage() {
         } catch (error) {
           setLoading(false);
           toast.error(error.response.data.message);
-          console.error(error.response.data.message);
         }
       };
       activationEmail();
