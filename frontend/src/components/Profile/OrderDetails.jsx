@@ -194,7 +194,7 @@ const OrderDetails = () => {
                 </h2>
                 <div className="mt-4 w-full flex flex-col md:flex-row gap-3">
                   <img
-                    src={selectedItem?.images[0]}
+                    src={selectedItem?.images[0].url}
                     alt="productImage"
                     className="w-32 h-32 object-cover"
                   />

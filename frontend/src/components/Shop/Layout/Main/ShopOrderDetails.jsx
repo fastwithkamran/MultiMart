@@ -110,7 +110,7 @@ const ShopOrderDetails = () => {
             data?.cart.map((item, index) => (
               <div key={index} className="w-full flex items-start mb-5 mt-4">
                 <img
-                  src={`${item?.images[0]}`}
+                  src={`${item?.images[0].url}`}
                   alt="productImage"
                   className="object-cover w-50 h-50"
                 />
