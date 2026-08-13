@@ -1,4 +1,5 @@
 const Shop = require("../models/shop");
+const UnverifiedShop = require("../models/unverifiedShop.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const sendMail = require("../utils/sendMail.js");
@@ -9,24 +10,38 @@ const { uploadToCloudinary, deleteFromCloudinary } = require("../multer");
 const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
   try {
     const { name, email, password, address, phoneNumber, zipCode } = req.body;
+
+    const shopNameExist = await Shop.findOne({ name });
+
+    if (shopNameExist)
+      return next(
+        new ErrorHandler("Name is already chosen by other vendor", 400),
+      );
+
     const sellerEmail = await Shop.findOne({ email });
 
     if (sellerEmail) {
       return next(new ErrorHandler("Seller already exits", 400));
     }
 
-    const seller = {
+    const uploadImage = await uploadToCloudinary(fileSize, fileName);
+
+    const seller = await UnverifiedShop.create({
       name,
       email,
       password,
       address,
       phoneNumber,
-      fileSize: req.file.buffer,
-      fileName: req.file.originalname,
+      avatar: {
+        public_id: uploadImage.public_id,
+        url: uploadImage.secure_url,
+      },
       zipCode,
-    };
+    });
 
-    const activationToken = createActivationToken(seller);
+    const id = seller._id;
+
+    const activationToken = createActivationToken({ id });
     let activationUrl;
 
     if (process.env.NODE_ENV === "production") {
@@ -72,31 +87,21 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Invalid Token", 400));
     }
 
-    const {
-      name,
-      email,
-      password,
-      address,
-      phoneNumber,
-      zipCode,
-      fileSize,
-      fileName,
-    } = newSeller;
+    const { id } = newSeller;
+    const unverifiedSellerData = await UnverifiedShop.findById(id);
+
+    if (!unverifiedSellerData) {
+      return next(new ErrorHandler("Token had already used", 400));
+    }
+
+    const { name, email, password, address, phoneNumber, avatar, zipCode } =
+      unverifiedSellerData;
 
     const seller_exist = await Shop.findOne({ email });
 
     if (seller_exist) {
       return next(new ErrorHandler("Seller already exits", 400));
     }
-
-    const shopNameExist = await Shop.findOne({ name });
-
-    if (shopNameExist)
-      return next(
-        new ErrorHandler("Name is already chosen by other vendor", 400),
-      );
-
-    const uploadImage = await uploadToCloudinary(fileSize, fileName);
 
     const seller = await Shop.create({
       name,
@@ -105,14 +110,10 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
       address,
       phoneNumber,
       zipCode,
-      avatar: {
-        public_id: uploadImage.public_id,
-        url: uploadImage.secure_url,
-      },
+      avatar,
     });
-    console.log(seller);
+
     const result = sendToken(seller);
-    console.log(result);
     res.status(201).cookie("Shoptoken", result.token, result.options).json({
       success: true,
       seller,
