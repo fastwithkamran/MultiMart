@@ -77,6 +77,6 @@ const handleUpdateLastMessage = catchAsyncErrors(async (req, res, next) => {
 
 module.exports = {
   handleCreateConversations,
-  handleGetSellerConversations,
+  handleGetConversations,
   handleUpdateLastMessage,
 };
