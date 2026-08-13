@@ -1,4 +1,5 @@
 const User = require("../models/user.js");
+const UnverifiedUser = require("../models/unverifiedUser.js");
 const ErrorHandler = require("../utils/ErrorHandler.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
 const sendMail = require("../utils/sendMail.js");
@@ -15,22 +16,24 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("User already exits", 400));
     }
 
-    const result = await uploadToCloudinary(
+    const uploadImage = await uploadToCloudinary(
       req.file.buffer,
       req.file.originalname,
     );
 
-    const user = {
+    const user = await UnverifiedUser.create({
       name,
       email,
       password,
       avatar: {
-        public_id: result.public_id,
-        url: result.secure_url,
+        public_id: uploadImage.public_id,
+        url: uploadImage.secure_url,
       },
-    };
+    });
 
-    const activationToken = createActivationToken(user);
+    const id = user._id;
+
+    const activationToken = createActivationToken({ id });
     let activationUrl;
 
     if (process.env.NODE_ENV === "production") {
@@ -42,7 +45,8 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
     await sendMail({
       email: user.email,
       subject: "Activate your account",
-      message: `Hello ${user.name}, please click on the link to activate your account ${activationUrl}`,
+      message: `Hello ${user.name}, please click on the link to activate your account:
+      ${activationUrl}`,
     });
 
     res.status(201).json({
@@ -51,14 +55,14 @@ const handleCreateUser = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
 // create activation token
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.Activation_Secret, {
-    expiresIn: "5m",
+    expiresIn: "15m",
   });
 };
 
@@ -69,10 +73,18 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     const newUser = jwt.verify(activation_token, process.env.Activation_Secret);
 
     if (!newUser) {
-      return next(new ErrorHandler("Invalid Token", 400));
+      return next(new ErrorHandler("Token had expired", 400));
     }
 
-    const { name, email, password, avatar } = newUser;
+    const { id } = newUser;
+
+    const unverifiedUserData = await UnverifiedUser.findById(id);
+
+    if (!unverifiedUserData) {
+      return next(new ErrorHandler("Token had already used", 400));
+    }
+
+    const { name, email, password, avatar } = unverifiedUserData;
 
     const userEmail = await User.findOne({ email });
 
@@ -87,6 +99,8 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
       avatar,
     });
 
+    await UnverifiedUser.findByIdAndDelete(id);
+
     const result = sendToken(user);
 
     res.status(201).cookie("Usertoken", result.token, result.options).json({
@@ -95,7 +109,7 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -124,7 +138,7 @@ const handleUserLogin = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -154,7 +168,7 @@ const handleUpdateUserInfo = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -186,7 +200,7 @@ const handleUpdateAvatar = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -228,7 +242,7 @@ const handleUpdateAddresses = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -253,7 +267,7 @@ const handleDeleteAddress = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -281,7 +295,7 @@ const handleUpdatePassword = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
@@ -296,7 +310,7 @@ const handleGetUserInfo = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new ErrorHandler(error, 500));
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
   }
 });
 
