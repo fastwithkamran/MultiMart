@@ -41,7 +41,7 @@ const Inbox = () => {
 
   // receiving new messages in real-time from socket
   useEffect(() => {
-    socketRef.current.on("getMessage", (data) => {
+    socketRef.current?.on("getMessage", (data) => {
       const message = {
         sender: data.senderId,
         text: data.text,
@@ -109,7 +109,7 @@ const Inbox = () => {
       (memberId) => memberId !== user._id,
     );
 
-    socketRef.current.emit("sendMessage", {
+    socketRef.current?.emit("sendMessage", {
       senderId: user._id,
       receiverId,
       text: message.text,
@@ -131,7 +131,7 @@ const Inbox = () => {
 
   // to update the last message both in database and socket
   const updateLastMessage = async () => {
-    socketRef.current.emit("updateLastMessage", {
+    socketRef.current?.emit("updateLastMessage", {
       lastMessage: newMessage,
       lastMessageId: user._id,
     });
@@ -154,8 +154,8 @@ const Inbox = () => {
   useEffect(() => {
     if (user) {
       const userId = user._id;
-      socketRef.current.emit("addUser", userId);
-      socketRef.current.on("getUsers", (data) => {
+      socketRef.current?.emit("addUser", userId);
+      socketRef.current?.on("getUsers", (data) => {
         setOnlineSellers(data);
       });
     }

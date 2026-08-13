@@ -49,7 +49,7 @@ const OrderDetails = () => {
         setOpen(false);
         dispatch(getAllUserOrders(user._id));
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) => toast.error(error.response?.data?.message || error.message));
   };
 
   const refundHandler = async (e) => {
@@ -63,14 +63,13 @@ const OrderDetails = () => {
         toast.success("Refund Request is in Process");
         dispatch(getAllUserOrders(user._id));
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) => toast.error(error.response?.data?.message || error.message));
   };
 
   const handleMessageSubmit = async (e, item) => {
     e.preventDefault();
 
     if (isAuthenticated) {
-      console.log(item)
       const conversationTitle = user._id + item.shopId;
       const userId = user._id;
       const sellerId = item.shopId;
@@ -84,7 +83,7 @@ const OrderDetails = () => {
         .then(() => {
           navigate(`/inbox`);
         })
-        .catch((error) => toast.error(error.response.data.message));
+        .catch((error) => toast.error(error.response?.data?.message || error.message));
     } else {
       toast.error("Please login to start a conversation!");
     }

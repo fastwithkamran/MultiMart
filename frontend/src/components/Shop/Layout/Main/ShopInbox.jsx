@@ -41,7 +41,7 @@ const ShopInbox = () => {
 
   // receive new messages in real-time from socket
   useEffect(() => {
-    socketRef.current.on("getMessage", (data) => {
+    socketRef.current?.on("getMessage", (data) => {
       const message = {
         sender: data.senderId,
         text: data.text,
@@ -110,7 +110,7 @@ const ShopInbox = () => {
       (memberId) => memberId !== seller._id,
     );
 
-    socketRef.current.emit("sendMessage", {
+    socketRef.current?.emit("sendMessage", {
       senderId: seller._id,
       receiverId,
       text: newMessage,
@@ -131,7 +131,7 @@ const ShopInbox = () => {
 
   // to update the last message both in database and socket
   const updateLastMessage = async () => {
-    socketRef.current.emit("updateLastMessage", {
+    socketRef.current?.emit("updateLastMessage", {
       lastMessage: newMessage,
       lastMessageId: seller._id,
     });
@@ -155,8 +155,8 @@ const ShopInbox = () => {
     if (!seller?._id) return;
 
     const userId = seller._id;
-    socketRef.current.emit("addUser", userId);
-    socketRef.current.on("getUsers", (data) => {
+    socketRef.current?.emit("addUser", userId);
+    socketRef.current?.on("getUsers", (data) => {
       setOnlineUsers(data);
     });
   }, [seller]);

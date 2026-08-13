@@ -31,7 +31,9 @@ function ShopInfo({ isOwner }) {
     axios
       .get(`${server}/shop/get-shop-info/${id}`)
       .then((res) => setData(res.data.shop))
-      .catch((error) => toast.error(error.response.data.message));
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      );
   }, [id]);
 
   const handleLogOut = async (e) => {
@@ -42,7 +44,7 @@ function ShopInfo({ isOwner }) {
         window.location.reload();
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || error.message);
       });
   };
 
@@ -56,7 +58,9 @@ function ShopInfo({ isOwner }) {
             className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-2 border-green-400"
           />
         </div>
-        <h3 className="text-center py-2 text-[14px] md:text-[20px]">{data?.name}</h3>
+        <h3 className="text-center py-2 text-[14px] md:text-[20px]">
+          {data?.name}
+        </h3>
         <p className="text-[16px] text-black/60 p-2.5 items-center hidden md:block">
           {data?.description}
         </p>
@@ -69,7 +73,9 @@ function ShopInfo({ isOwner }) {
 
       <div className="p-3">
         <h5 className="font-semibold">Phone Number</h5>
-        <h4 className="text-black/60 text-[12px] sm:text-[16px]">{data?.phoneNumber}</h4>
+        <h4 className="text-black/60 text-[12px] sm:text-[16px]">
+          {data?.phoneNumber}
+        </h4>
       </div>
 
       <div className="p-3">

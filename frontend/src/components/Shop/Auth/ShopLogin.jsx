@@ -5,15 +5,20 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../../../server";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loadSeller } from "../../../redux/actions/user";
 
 function ShopLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     axios
       .post(
@@ -23,15 +28,23 @@ function ShopLogin() {
       )
       .then((res) => {
         if (res.data.success) {
-          navigate("/dashboard");
-          window.location.reload();
-        } else toast.error(res.data.message);
-        setEmail("");
-        setPassword("");
+          dispatch(loadSeller())
+            .then(() => {
+              navigate("/dashboard");
+              toast.success("Login Success");
+            })
+            .catch((error) =>
+              toast.error(error.response?.data?.message || error.message),
+            );
+
+          setEmail("");
+          setPassword("");
+        }
       })
-      .catch((err) =>
-        toast.error(err.response?.data?.message || "Server Offline"),
-      );
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -122,10 +135,11 @@ function ShopLogin() {
             </div>
             <div>
               <button
+                disabled={loading}
                 type="submit"
                 className="group relative w-full h-10 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-gray-500"
               >
-                Submit
+                {loading ? "Loading..." : "Submit"}
               </button>
             </div>
             <div className={`${styles.normalFlex} w-full`}>

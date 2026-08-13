@@ -16,9 +16,11 @@ const ShopSettings = () => {
   const [address, setAddress] = useState(seller?.address || "");
   const [phoneNumber, setphoneNumber] = useState(seller?.phoneNumber || null);
   const [zipCode, setZipCode] = useState(seller?.zipCode || null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = async (e) => {
     const formData = new FormData();
+    setLoading(true);
 
     formData.append("image", e.target.files[0]);
 
@@ -35,12 +37,14 @@ const ShopSettings = () => {
         );
       })
       .catch((error) => {
-        toast.error(error.response.data.message);;
-      });
+        toast.error(error.response?.data?.message || error.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleUpdateShopInfo = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     await axios
       .put(
@@ -60,7 +64,10 @@ const ShopSettings = () => {
         );
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || error.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -171,9 +178,10 @@ const ShopSettings = () => {
               required
             />
             <input
+              disabled={loading}
               type="submit"
               required
-              value="Update"
+              value={loading ? "Loading..." : "Update"}
               className="w-[95%]! h-8 border border-blue-800 text-center text-blue-700 rounded-sm mt-8 cursor-pointer"
             />
           </div>

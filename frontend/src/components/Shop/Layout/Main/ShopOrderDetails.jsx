@@ -48,7 +48,9 @@ const ShopOrderDetails = () => {
         dispatch(getAllProductsShop());
         navigate("/dashboard-orders");
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      );
   };
 
   const refundOrderUpdateHandler = async (e) => {
@@ -69,7 +71,9 @@ const ShopOrderDetails = () => {
         dispatch(getAllProducts());
         dispatch(getAllProductsShop());
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      );
   };
 
   return (

@@ -90,7 +90,9 @@ function ProductDetails({ data }) {
         .then(() => {
           navigate(`/inbox`);
         })
-        .catch((error) => toast.error(error.response.data.message));
+        .catch((error) =>
+          toast.error(error.response?.data?.message || error.message),
+        );
     } else {
       toast.error("Please login to start a conversation!");
     }

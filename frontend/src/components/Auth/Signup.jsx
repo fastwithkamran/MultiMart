@@ -13,9 +13,11 @@ function Signup() {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true,
@@ -30,14 +32,16 @@ function Signup() {
     axios
       .post(`${server}/user/create-user`, newForm, config)
       .then((res) => {
-        if (res.data.success) toast.success(res.data.message);
-        else toast.error(res.data.message);
+        toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
         setAvatar(null);
       })
-      .catch((err) => toast.error(err.response?.data?.message || "Server Offline"));
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      )
+      .finally(() => setLoading(false));
   };
 
   const handleFileInput = (e) => {
@@ -54,7 +58,11 @@ function Signup() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-18">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit}
+            aria-required="true"
+          >
             <div>
               <label
                 htmlFor="name"
@@ -165,10 +173,11 @@ function Signup() {
 
             <div>
               <button
+                disabled={loading}
                 type="submit"
                 className="group relative w-full h-10 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-gray-500"
               >
-                Submit
+                {loading ? "Loading..." : "Submit"}
               </button>
             </div>
             <div className={`${styles.normalFlex} w-full`}>

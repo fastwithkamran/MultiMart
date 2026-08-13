@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../../server";
 import { toast } from "react-toastify";
@@ -15,12 +15,8 @@ function ActivationPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-
     if (activation_token) {
       const activationEmail = async () => {
         setLoading(true);
@@ -34,17 +30,19 @@ function ActivationPage() {
           );
 
           if (res.data.success) {
-            dispatch(loadUser()).then(() => {
-              navigate("/");
-              toast.success("Welcome to the MultiMart");
-            });
-          } else {
-            toast.error(res.data.message);
+            dispatch(loadUser())
+              .then(() => {
+                navigate("/");
+                toast.success("Welcome to the MultiMart");
+              })
+              .catch((error) =>
+                toast.error(error.response?.data?.message || error.message),
+              );
           }
-          setLoading(false);
         } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        } finally {
           setLoading(false);
-          toast.error(error.response.data.message);
         }
       };
       activationEmail();

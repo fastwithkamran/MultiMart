@@ -8,11 +8,14 @@ import { useState } from "react";
 import { Loader } from "../../components";
 import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
+import { useDispatch } from "react-redux";
+import { loadSeller } from "../../redux/actions/user";
 
 function SellerActivationPage() {
   const { activation_token } = useParams();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (activation_token) {
@@ -28,21 +31,24 @@ function SellerActivationPage() {
           );
 
           if (res.data.success) {
-            toast.success("Shop Created Successfully");
-            navigate("/dashboard");
-          } else {
-            toast.error(res.data.message);
+            dispatch(loadSeller())
+              .then(() => {
+                navigate("/");
+                toast.success("Welcome to the MultiMart");
+              })
+              .catch((error) =>
+                toast.error(error.response?.data?.message || error.message),
+              );
           }
-          setLoading(false);
         } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        } finally {
           setLoading(false);
-          toast.error(error.response.data.message);
-          console.error(error.response.data.message);
         }
       };
       activationEmail();
     }
-  }, [activation_token, navigate]);
+  }, [activation_token, navigate, dispatch]);
 
   return (
     <>
@@ -51,7 +57,7 @@ function SellerActivationPage() {
       ) : (
         <div className="flex flex-col w-full h-screen items-center justify-center text-2xl text-red-400">
           Your Email Verification Code Has Expired. Try again!
-          <Link to={"/login"}>
+          <Link to={"/shop-login"}>
             <div className={`${styles.button} text-white p-3`}>Go To Login</div>
           </Link>
         </div>

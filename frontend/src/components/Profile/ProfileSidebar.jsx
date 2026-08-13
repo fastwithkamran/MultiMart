@@ -22,9 +22,7 @@ function ProfileSidebar({ active, setActive }) {
           window.location.reload();
         });
     } catch (error) {
-      console.error(error.response.data.message);
-      console.error(error);
-      toast.error("Failed to fetch API Request");
+      toast.error(error.response?.data?.message || error.message);
     }
   };
   return (

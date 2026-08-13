@@ -16,6 +16,7 @@ function ShopCreate() {
   const [phoneNumber, setPhoneNumber] = useState();
   const [zipCode, setZipCode] = useState();
   const [shopAvatar, setShopAvatar] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleFileInput = (e) => {
     const file = e.target.files[0];
@@ -24,6 +25,8 @@ function ShopCreate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true,
@@ -41,8 +44,7 @@ function ShopCreate() {
     axios
       .post(`${server}/shop/create-shop`, newForm, config)
       .then((res) => {
-        if (res.data.success) toast.success(res.data.message);
-        else toast.error(res.data.message);
+        toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
@@ -51,9 +53,10 @@ function ShopCreate() {
         setZipCode("");
         setPhoneNumber("");
       })
-      .catch((err) =>
-        toast.error(err.response?.data?.message || "Server Offline"),
-      );
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message),
+      )
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -228,10 +231,11 @@ function ShopCreate() {
             {/* Submit */}
             <div>
               <button
+                disabled={loading}
                 type="submit"
                 className="group relative w-full h-10 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-gray-500"
               >
-                Submit
+                {loading ? "Loading..." : "Submit"}
               </button>
             </div>
 

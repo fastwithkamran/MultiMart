@@ -37,7 +37,7 @@ function ShopAllCoupons() {
           dispatch(getAllProductsShop(seller._id));
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          toast.error(error.response?.data?.message || error.message);
         });
     };
     fetchData();
@@ -73,7 +73,7 @@ function ShopAllCoupons() {
       })
       .catch((error) => {
         setIsLoading(false);
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || error.message);
       });
   };
 
@@ -91,7 +91,7 @@ function ShopAllCoupons() {
       })
       .catch((error) => {
         setIsLoading(false);
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || error.message);
       });
   };
 

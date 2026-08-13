@@ -43,6 +43,7 @@ function ProfileContent({ active, setActive }) {
   const [email] = useState(user && user.email);
   const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -88,7 +89,7 @@ function ProfileContent({ active, setActive }) {
 
   const handleImageChange = async (e) => {
     const formData = new FormData();
-
+    setLoading(false);
     formData.append("image", e.target.files[0]);
 
     await axios
@@ -104,7 +105,10 @@ function ProfileContent({ active, setActive }) {
         );
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast.error(error.response?.data?.message || error.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -191,9 +195,10 @@ function ProfileContent({ active, setActive }) {
                 </div>
               </div>
               <input
+                disabled={loading}
                 type="submit"
                 required
-                value="Update"
+                value={loading ? "Loading..." : "Update"}
                 className="w-64 h-8 border border-blue-800 text-center text-blue-700 rounded-sm mt-8 cursor-pointer"
               />
             </form>
@@ -519,7 +524,7 @@ const ChangePassword = () => {
       )
       .then(() => toast.success("Password Updated"))
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || error.message);
       });
   };
 
