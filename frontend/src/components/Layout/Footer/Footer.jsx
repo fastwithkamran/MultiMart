@@ -40,13 +40,13 @@ function Footer() {
 
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 sm:px-8 px-5 pt-5 pb-16 justify-items-center">
         {/* Shop logo and description */}
-        <ul className="px-5 flex flex-col items-center text-center">
+        <ul className="px-5 mt-5 flex flex-col items-center text-center">
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5oWZDONBetL_aTOElWb_x6ECh9FPrnJr4vEAkyedUGQ&s=10"
+            src="/favicon.png"
             alt="Logo"
-            className="invert-100 h-25 object-contain"
+            className="invert-100 h-15 object-cover"
           />
-          <p>The home and elements needed to create beautiful products</p>
+          <p className="mt-4">The home and elements needed to create beautiful products</p>
           <div className="flex mt-3.5 gap-3">
             <AiFillFacebook size={25} className="cursor-pointer" />
             <AiOutlineTwitter size={25} className="cursor-pointer" />

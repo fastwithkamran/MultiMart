@@ -60,9 +60,9 @@ const Header = ({ activePage }) => {
           <div>
             <Link to="/">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5oWZDONBetL_aTOElWb_x6ECh9FPrnJr4vEAkyedUGQ&s=10"
+                src="/logo.png"
                 alt="Logo"
-                className="m-1 h-15 w-30 object-cover mix-blend-multiply"
+                className="m-1 h-15 w-50 object-cover mix-blend-multiply"
               />
             </Link>
           </div>
@@ -90,7 +90,7 @@ const Header = ({ activePage }) => {
                       <Link to={`/product/${product._id}`}>
                         <div className="w-full flex items-start py-3">
                           <img
-                            src={product.images[0]}
+                            src={product.images[0].url}
                             alt="Product image"
                             className="w-10 h-10 mr-2.5"
                           />
@@ -220,9 +220,9 @@ const Header = ({ activePage }) => {
           <div>
             <Link to={"/"}>
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5oWZDONBetL_aTOElWb_x6ECh9FPrnJr4vEAkyedUGQ&s=10"
+                src="/logo.png"
                 alt="Logo"
-                className="m-1 h-15 w-30 object-cover mix-blend-multiply"
+                className="m-1 h-15 w-55 object-cover mix-blend-multiply"
               />
             </Link>
           </div>
@@ -287,7 +287,7 @@ const Header = ({ activePage }) => {
                               >
                                 <div className="w-full flex items-start py-3">
                                   <img
-                                    src={product.image_Url[0].url}
+                                    src={product.images[0].url}
                                     alt="Product image"
                                     className="w-10 h-10 mr-2.5"
                                   />
