@@ -77,9 +77,10 @@ router.get(
     try {
       res.cookie("Usertoken", null, {
         expires: new Date(Date.now()),
+        path: "/",
         httpOnly: true,
-        sameSite: "lax",
-        secure: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
       });
 
       res.status(200).json({
