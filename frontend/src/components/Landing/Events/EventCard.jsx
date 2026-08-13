@@ -35,7 +35,7 @@ function EventCard({ active, data }) {
 
           <div className="w-full flex flex-col justify-center">
             <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
-            <p>{data?.description}</p>
+            <p className="whitespace-pre-line">{data?.description}</p>
             <div className="flex py-2 justify-between">
               <div className="flex">
                 <h5 className="font-medium text-[18px] text-orange-600 pr-3 line-through">

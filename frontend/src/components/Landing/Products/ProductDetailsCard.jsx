@@ -142,7 +142,7 @@ const ProductDetailsCard = ({ data, setOpen }) => {
                 <h1 className={`${styles.productTitle} text-[20px]`}>
                   {data.name}
                 </h1>
-                <p>{data.description}</p>
+                <p className="whitespace-pre-line">{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
                     {data.discountPrice}

@@ -132,7 +132,7 @@ function ProductDetails({ data }) {
                 {/* Right Col */}
                 <div className="w-full md:w-[50%] mt-5 p-3">
                   <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                  <p>{data.description}</p>
+                  <p className="whitespace-pre-line">{data.description}</p>
                   <div className="flex mt-3">
                     <h4 className={`${styles.productDiscountPrice}`}>
                       {data.discountPrice}$
