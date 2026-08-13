@@ -35,8 +35,8 @@ function ActivationPage() {
 
           if (res.data.success) {
             dispatch(loadUser()).then(() => {
-              toast.success("Avatar Updated Successfully");
               navigate("/");
+              toast.success("Welcome to the MultiMart");
             });
           } else {
             toast.error(res.data.message);
