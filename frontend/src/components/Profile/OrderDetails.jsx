@@ -120,7 +120,7 @@ const OrderDetails = () => {
               >
                 <div className="flex flex-col md:flex-row">
                   <img
-                    src={`${item?.images[0]}`}
+                    src={`${item?.images[0].url}`}
                     alt="productImage"
                     className="object-cover w-32 h-32"
                   />

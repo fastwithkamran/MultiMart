@@ -33,7 +33,7 @@ function SellerActivationPage() {
           if (res.data.success) {
             dispatch(loadSeller())
               .then(() => {
-                navigate("/");
+                navigate("/dashboard");
                 toast.success("Welcome to the MultiMart");
               })
               .catch((error) =>
