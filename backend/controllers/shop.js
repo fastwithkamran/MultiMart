@@ -24,7 +24,10 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Seller already exits", 400));
     }
 
-    const uploadImage = await uploadToCloudinary(fileSize, fileName);
+    const uploadImage = await uploadToCloudinary(
+      req.file.buffer,
+      req.file.originalname,
+    );
 
     const seller = await UnverifiedShop.create({
       name,
