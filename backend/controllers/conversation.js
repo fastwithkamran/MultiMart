@@ -34,13 +34,13 @@ const handleCreateConversations = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-// get seller conversations
-const handleGetSellerConversations = catchAsyncErrors(
+// get conversations
+const handleGetConversations = catchAsyncErrors(
   async (req, res, next) => {
     try {
       const conversations = await Conversation.find({
         members: {
-          $in: [req.params.sellerId],
+          $in: [req.params.id],
         },
       }).sort({ updatedAt: -1, createdAt: -1 });
 

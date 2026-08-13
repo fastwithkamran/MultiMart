@@ -173,7 +173,7 @@ const Inbox = () => {
     const fetchConversations = async () => {
       await axios
         .get(
-          `${server}/conversation/get-all-seller-conversations/${user._id}`,
+          `${server}/conversation/get-all-user-conversations/${user._id}`,
           { withCredentials: true },
         )
         .then((res) => {

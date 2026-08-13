@@ -69,7 +69,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <Button
-            to={`/dashboard/order/${params.id}`}
+            to={`/order/${params.id}`}
             component={Link}
             variant="text"
           >

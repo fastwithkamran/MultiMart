@@ -2,12 +2,12 @@ const { Router } = require("express");
 const router = Router();
 const { upload } = require("../multer");
 
-const { isAuthenticatedUser } = require("../utils/auth");
+const { isAuthenticatedSeller, isAuthenticatedUser } = require("../utils/auth");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 
 const {
   handleCreateConversations,
-  handleGetSellerConversations,
+  handleGetConversations,
   handleUpdateLastMessage,
 } = require("../controllers/conversation");
 
@@ -16,9 +16,16 @@ router.post("/create-new-conversation", handleCreateConversations);
 
 // get seller conversations
 router.get(
-  "/get-all-seller-conversations/:sellerId",
+  "/get-all-seller-conversations/:id",
+  isAuthenticatedSeller,
+  handleGetConversations,
+);
+
+// get user conversations
+router.get(
+  "/get-all-user-conversations/:id",
   isAuthenticatedUser,
-  handleGetSellerConversations,
+  handleGetConversations,
 );
 
 router.put("/update-last-message/:id", handleUpdateLastMessage);
