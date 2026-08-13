@@ -45,7 +45,7 @@ router.get(
       res.cookie("Shoptoken", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "lax",
         secure: true,
       });
 
