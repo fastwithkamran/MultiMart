@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../../styles/styles.js";
 import { Link } from "react-router";
 import { categoriesData } from "../../../static/data.jsx";
@@ -34,6 +34,15 @@ const Header = ({ activePage }) => {
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
+  useEffect(() => {
+    const fetchProducts = () => {
+      const data = allProducts?.map((product) => product).slice(0, 5);
+      setSearchData(data);
+    };
+
+    fetchProducts();
+  }, [allProducts]);
+
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -58,12 +67,11 @@ const Header = ({ activePage }) => {
         {/* Header */}
         <div className="h-fit flex items-center justify-between bg-slate-100 px-3">
           <div>
-            <Link to="/">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className="m-1 h-15 w-50 object-cover mix-blend-multiply"
-              />
+            <Link to="/" className="flex flex-col text-center">
+              <p className="text-2xl text-slate-600 font-extrabold">
+                MULTI <span className="font-medium">MART</span>
+              </p>
+              <p className="text-sm font-normal">YOUR EVERYDAY MARKETPLACE</p>
             </Link>
           </div>
           {/* Search Box */}
@@ -83,11 +91,11 @@ const Header = ({ activePage }) => {
               className="absolute right-2 top-1.5 cursor-pointer"
             />
             {openSearch && searchData.length !== 0 ? (
-              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-9 p-4">
+              <div className="absolute h-min bg-slate-50 shadow-sm-2 z-9 p-4">
                 {searchData &&
-                  searchData.map((product) => {
+                  searchData.map((product, index) => {
                     return (
-                      <Link to={`/product/${product._id}`}>
+                      <Link key={index} to={`/product/${product._id}`}>
                         <div className="w-full flex items-start py-3">
                           <img
                             src={product.images[0].url}
@@ -218,12 +226,13 @@ const Header = ({ activePage }) => {
             />
           </div>
           <div>
-            <Link to={"/"}>
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className="m-1 h-15 w-55 object-cover mix-blend-multiply"
-              />
+            <Link to="/" className="flex flex-col text-center">
+              <p className="text-2xl text-slate-600 font-extrabold">
+                MULTI <span className="font-medium">MART</span>
+              </p>
+              <p className="text-[12px] font-normal">
+                YOUR EVERYDAY MARKETPLACE
+              </p>
             </Link>
           </div>
           <div>
@@ -277,11 +286,12 @@ const Header = ({ activePage }) => {
                       className="absolute right-2 top-1.5 cursor-pointer "
                     />
                     {openSearch && searchData.length !== 0 ? (
-                      <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-9 p-4">
+                      <div className="absolute h-min bg-slate-50 shadow-sm-2 z-9 p-4">
                         {searchData &&
-                          searchData.map((product) => {
+                          searchData.map((product, index) => {
                             return (
                               <Link
+                                key={index}
                                 to={`/product/${product._id}`}
                                 onClick={() => setOpen(false)}
                               >
