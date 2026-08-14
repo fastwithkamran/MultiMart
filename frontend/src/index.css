@@ -14,3 +14,9 @@ input,
 select {
   outline: none;
 }
+.greenColor {
+  color: green;
+}
+.redColor {
+  color: red;
+}

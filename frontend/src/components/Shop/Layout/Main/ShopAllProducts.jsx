@@ -85,11 +85,10 @@ function ShopAllProducts() {
       type: "number",
       sortable: false,
       renderCell: (params) => {
-        const d = params.row.name;
-        const product_name = d.replace(/\s+/g, "-");
+        const id = params.row.id;
         return (
           <>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/product/${id}`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -106,11 +105,10 @@ function ShopAllProducts() {
       type: "number",
       sortable: false,
       renderCell: (params) => {
-        const d = params.row.name;
-        const product_name = d.replace(/\s+/g, "-");
+        const id = params.row.id;
         return (
           <>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/product/${id}`}>
               <Button onClick={(e) => handleDelete(e, params.id)}>
                 <AiOutlineDelete size={20} />
               </Button>
