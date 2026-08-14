@@ -94,7 +94,7 @@ function ShopAllEvents() {
         const id = params.row.id;
         return (
           <>
-            <Link to={`/product/${id}`}>
+            <Link to={`/product/${id}?isEvent=true`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -114,7 +114,7 @@ function ShopAllEvents() {
         const id = params.row.id;
         return (
           <>
-            <Link to={`/product/${id}`}>
+            <Link to={`/product/${id}?isEvent=true`}>
               <Button onClick={(e) => handleDelete(e, params.id)}>
                 <AiOutlineDelete size={20} />
               </Button>
