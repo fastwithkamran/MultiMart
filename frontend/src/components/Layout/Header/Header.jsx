@@ -217,7 +217,7 @@ const Header = ({ activePage }) => {
         className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} transition items-center justify-between h-16
          w-full bg-white z-50 top-0 left-0 shadow-sm md:hidden`}
       >
-        <div className="w-full flex items-center justify-between">
+        <div className="pt-1.5 w-full flex items-center justify-between">
           <div>
             <BiMenuAltLeft
               size={40}
