@@ -37,6 +37,8 @@ import {
   ShopWithdrawMoneyPage,
   ShopInboxPage,
   InboxPage,
+  ForgetPasswordPage,
+  ResetPasswordVerificationPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -54,6 +56,7 @@ const router = createBrowserRouter(
       {/* Auth ROutes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/sign-up" element={<SignupPage />} />
+      <Route path="/forget-password" element={<ForgetPasswordPage />} />
       {/* Nav Items Routes */}
       <Route path="/products" element={<ProductPage />} />
       <Route path="/best-selling" element={<BestSellingPage />} />
@@ -195,6 +198,11 @@ const router = createBrowserRouter(
       <Route
         path="/seller/activation/:activation_token"
         element={<SellerActivationPage />}
+      />
+      {/* Forget Password Verification */}
+      <Route
+        path="/reset-password-verification/:activation_token"
+        element={<ResetPasswordVerificationPage />}
       />
       {/* CheckOut Route */}
       <Route

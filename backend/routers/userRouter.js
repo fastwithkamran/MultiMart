@@ -11,6 +11,8 @@ const {
   handleDeleteAddress,
   handleUpdatePassword,
   handleGetUserInfo,
+  handleUserForgetPassword,
+  handleUpdateUserForgetPassword,
 } = require("../controllers/user");
 const { isAuthenticatedUser } = require("../utils/auth.js");
 const catchAsyncErrors = require("../utils/catchAsyncErrors.js");
@@ -93,5 +95,11 @@ router.get(
     }
   }),
 );
+
+// user forget password
+router.post("/forget-password", handleUserForgetPassword);
+
+// user reset password activation
+router.post("/reset-forget-password", handleUpdateUserForgetPassword);
 
 module.exports = router;

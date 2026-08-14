@@ -73,7 +73,7 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     const newUser = jwt.verify(activation_token, process.env.Activation_Secret);
 
     if (!newUser) {
-      return next(new ErrorHandler("Token had expired", 204));
+      return next(new ErrorHandler("Token had expired", 400));
     }
 
     const { id } = newUser;
@@ -81,7 +81,7 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     const unverifiedUserData = await UnverifiedUser.findById(id);
 
     if (!unverifiedUserData) {
-      return next(new ErrorHandler("Token had already used", 204));
+      return next(new ErrorHandler("Token had already used", 400));
     }
 
     const { name, email, password, avatar } = unverifiedUserData;
@@ -314,6 +314,81 @@ const handleGetUserInfo = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// forget password
+const handleUserForgetPassword = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const userExist = await User.findOne({ email });
+
+    if (!userExist) {
+      return next(new ErrorHandler("Email is not registered", 400));
+    }
+
+    const user = {
+      email,
+      password,
+    };
+
+    const activationToken = createActivationToken({ user });
+    let activationUrl;
+
+    if (process.env.NODE_ENV === "production") {
+      activationUrl = `${process.env.FRONTEND_API}/reset-password-verification/${activationToken}`;
+    } else {
+      activationUrl = `http://localhost:5173/reset-password-verification/${activationToken}`;
+    }
+
+    await sendMail({
+      email: user.email,
+      subject: "Reset Your Password",
+      message: `Hello ${userExist.name}, please click on the link to reset your password:
+      ${activationUrl}`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Please check your email: ${user.email} to reset your password`,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
+  }
+});
+
+// update forget password with new password
+const handleUpdateUserForgetPassword = catchAsyncErrors(
+  async (req, res, next) => {
+    try {
+      const { activation_token } = req.body;
+
+      const userDetail = jwt.verify(
+        activation_token,
+        process.env.Activation_Secret,
+      );
+
+      if (!userDetail) {
+        return next(new ErrorHandler("Token had expired", 400));
+      }
+
+      const { user } = userDetail;
+      const { email, password } = user;
+
+      const updateUser = await User.findOne({ email }).select("+password");
+
+      updateUser.password = password;
+
+      await updateUser.save();
+
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error.message, error.statusCode || 500));
+    }
+  },
+);
+
 module.exports = {
   handleCreateUser,
   handleActivateUser,
@@ -324,4 +399,6 @@ module.exports = {
   handleDeleteAddress,
   handleUpdatePassword,
   handleGetUserInfo,
+  handleUserForgetPassword,
+  handleUpdateUserForgetPassword,
 };
