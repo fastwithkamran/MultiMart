@@ -66,29 +66,29 @@ function ShopInfo({ isOwner }) {
         </p>
       </div>
 
-      <div className="p-3">
+      <div className="pl-1 py-3 sm:p-3">
         <h5 className="font-semibold">Address</h5>
         <h4 className="text-black/60">{data?.address}</h4>
       </div>
 
-      <div className="p-3">
+      <div className="pl-1 py-3 sm:p-3">
         <h5 className="font-semibold">Phone Number</h5>
-        <h4 className="text-black/60 text-[12px] sm:text-[16px]">
+        <h4 className="text-black/60 text-[10px] sm:text-[16px]">
           {data?.phoneNumber}
         </h4>
       </div>
 
-      <div className="p-3">
+      <div className="pl-1 py-3 sm:p-3">
         <h5 className="font-semibold">Total Products</h5>
         <h4 className="text-black/60">{products && products.length}</h4>
       </div>
 
-      <div className="p-3">
+      <div className="pl-1 py-3 sm:p-3">
         <h5 className="font-semibold">Shop Ratings</h5>
         <h4 className="text-black/60">{avgRatings}/5</h4>
       </div>
 
-      <div className="p-3">
+      <div className="pl-1 py-3 sm:p-3">
         <h5 className="font-semibold">Joined On</h5>
         <h4 className="text-black/60">{data?.createdAt?.slice(0, 10)}</h4>
       </div>
