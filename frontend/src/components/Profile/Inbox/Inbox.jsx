@@ -203,7 +203,7 @@ const Inbox = () => {
     <div className="w-[90%] mx-auto my-4 h-[70vh] overflow-hidden rounded shadow-sm bg-white">
       {!open ? (
         <div className="h-full overflow-y-auto">
-          <h1 className="text-center text-[30px] py-4 font-Poppins border-b border-slate-200">
+          <h1 className="text-center text-[30px] py-4 font-poppins border-b border-slate-200">
             All Chats
           </h1>
           <div className="p-3 space-y-2">

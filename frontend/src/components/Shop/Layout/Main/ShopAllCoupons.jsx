@@ -171,7 +171,7 @@ function ShopAllCoupons() {
                       onClick={() => setOpen(false)}
                     />
                   </div>
-                  <h5 className="text-[30px] font-Poppins text-center">
+                  <h5 className="text-[30px] font-poppins text-center">
                     Create Coupon Code
                   </h5>
                   {/* Create Coupon Code */}

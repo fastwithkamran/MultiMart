@@ -643,7 +643,7 @@ const Address = () => {
                 onClick={() => setOpen(false)}
               />
             </div>
-            <h1 className="text-[25px] font-Poppins text-center ">
+            <h1 className="text-[25px] font-poppins text-center ">
               Add New Addresses
             </h1>
             <div className="w-full">

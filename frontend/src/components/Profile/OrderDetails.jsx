@@ -189,7 +189,7 @@ const OrderDetails = () => {
                     className="cursor-pointer"
                   />
                 </div>
-                <h2 className="text-[30px] font-semibold font-Poppins text-center">
+                <h2 className="text-[30px] font-semibold font-poppins text-center">
                   Give a Review
                 </h2>
                 <div className="mt-4 w-full flex flex-col md:flex-row gap-3">

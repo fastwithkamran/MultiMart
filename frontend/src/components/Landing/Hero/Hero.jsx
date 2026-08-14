@@ -11,7 +11,7 @@ function Hero() {
         <h1 className="text-[35px] leading-[1.2] md:text-[60px] text-slate-700 font-medium capitalize">
           Best Collection for home Decoration
         </h1>
-        <p className="pt-5 text-[16px] font-[Poppins] font-normal text-black max-w-125">
+        <p className="pt-5 text-[16px] font-poppins font-normal text-black max-w-125">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis
           eius, quaerat mollitia delectus et cupiditate dignissimos, atque
           voluptatibus reiciendis laborum, perspiciatis quod autem
@@ -19,7 +19,7 @@ function Hero() {
         </p>
         <Link to={"/products"} className="inline-block">
           <div className={`${styles.button} mt-5 p-3`}>
-            <span className="text-white font-[Poppins] text-[18px]">
+            <span className="text-white font-poppins text-[18px]">
               Shop Now
             </span>
           </div>

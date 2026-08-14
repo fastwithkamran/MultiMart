@@ -102,7 +102,7 @@ const WishlistSingle = ({
 
           <div className="pl-2">
             <h1>{data.name}</h1>
-            <h4 className="font-medium text-[17px] pt-1.5 text-red-500 font-Roboto">
+            <h4 className="font-medium text-[17px] pt-1.5 text-red-500 font-roboto">
               US${data.discountPrice}
             </h4>
           </div>

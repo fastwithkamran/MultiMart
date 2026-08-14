@@ -94,7 +94,7 @@ const DashboardHero = () => {
 
   return (
     <div className="w-full p-4 sm:p-6 lg:p-8">
-      <h3 className="pb-4 text-[22px] font-Poppins">Overview</h3>
+      <h3 className="pb-4 text-[22px] font-poppins">Overview</h3>
 
       <div className="mb-8 grid gap-4 lg:grid-cols-3">
         <div className="min-h-[20vh] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -164,7 +164,7 @@ const DashboardHero = () => {
         </div>
       </div>
 
-      <h3 className="pb-4 text-[22px] font-Poppins">Latest Orders</h3>
+      <h3 className="pb-4 text-[22px] font-poppins">Latest Orders</h3>
       <div className="min-h-[40vh] overflow-hidden rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
         <DataGrid
           rows={row}

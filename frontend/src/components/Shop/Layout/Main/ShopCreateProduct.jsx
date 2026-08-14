@@ -60,7 +60,7 @@ const ShopCreateProduct = () => {
   };
   return (
     <div className="w-[90%] md:w-[75%] bg-white shadow h-[80vh] rounded-sm p-3 overflow-y-auto">
-      <h5 className="text-[30px] font-Poppins text-center">Create Product</h5>
+      <h5 className="text-[30px] font-poppins text-center">Create Product</h5>
       {/* Create Product Form */}
       <form onSubmit={(e) => handleSubmit(e)}>
         <br />

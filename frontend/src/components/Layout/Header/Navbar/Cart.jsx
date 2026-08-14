@@ -141,7 +141,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
             <h4 className="font-medium text-[15px] text-gray-600">
               ${data.discountPrice} * {value}
             </h4>
-            <h4 className="font-medium text-[17px] pt-1.5 text-red-500 font-Roboto">
+            <h4 className="font-medium text-[17px] pt-1.5 text-red-500 font-roboto">
               US${totalPrice}
             </h4>
           </div>

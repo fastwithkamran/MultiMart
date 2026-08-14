@@ -204,7 +204,7 @@ const ShopInbox = () => {
   return (
     <div className="w-[90%] bg-white m-4 h-[80vh] overflow-hidden rounded shadow-sm">
       {!open && (
-        <h1 className="text-center text-[30px] py-3 font-Poppins">All Chats</h1>
+        <h1 className="text-center text-[30px] py-3 font-poppins">All Chats</h1>
       )}
 
       {!open &&
