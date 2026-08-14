@@ -29,22 +29,10 @@ const OrderTrack = () => {
               Your Order Details are Processing!!
             </h1>
           )}
-          
-          {data && data?.status === "Transferred to delivery partner" && (
-            <h1 className="text-center text-20[px]">
-              Your Order is Dispatch!!
-            </h1>
-          )}
          
           {data && data?.status === "Shipping" && (
             <h1 className="text-center text-20[px]">
               Your Order is On The Way!!
-            </h1>
-          )}
-          
-          {data && data?.status === "Received" && (
-            <h1 className="text-center text-20[px]">
-              Your Order Reached Your City!!
             </h1>
           )}
           

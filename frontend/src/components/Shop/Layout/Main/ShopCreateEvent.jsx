@@ -72,6 +72,11 @@ const ShopCreateEvent = () => {
     e.preventDefault();
     setLoading(true);
 
+    if (images?.length === 0) {
+      toast.error("Upload Product Images");
+      return;
+    }
+
     const newForm = new FormData();
 
     images.forEach((image) => {
@@ -106,7 +111,7 @@ const ShopCreateEvent = () => {
         <div className="w-[90%] md:w-[75%] bg-white shadow h-[80vh] rounded-sm p-3 overflow-y-auto">
           <h5 className="text-[30px] font-poppins text-center">Create Event</h5>
           {/* Create Event Form */}
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form aria-required="true" onSubmit={(e) => handleSubmit(e)}>
             <br />
             <div>
               <label className="pb-2">

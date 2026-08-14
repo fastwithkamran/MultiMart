@@ -33,9 +33,10 @@ const ShopOrderDetails = () => {
   const orderUpdateHandler = async (e) => {
     e.preventDefault();
 
-    if (status === "" || status === "Processing")
+    if (status === "" || status === "Processing") {
       toast.error("Update the order status");
-
+      return;
+    }
     await axios
       .put(
         `${server}/order/update-order-status/${id}`,
@@ -56,9 +57,10 @@ const ShopOrderDetails = () => {
   const refundOrderUpdateHandler = async (e) => {
     e.preventDefault();
 
-    if (status === "" || status === "Processing refund")
+    if (status === "" || status === "Processing refund") {
       toast.error("Update the order status");
-
+      return;
+    }
     await axios
       .put(
         `${server}/order/order-refund-proceedings/${id}`,
@@ -180,23 +182,9 @@ const ShopOrderDetails = () => {
                 setStatus(e.target.value);
               }}
             >
-              {[
-                "Processing",
-                "Transferred to delivery partner",
-                "Shipping",
-                "Received",
-                "On the way",
-                "Delivered",
-              ]
+              {["Processing", "Shipping", "Delivered"]
                 .slice(
-                  [
-                    "Processing",
-                    "Transferred to delivery partner",
-                    "Shipping",
-                    "Received",
-                    "On the way",
-                    "Delivered",
-                  ].indexOf(data?.status),
+                  ["Processing", "Shipping", "Delivered"].indexOf(data?.status),
                 )
                 .map((option, index) => (
                   <option key={index}>{option}</option>

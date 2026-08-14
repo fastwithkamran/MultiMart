@@ -47,6 +47,12 @@ const ShopCreateProduct = () => {
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
+
+    if (images?.length === 0) {
+      toast.error("Upload Product Images");
+      return;
+    }
+
     const newForm = new FormData();
 
     images.forEach((image) => {

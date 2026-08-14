@@ -32,10 +32,12 @@ function Checkout() {
   const paymentStep = () => {
     if (name === null || email === null || phoneNumber === null) {
       toast.error("Please fill your personal information");
+      return;
     }
 
     if (address === "" || zipCode === "" || country === "" || city === "") {
       toast.error("Please Choose your delivery address");
+      return;
     } else {
       const shippingAddress = {
         address,
@@ -190,7 +192,7 @@ const ShippingInfo = ({
     <div className="w-full md:w-[95%] bg-white rounded-md p-5 pb-8">
       <h5 className="text-[18px] fone-medium">Shipping Address</h5>
 
-      <form>
+      <form aria-required="true">
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">Full Name</label>
