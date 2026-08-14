@@ -134,7 +134,7 @@ function ShopAllEvents() {
         name: item.name,
         price: "US$" + item.discountPrice,
         stock: item.stock,
-        sold: 10,
+        sold: item.sold_out,
       });
     });
   return (
