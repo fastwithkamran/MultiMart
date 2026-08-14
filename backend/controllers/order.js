@@ -86,6 +86,13 @@ const handleUpdateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
     if (!orders) return next(new ErrorHandler("Order is not found", 400));
 
+    // if product is dispatch then update the stock and sold out number
+    if (orders.status === "Processing") {
+      orders.cart.forEach(async (product) => {
+        await updateProduct(product._id, product.qty);
+      });
+    }
+
     // update the order status
     orders.status = req.body.status;
 
@@ -93,13 +100,6 @@ const handleUpdateOrderStatus = catchAsyncErrors(async (req, res, next) => {
     if (req.body.status === "Delivered") {
       orders.deliveredAt = Date.now();
       orders.paymentInfo.status = "Succeeded";
-    }
-
-    // if product is dispatch then update the stock and sold out number
-    if (req.body.status === "Transferred to delivery partner") {
-      orders.cart.forEach(async (order) => {
-        await updateProduct(order._id, order.qty);
-      });
     }
 
     async function updateProduct(id, qty) {
