@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { resetSuccess, clearErrors } from "../../../../redux/reducers/product";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
@@ -19,6 +19,7 @@ function ShopAllEvents() {
     (state) => state.event,
   );
   const dispatch = useDispatch();
+  const [isDelete, setIsDelete] = useState(false);
 
   useEffect(() => {
     let timerId;
@@ -41,14 +42,19 @@ function ShopAllEvents() {
 
   const handleDelete = (e, id) => {
     e.preventDefault();
-    dispatch(deleteEvent(id));
+    setIsDelete(true);
+    dispatch(deleteEvent(id)).then(() => {
+      setIsDelete(false);
+    });
   };
 
   useEffect(() => {
     if (!seller?._id) return;
-    dispatch(getAllEventsShop(seller._id));
-    dispatch(getAllEvents());
-  }, [dispatch, seller?._id, isLoading]);
+    if (!isDelete) {
+      dispatch(getAllEventsShop(seller._id));
+      dispatch(getAllEvents());
+    }
+  }, [dispatch, seller?._id, isDelete]);
 
   const columns = [
     { field: "id", headerName: "Event Id", minWidth: 150, flex: 0.7 },

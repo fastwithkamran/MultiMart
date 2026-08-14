@@ -5,7 +5,7 @@ import {
   getAllProductsShop,
 } from "../../../../redux/actions/product";
 import { resetSuccess, clearErrors } from "../../../../redux/reducers/product";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
@@ -19,6 +19,7 @@ function ShopAllProducts() {
     (state) => state.product,
   );
   const dispatch = useDispatch();
+  const [isDelete, setIsDelete] = useState(false);
 
   useEffect(() => {
     let timerId;
@@ -41,14 +42,17 @@ function ShopAllProducts() {
 
   const handleDelete = (e, id) => {
     e.preventDefault();
-    dispatch(deleteProduct(id));
+    setIsDelete(true);
+    dispatch(deleteProduct(id)).then(() => setIsDelete(false));
   };
 
   useEffect(() => {
     if (!seller?._id) return;
-    dispatch(getAllProductsShop(seller._id));
-    dispatch(getAllProducts());
-  }, [dispatch, seller?._id, isLoading]);
+    if (!isDelete) {
+      dispatch(getAllProductsShop(seller._id));
+      dispatch(getAllProducts());
+    }
+  }, [dispatch, seller?._id, isDelete]);
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
