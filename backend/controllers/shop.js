@@ -87,7 +87,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     );
 
     if (!newSeller) {
-      return next(new ErrorHandler("Invalid Token", 400));
+      return next(new ErrorHandler("Invalid Token", 204));
     }
 
     const { id } = newSeller;

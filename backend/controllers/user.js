@@ -73,7 +73,7 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     const newUser = jwt.verify(activation_token, process.env.Activation_Secret);
 
     if (!newUser) {
-      return next(new ErrorHandler("Token had expired", 400));
+      return next(new ErrorHandler("Token had expired", 204));
     }
 
     const { id } = newUser;
