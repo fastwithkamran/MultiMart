@@ -70,12 +70,12 @@ const ShopCreateEvent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
 
     if (images?.length === 0) {
       toast.error("Upload Product Images");
       return;
     }
+    setLoading(true);
 
     const newForm = new FormData();
 

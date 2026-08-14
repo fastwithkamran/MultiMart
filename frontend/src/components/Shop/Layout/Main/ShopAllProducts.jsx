@@ -48,7 +48,7 @@ function ShopAllProducts() {
     if (!seller?._id) return;
     dispatch(getAllProductsShop(seller._id));
     dispatch(getAllProducts());
-  }, [dispatch, seller?._id]);
+  }, [dispatch, seller?._id, isLoading]);
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },

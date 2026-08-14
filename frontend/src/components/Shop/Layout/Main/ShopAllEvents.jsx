@@ -48,7 +48,7 @@ function ShopAllEvents() {
     if (!seller?._id) return;
     dispatch(getAllEventsShop(seller._id));
     dispatch(getAllEvents());
-  }, [dispatch, seller?._id]);
+  }, [dispatch, seller?._id, isLoading]);
 
   const columns = [
     { field: "id", headerName: "Event Id", minWidth: 150, flex: 0.7 },
