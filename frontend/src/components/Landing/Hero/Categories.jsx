@@ -36,15 +36,15 @@ function Categories() {
                     key={product.id}
                     onClick={() => handleSubmit(product)}
                   >
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                    <div className="flex flex-col sm:flex-row items-center justify-between md:gap-4 w-full">
                       <div className="flex-1 text-center sm:text-start">
-                        <h5 className={`font-medium text-sm md:text-base leading-tight wrap-break-word`}>{product.title}</h5>
+                        <h5 className={`font-medium text-sm md:text-base leading-tight wrap-break-word mb-5`}>{product.title}</h5>
                       </div>
                       <div className="shrink-0">
                         <img
                           src={product.image_Url}
                           alt="productImage"
-                          className="w-30 object-contain mix-blend-multiply"
+                          className="w-30 object-contain mix-blend-multiply mb-5"
                         />
                       </div>
                     </div>
