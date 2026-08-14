@@ -94,7 +94,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     const unverifiedSellerData = await UnverifiedShop.findById(id);
 
     if (!unverifiedSellerData) {
-      return next(new ErrorHandler("Token had already used", 400));
+      return next(new ErrorHandler("Token had already used", 204));
     }
 
     const { name, email, password, address, phoneNumber, avatar, zipCode } =
@@ -103,7 +103,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     const seller_exist = await Shop.findOne({ email });
 
     if (seller_exist) {
-      return next(new ErrorHandler("Seller already exits", 400));
+      return next(new ErrorHandler("Seller already exits", 204));
     }
 
     const seller = await Shop.create({

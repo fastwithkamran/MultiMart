@@ -81,7 +81,7 @@ const handleActivateUser = catchAsyncErrors(async (req, res, next) => {
     const unverifiedUserData = await UnverifiedUser.findById(id);
 
     if (!unverifiedUserData) {
-      return next(new ErrorHandler("Token had already used", 400));
+      return next(new ErrorHandler("Token had already used", 204));
     }
 
     const { name, email, password, avatar } = unverifiedUserData;
