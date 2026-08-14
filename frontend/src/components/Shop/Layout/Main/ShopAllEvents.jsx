@@ -7,7 +7,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import Loader from "../../../Layout/Loader/Loader";
 import { toast } from "react-toastify";
-import { deleteEvent, getAllEventsShop } from "../../../../redux/actions/event";
+import {
+  deleteEvent,
+  getAllEvents,
+  getAllEventsShop,
+} from "../../../../redux/actions/event";
 
 function ShopAllEvents() {
   const { seller } = useSelector((state) => state.seller);
@@ -17,15 +21,22 @@ function ShopAllEvents() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    let timerId;
+
     if (error) {
       toast.error(error.response?.data?.message || error.message);
-      dispatch(clearErrors());
+      timerId = setTimeout(() => {
+        dispatch(clearErrors());
+      }, 10000);
     }
     if (success) {
       toast.success(message);
       dispatch(resetSuccess());
-      dispatch(getAllEventsShop(seller._id));
     }
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [error, success, dispatch, message, seller._id]);
 
   const handleDelete = (e, id) => {
@@ -36,6 +47,7 @@ function ShopAllEvents() {
   useEffect(() => {
     if (!seller?._id) return;
     dispatch(getAllEventsShop(seller._id));
+    dispatch(getAllEvents());
   }, [dispatch, seller?._id]);
 
   const columns = [

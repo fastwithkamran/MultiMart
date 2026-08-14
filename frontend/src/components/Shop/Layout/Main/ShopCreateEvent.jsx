@@ -6,7 +6,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { resetSuccess, clearErrors } from "../../../../redux/reducers/event";
 import { toast } from "react-toastify";
 import { createEvent, getAllEvents } from "../../../../redux/actions/event";
-import Loader from "../../../Layout/Loader/Loader";
+import { Loader } from "../../../../components";
 
 const ShopCreateEvent = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -48,9 +48,13 @@ const ShopCreateEvent = () => {
   };
 
   useEffect(() => {
+    let timerId;
+
     if (error) {
       toast.error(error.response?.data?.message || error.message);
-      dispatch(clearErrors());
+      timerId = setTimeout(() => {
+        dispatch(clearErrors());
+      }, 10000);
     }
     if (success) {
       toast.success("Event Created Successfully");
@@ -58,6 +62,10 @@ const ShopCreateEvent = () => {
       dispatch(getAllEvents());
       navigate("/dashboard-events");
     }
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [error, success, navigate, dispatch]);
 
   const handleSubmit = (e) => {
@@ -81,7 +89,7 @@ const ShopCreateEvent = () => {
     newForm.append("start_Date", startDate.toISOString());
     newForm.append("finish_Date", finishDate.toISOString());
 
-    dispatch(createEvent(newForm));
+    dispatch(createEvent(newForm)).then(() => setLoading(false));
   };
 
   const handleImageChange = (e) => {
@@ -283,8 +291,9 @@ const ShopCreateEvent = () => {
               <br />
               <div>
                 <input
+                  disabled={loading}
                   type="submit"
-                  value={"Create"}
+                  value={loading ? "Loading..." : "Create"}
                   className="mt-2 cursor-pointer appearance-none text-center block w-full h-8 border border-gray-300 rounded-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm px-3"
                 />
               </div>

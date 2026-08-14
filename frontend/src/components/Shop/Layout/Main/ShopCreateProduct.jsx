@@ -3,13 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import {
-  createProduct,
-  getAllProducts,
-} from "../../../../redux/actions/product";
+import { createProduct } from "../../../../redux/actions/product";
 import { resetSuccess, clearErrors } from "../../../../redux/reducers/product";
 import { toast } from "react-toastify";
-import { Loader } from "../../../Layout/Loader/Loader";
+import { Loader } from "../../../../components";
 
 const ShopCreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -27,16 +24,24 @@ const ShopCreateProduct = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let timerId;
+
     if (error) {
       toast.error(error.response?.data?.message || error.message);
-      dispatch(clearErrors());
+      timerId = setTimeout(() => {
+        dispatch(clearErrors());
+      }, 10000);
     }
+
     if (success) {
       toast.success("Product Created Successfully");
-      dispatch(resetSuccess());
-      dispatch(getAllProducts());
       navigate("/dashboard-products");
+      dispatch(resetSuccess());
     }
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [error, success, navigate, dispatch]);
 
   const handleSubmit = (e) => {
@@ -57,7 +62,7 @@ const ShopCreateProduct = () => {
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
 
-    dispatch(createProduct(newForm));
+    dispatch(createProduct(newForm)).then(() => setLoading(false));
   };
 
   const handleImageChange = (e) => {
@@ -75,7 +80,7 @@ const ShopCreateProduct = () => {
             Create Product
           </h5>
           {/* Create Product Form */}
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form aria-required="true" onSubmit={(e) => handleSubmit(e)}>
             <br />
             <div>
               <label className="pb-2">
@@ -224,8 +229,9 @@ const ShopCreateProduct = () => {
               <br />
               <div>
                 <input
+                  disabled={loading}
                   type="submit"
-                  value={"Create"}
+                  value={loading ? "Loading..." : "Create"}
                   className="mt-2 cursor-pointer appearance-none text-center block w-full h-8 border border-gray-300 rounded-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm px-3"
                 />
               </div>

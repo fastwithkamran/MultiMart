@@ -264,9 +264,10 @@ function ShopAllCoupons() {
                     <br />
                     <div>
                       <input
+                        disabled={isLoading}
                         className="bg-slate-200 appearance-none mt-2 block w-full h-7 border border-gray-300 rounded-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 sm:text-sm px-3"
                         type="submit"
-                        value="Create"
+                        value={isLoading ? "Loading..." : "Create"}
                       />
                     </div>
                   </form>

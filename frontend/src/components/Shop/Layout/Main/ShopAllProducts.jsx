@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
+  getAllProducts,
   getAllProductsShop,
 } from "../../../../redux/actions/product";
 import { resetSuccess, clearErrors } from "../../../../redux/reducers/product";
@@ -20,16 +21,22 @@ function ShopAllProducts() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    let timerId;
+
     if (error) {
       toast.error(error.response?.data?.message || error.message);
-      dispatch(clearErrors());
+      timerId = setTimeout(() => {
+        dispatch(clearErrors());
+      }, 10000);
     }
     if (success) {
-      console.log(message);
       toast.success(message);
       dispatch(resetSuccess());
-      dispatch(getAllProductsShop(seller._id));
     }
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [error, success, dispatch, message, seller._id]);
 
   const handleDelete = (e, id) => {
@@ -40,6 +47,7 @@ function ShopAllProducts() {
   useEffect(() => {
     if (!seller?._id) return;
     dispatch(getAllProductsShop(seller._id));
+    dispatch(getAllProducts());
   }, [dispatch, seller?._id]);
 
   const columns = [
