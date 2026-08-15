@@ -39,6 +39,8 @@ import {
   InboxPage,
   ForgetPasswordPage,
   ResetPasswordVerificationPage,
+  ShopForgetPasswordPage,
+  ResetShopPasswordVerificationPage,
 } from "./pages";
 import Store from "./redux/store.js";
 import {
@@ -93,6 +95,10 @@ const router = createBrowserRouter(
       {/* Shop Routes */}
       <Route path="/shop-create" element={<ShopCreatePage />} />
       <Route path="/shop-login" element={<ShopLoginPage />} />
+      <Route
+        path="/shop-forget-password"
+        element={<ShopForgetPasswordPage />}
+      />
       <Route
         path="/shop/:id"
         element={
@@ -198,6 +204,10 @@ const router = createBrowserRouter(
       <Route
         path="/seller/activation/:activation_token"
         element={<SellerActivationPage />}
+      />
+      <Route
+        path="/seller/reset-password-activation/:activation_token"
+        element={<ResetShopPasswordVerificationPage />}
       />
       {/* Forget Password Verification */}
       <Route

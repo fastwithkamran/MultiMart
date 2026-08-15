@@ -33,6 +33,8 @@ import ShopInboxPage from "./ShopPage/ShopInboxPage.jsx";
 import InboxPage from "./ProfilePage/Inbox/InboxPage.jsx";
 import ForgetPasswordPage from "./UserAuthPages/ForgetPasswordPage.jsx";
 import ResetPasswordVerificationPage from "./UserAuthPages/ResetPasswordVerificationPage.jsx";
+import ShopForgetPasswordPage from "./SellerAuthPages/ShopForgetPasswordPage.jsx";
+import ResetShopPasswordVerificationPage from "./SellerAuthPages/ResetShopPasswordVerificationPage.jsx";
 export {
   LoginPage,
   SignupPage,
@@ -69,4 +71,6 @@ export {
   InboxPage,
   ForgetPasswordPage,
   ResetPasswordVerificationPage,
+  ShopForgetPasswordPage,
+  ResetShopPasswordVerificationPage,
 };

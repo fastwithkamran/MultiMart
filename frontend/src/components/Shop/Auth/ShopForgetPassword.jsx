@@ -1,45 +1,27 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../../styles/styles";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../../../server";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { loadSeller } from "../../../redux/actions/user";
 
-function ShopLogin() {
+function ShopForgetPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
 
     axios
-      .post(
-        `${server}/shop/login`,
-        { email, password },
-        { withCredentials: true },
-      )
+      .post(`${server}/shop/forget-password`, { email, password })
       .then((res) => {
-        if (res.data.success) {
-          dispatch(loadSeller())
-            .then(() => {
-              navigate("/dashboard");
-              toast.success("Login Success");
-            })
-            .catch((error) =>
-              toast.error(error.response?.data?.message || error.message),
-            );
-
-          setEmail("");
-          setPassword("");
-        }
+        toast.success(res.data.message);
+        setEmail("");
+        setPassword("");
       })
       .catch((error) =>
         toast.error(error.response?.data?.message || error.message),
@@ -51,12 +33,16 @@ function ShopLogin() {
     <div className="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold">
-          Login to your Shop
+          Change Your Password
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-18">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit}
+            aria-required="true"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -82,7 +68,7 @@ function ShopLogin() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                New Password
               </label>
               <div className="mt-1 relative">
                 <input
@@ -109,30 +95,6 @@ function ShopLogin() {
                 )}
               </div>
             </div>
-            <div className={`${styles.normalFlex} justify-between`}>
-              <div className={`${styles.normalFlex}`}>
-                <input
-                  type="checkbox"
-                  name="remember-me"
-                  id="remember-me"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-              <div className="text-sm">
-                <Link
-                  to="/shop-forget-password"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Forget Password?
-                </Link>
-              </div>
-            </div>
             <div>
               <button
                 disabled={loading}
@@ -155,4 +117,4 @@ function ShopLogin() {
   );
 }
 
-export default ShopLogin;
+export default ShopForgetPassword;

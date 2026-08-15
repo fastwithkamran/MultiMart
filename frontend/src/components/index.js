@@ -40,6 +40,7 @@ import ShopWithdrawMoney from "./Shop/Layout/Main/ShopWithdrawMoney.jsx";
 import ShopInbox from "./Shop/Layout/Main/ShopInbox.jsx";
 import Inbox from "./Profile/Inbox/Inbox.jsx";
 import ForgetPassword from "./Auth/ForgetPassword.jsx";
+import ShopForgetPassword from "./Shop/Auth/ShopForgetPassword.jsx";
 export {
   Loader,
   Login,
@@ -83,4 +84,5 @@ export {
   ShopInbox,
   Inbox,
   ForgetPassword,
+  ShopForgetPassword,
 };

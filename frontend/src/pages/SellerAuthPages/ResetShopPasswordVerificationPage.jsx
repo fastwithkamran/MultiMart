@@ -1,44 +1,31 @@
 import axios from "axios";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../../server";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { Loader } from "../../components";
-import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
-import { useDispatch } from "react-redux";
-import { loadSeller } from "../../redux/actions/user";
+import { Link } from "react-router-dom";
+import { Loader } from "../../components";
 
-function SellerActivationPage() {
+function ResetShopPasswordVerificationPage() {
   const { activation_token } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = () => {
     if (activation_token) {
       const activationEmail = async () => {
         setLoading(true);
         try {
-          const res = await axios.post(
-            `${server}/shop/activation`,
-            {
-              activation_token,
-            },
-            { withCredentials: true },
-          );
+          const res = await axios.post(`${server}/shop/reset-forget-password`, {
+            activation_token,
+          });
 
           if (res.data.success) {
-            dispatch(loadSeller())
-              .then(() => {
-                navigate("/dashboard");
-                toast.success("Welcome to the MultiMart");
-              })
-              .catch((error) =>
-                toast.error(error.response?.data?.message || error.message),
-              );
+            navigate("/shop-login");
+            toast.success("Password has been Reset!!");
           }
         } catch (error) {
           setError(true);
@@ -50,6 +37,7 @@ function SellerActivationPage() {
       activationEmail();
     }
   };
+
   return (
     <>
       {loading ? (
@@ -60,19 +48,19 @@ function SellerActivationPage() {
             className={`${styles.button} text-white p-3 shadow-2xl shadow-red-400`}
             onClick={handleSubmit}
           >
-            Click Here to Activate Account
+            Click Here to Reset Password
           </div>
         </div>
       ) : (
         <div className="flex flex-col w-full h-screen items-center justify-center text-2xl text-red-400 whitespace-pre-wrap">
           <p className="whitespace-pre-wrap p-3 text-center">
-            Your Email Verification Code Has Expired. Try Login Again!
+            Your Email Verification Code Has Expired. Try Reset Password Again!
           </p>
-          <Link to={"/shop-login"}>
+          <Link to={"/shop-forget-password"}>
             <div
               className={`${styles.button} text-white p-3 shadow-2xl shadow-red-500`}
             >
-              Login To Shop
+              Reset Password
             </div>
           </Link>
         </div>
@@ -81,4 +69,4 @@ function SellerActivationPage() {
   );
 }
 
-export default SellerActivationPage;
+export default ResetShopPasswordVerificationPage;
