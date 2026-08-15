@@ -56,8 +56,7 @@ const handleCreateShop = catchAsyncErrors(async (req, res, next) => {
     await sendMail({
       email: seller.email,
       subject: "Activate your shop",
-      message: `Hello ${seller.name}, please click on the link to activate your shop:
-      ${activationUrl}`,
+      message: `Hello ${seller.name}, please click on the link to activate your shop:\n${activationUrl}`,
     });
 
     res.status(201).json({
@@ -87,14 +86,14 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     );
 
     if (!newSeller) {
-      return next(new ErrorHandler("Invalid Token", 204));
+      return next(new ErrorHandler("Invalid Token", 400));
     }
 
     const { id } = newSeller;
     const unverifiedSellerData = await UnverifiedShop.findById(id);
 
     if (!unverifiedSellerData) {
-      return next(new ErrorHandler("Token had already used", 204));
+      return next(new ErrorHandler("Token had already used", 400));
     }
 
     const { name, email, password, address, phoneNumber, avatar, zipCode } =
@@ -103,7 +102,7 @@ const handleActivateShop = catchAsyncErrors(async (req, res, next) => {
     const seller_exist = await Shop.findOne({ email });
 
     if (seller_exist) {
-      return next(new ErrorHandler("Seller already exits", 204));
+      return next(new ErrorHandler("Seller already exits", 400));
     }
 
     const seller = await Shop.create({
@@ -242,6 +241,79 @@ const handleUpdateShopInfo = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+// forget password
+const handleShopForgetPassword = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const shopExist = await Shop.findOne({ email });
+
+    if (!shopExist) {
+      return next(new ErrorHandler("Email is not registered", 400));
+    }
+
+    const seller = {
+      email,
+      password,
+    };
+
+    const activationToken = createActivationToken({ seller });
+    let activationUrl;
+
+    if (process.env.NODE_ENV === "production") {
+      activationUrl = `${process.env.FRONTEND_API}/seller/reset-password-activation/${activationToken}`;
+    } else {
+      activationUrl = `http://localhost:5173/seller/reset-password-activation/${activationToken}`;
+    }
+
+    await sendMail({
+      email: seller.email,
+      subject: "Reset Your Password",
+      message: `Hello ${shopExist.name}, please click on the link to reset your password:\n${activationUrl}`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Please check your email: ${seller.email} to reset your password`,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new ErrorHandler(error.message, error.statusCode || 500));
+  }
+});
+
+// update forget password with new password
+const handleUpdateShopForgetPassword = catchAsyncErrors(
+  async (req, res, next) => {
+    try {
+      const { activation_token } = req.body;
+      const shopDetail = jwt.verify(
+        activation_token,
+        process.env.Activation_Secret,
+      );
+
+      if (!shopDetail) {
+        return next(new ErrorHandler("Token had expired", 400));
+      }
+
+      const { seller } = shopDetail;
+      const { email, password } = seller;
+
+      const shop = await Shop.findOne({ email }).select("+password");
+
+      shop.password = password;
+
+      await shop.save();
+
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error.message, error.statusCode || 500));
+    }
+  },
+);
+
 module.exports = {
   handleCreateShop,
   handleActivateShop,
@@ -249,4 +321,6 @@ module.exports = {
   handleGetShopInfo,
   handleUpdateShopAvatar,
   handleUpdateShopInfo,
+  handleShopForgetPassword,
+  handleUpdateShopForgetPassword,
 };

@@ -10,6 +10,8 @@ const {
   handleGetShopInfo,
   handleUpdateShopAvatar,
   handleUpdateShopInfo,
+  handleShopForgetPassword,
+  handleUpdateShopForgetPassword,
 } = require("../controllers/shop");
 
 // Authentication
@@ -72,6 +74,13 @@ router.put(
   handleUpdateShopAvatar,
 );
 
+// update shop information
 router.put("/update-shop-info", isAuthenticatedSeller, handleUpdateShopInfo);
+
+// shop forget password
+router.post("/forget-password", handleShopForgetPassword);
+
+// shop reset password activation
+router.post("/reset-forget-password", handleUpdateShopForgetPassword);
 
 module.exports = router;
