@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../../../server";
 import { toast } from "react-toastify";
@@ -15,8 +15,9 @@ function ActivationPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
+  const handleSubmit = () => {
     if (activation_token) {
       const activationEmail = async () => {
         setLoading(true);
@@ -40,6 +41,7 @@ function ActivationPage() {
               );
           }
         } catch (error) {
+          setError(true);
           toast.error(error.response?.data?.message || error.message);
         } finally {
           setLoading(false);
@@ -47,17 +49,32 @@ function ActivationPage() {
       };
       activationEmail();
     }
-  }, [activation_token, navigate, dispatch]);
+  };
 
   return (
     <>
       {loading ? (
         <Loader />
-      ) : (
+      ) : !error ? (
         <div className="flex flex-col w-full h-screen items-center justify-center text-2xl text-red-400">
-          Your Email Verification Code Has Expired. Try again!
+          <div
+            className={`${styles.button} text-white p-3 shadow-2xl shadow-red-400`}
+            onClick={handleSubmit}
+          >
+            Click Here to Activate Account
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col w-full h-screen items-center justify-center text-2xl text-red-400 whitespace-pre-wrap">
+          <p className="whitespace-pre-wrap p-3 text-center">
+            Your Email Verification Code Has Expired. Try Login Again!
+          </p>
           <Link to={"/login"}>
-            <div className={`${styles.button} text-white p-3`}>Go To Login</div>
+            <div
+              className={`${styles.button} text-white p-3 shadow-2xl shadow-red-500`}
+            >
+              Login
+            </div>
           </Link>
         </div>
       )}
