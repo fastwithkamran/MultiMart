@@ -15,7 +15,7 @@ function ShopCreate() {
   const [visible, setVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState();
   const [zipCode, setZipCode] = useState();
-  const [shopAvatar, setShopAvatar] = useState();
+  const [shopAvatar, setShopAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleFileInput = (e) => {
