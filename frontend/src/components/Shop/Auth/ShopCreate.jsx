@@ -33,6 +33,12 @@ function ShopCreate() {
     };
     const newForm = new FormData();
 
+    if (shopAvatar === null) {
+      toast.error("Upload Your Shop Logo!");
+      setLoading(false);
+      return;
+    }
+
     newForm.append("file", shopAvatar);
     newForm.append("name", name);
     newForm.append("email", email);
@@ -217,7 +223,7 @@ function ShopCreate() {
                 htmlFor="file-input"
                 className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-py test-sm font-medium text-gray-700 bg-white hover:bg-gray-500"
               >
-                <span>Upload a file</span>
+                <span>Upload Shop Logo</span>
                 <input
                   type="file"
                   name="avatar"

@@ -24,6 +24,11 @@ function Signup() {
     };
     const newForm = new FormData();
 
+    if (avatar === null) {
+      toast.error("Choose Your Avatar!");
+      setLoading(false);
+      return;
+    }
     newForm.append("file", avatar);
     newForm.append("name", name);
     newForm.append("email", email);
