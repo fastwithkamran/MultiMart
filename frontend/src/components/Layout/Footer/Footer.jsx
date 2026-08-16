@@ -130,7 +130,7 @@ function Footer() {
           © 2026
           <a
             target="_blank"
-            href="https://kamranportfolio-six.vercel.app"
+            href="https://fastwithkamran.vercel.app"
             rel="noopener noreferrer"
             className="ml-1 text-blue-300 font-semibold cursor-pointer"
           >
